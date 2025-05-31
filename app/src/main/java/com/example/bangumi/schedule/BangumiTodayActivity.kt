@@ -1,4 +1,4 @@
-package com.example.bangumi
+package com.example.bangumi.schedule
 
 import android.annotation.SuppressLint
 import android.os.Bundle

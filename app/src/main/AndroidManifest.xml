@@ -16,10 +16,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".detail.BangumiDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".schedule.ScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".BangumiTodayActivity"
+            android:name=".schedule.BangumiTodayActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
