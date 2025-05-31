@@ -32,7 +32,8 @@ class ScheduleActivity : AppCompatActivity() {
         // 设置顶部 padding 以适配状态栏
         mBinding.root.setOnApplyWindowInsetsListener { view, insets ->
             val topInset = insets.getInsets(WindowInsets.Type.statusBars()).top
-            view.setPadding(0, topInset, 0, 0)
+            val bottomInset = insets.getInsets(WindowInsets.Type.navigationBars()).bottom
+            view.setPadding(0, topInset, 0, bottomInset)
             insets
         }
 
