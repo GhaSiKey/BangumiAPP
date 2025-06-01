@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TagGroupView">
+        <attr name="tagSpacing" format="dimension" />
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="tagPadding" format="dimension" />
+        <attr name="defaultTextColor" format="color" />
+        <attr name="defaultBgColor" format="color" />
+    </declare-styleable>
+</resources>

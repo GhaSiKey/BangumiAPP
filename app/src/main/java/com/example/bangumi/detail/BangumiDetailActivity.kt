@@ -91,6 +91,10 @@ class BangumiDetailActivity : AppCompatActivity() {
         mBinding.bangumiAirDate.text = data.date
         mBinding.bangumiScoreCount.text = BangumiUtils.convertCount(data.rating?.total ?: 0) + " 人打分："
         mBinding.bangumiScore.text = data.rating?.score?.toString()?: "0.0"
+        // 设置标签
+        val tagList = BangumiUtils.getTags(data)
+        mBinding.bangumiTags.setTags(tagList)
+
     }
 
 

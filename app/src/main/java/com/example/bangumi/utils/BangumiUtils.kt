@@ -1,6 +1,8 @@
 package com.example.bangumi.utils
 
 import android.content.Context
+import com.example.bangumi.data.model.BangumiDetail
+import com.example.bangumi.widget.TagGroupView.Tag
 import java.util.Calendar
 
 /**
@@ -57,6 +59,17 @@ object BangumiUtils {
             7 -> "周日"
             else -> ""
         }
+    }
+
+    fun getTags(data: BangumiDetail): List<Tag> {
+        val tags = mutableListOf<Tag>()
+        data.metaTags?.distinct()?.forEach { title ->
+            tags.add(Tag(
+                text = title,
+                iconRes = com.example.bangumi.R.drawable.ic_vector_arrow_right
+            ))
+        }
+        return tags
     }
 
 }

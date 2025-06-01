@@ -95,18 +95,13 @@
                     android:layout_height="wrap_content"
                     android:text="风格：" />
 
-                <FrameLayout
+                <com.example.bangumi.widget.TagGroupView
                     android:id="@+id/bangumi_tags"
                     android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
-
-
-
-
-
     </LinearLayout>
 
 
