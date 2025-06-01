@@ -1,7 +1,9 @@
 package com.example.bangumi.data.api
 
+import com.example.bangumi.data.model.BangumiDetail
 import com.example.bangumi.data.model.CalendarResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * Created by gaoshiqi
@@ -12,4 +14,9 @@ interface BangumiService {
 
     @GET("/calendar")
     suspend fun getCalendar(): List<CalendarResponse>
+
+    @GET("v0/subjects/{subject_id}")
+    suspend fun getSubjectDetail(
+        @Path("subject_id") subjectId: Int
+    ): BangumiDetail
 }
