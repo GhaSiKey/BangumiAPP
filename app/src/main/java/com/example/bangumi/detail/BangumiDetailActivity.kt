@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,10 @@ import com.bumptech.glide.Glide
 import com.example.bangumi.R
 import com.example.bangumi.data.model.BangumiDetail
 import com.example.bangumi.databinding.ActivityBangumiDetailBinding
+import com.example.bangumi.detail.model.BangumiDetailIntent
+import com.example.bangumi.detail.model.BangumiDetailState
 import com.example.bangumi.utils.BangumiUtils
+import com.google.android.material.tabs.TabLayoutMediator
 
 class BangumiDetailActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityBangumiDetailBinding
@@ -31,18 +33,10 @@ class BangumiDetailActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBangumiDetailBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        // 设置顶部 padding 以适配状态栏/导航栏
-        mBinding.root.setOnApplyWindowInsetsListener { view, insets ->
-            val topInset = insets.getInsets(WindowInsets.Type.statusBars()).top
-            val bottomInset = insets.getInsets(WindowInsets.Type.navigationBars()).bottom
-            view.setPadding(0, topInset, 0, bottomInset)
-            insets
-        }
 
         // 获取传入的subjectID
         mSubjectId = intent.getIntExtra(ARG_SUBJECT_ID, 0)
@@ -57,7 +51,11 @@ class BangumiDetailActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        // todo
+        val adapter = BangumiDetailPagerAdapter(this)
+        mBinding.viewPager.adapter = adapter
+        TabLayoutMediator(mBinding.tabLayout, mBinding.viewPager) { tab, position ->
+            tab.text = adapter.getPageTitle(position)
+        }.attach()
     }
 
     private fun initObserver() {

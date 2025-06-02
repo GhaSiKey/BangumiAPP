@@ -1,4 +1,4 @@
-package com.example.bangumi.detail
+package com.example.bangumi.detail.model
 
 import com.example.bangumi.data.model.BangumiDetail
 

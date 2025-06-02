@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,114 +7,149 @@
     android:layout_height="match_parent"
     tools:context=".detail.BangumiDetailActivity">
 
-    <LinearLayout
-        android:id="@+id/detail_container"
+    <!-- 上半部分：封面和标题 -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="12dp"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true" >
 
-        <TextView
-            android:id="@+id/bangumi_title"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="时光流逝，饭菜依旧美味" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal" >
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_cover"
-                android:layout_width="175dp"
-                android:layout_height="245dp"
-                app:cardCornerRadius="8dp" >
-
-                <ImageView
-                    android:id="@+id/iv_cover"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@null"
-                    tools:src="@drawable/ic_cover_placeholder_36" />
-            </androidx.cardview.widget.CardView>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" >
 
             <LinearLayout
+                android:id="@+id/detail_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="12dp"
+                android:padding="12dp"
                 android:orientation="vertical" >
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="@color/black_85"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="放送开始：" />
-
-                <TextView
-                    android:id="@+id/bangumi_air_date"
-                    android:textSize="20sp"
+                    android:id="@+id/bangumi_title"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:textColor="@color/design_default_color_primary"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2024-01-01" />
-
-
-                <TextView
-                    android:id="@+id/bangumi_score_count"
-                    android:textSize="16sp"
-                    android:textColor="@color/black_85"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3028人评分：" />
-
-                <TextView
-                    android:id="@+id/bangumi_score"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/design_default_color_primary"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9.9" />
-
-                <TextView
-                    android:textSize="16sp"
-                    android:textColor="@color/black_85"
-                    android:layout_marginTop="4dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="风格：" />
-
-                <com.example.bangumi.widget.TagGroupView
-                    android:id="@+id/bangumi_tags"
-                    android:layout_marginTop="4dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:text="时光流逝，饭菜依旧美味" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal" >
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_cover"
+                        android:layout_width="175dp"
+                        android:layout_height="245dp"
+                        app:cardCornerRadius="8dp" >
+
+                        <ImageView
+                            android:id="@+id/iv_cover"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@null"
+                            tools:src="@drawable/ic_cover_placeholder_36" />
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:textSize="16sp"
+                            android:textColor="@color/black_85"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="放送开始：" />
+
+                        <TextView
+                            android:id="@+id/bangumi_air_date"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/design_default_color_primary"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2024-01-01" />
+
+
+                        <TextView
+                            android:id="@+id/bangumi_score_count"
+                            android:textSize="16sp"
+                            android:textColor="@color/black_85"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3028人评分：" />
+
+                        <TextView
+                            android:id="@+id/bangumi_score"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/design_default_color_primary"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9.9" />
+
+                        <TextView
+                            android:textSize="16sp"
+                            android:textColor="@color/black_85"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="风格：" />
+
+                        <com.example.bangumi.widget.TagGroupView
+                            android:id="@+id/bangumi_tags"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 下半部分：viewpager -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:tabIndicator="@color/black_85"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="scrollable"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/black20" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 
-
+    <!-- 加载中视图 -->
     <TextView
         android:id="@+id/loading_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="正在加载..."
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
