@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.bangumi.detail.fragment.CharactersFragment
 import com.example.bangumi.detail.fragment.DetailFragment
+import com.example.bangumi.detail.fragment.PointsFragment
 
 /**
  * Created by gaoshiqi
@@ -19,16 +20,18 @@ class BangumiDetailPagerAdapter(
         return when (position) {
             0 -> DetailFragment.newInstance() // 简介页面
             1 -> CharactersFragment.newInstance(mSubjectId) // 角色页面
+            2 -> PointsFragment.newInstance(mSubjectId) // 圣地巡礼页面
             else -> throw IllegalArgumentException("Invalid position")
         }
     }
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     fun getPageTitle(position: Int): String {
         return when (position) {
             0 -> "简介"
             1 -> "角色"
+            2 -> "圣地巡礼"
             else -> ""
         }
     }

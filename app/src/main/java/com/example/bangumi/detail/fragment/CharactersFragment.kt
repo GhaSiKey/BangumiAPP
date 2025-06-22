@@ -60,8 +60,9 @@ class CharactersFragment: Fragment() {
             layoutManager = StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL)
             adapter = mAdapter
         }
-        mViewModel.loadCharacters(mSubjectId)
         initObserver()
+
+        mViewModel.loadCharacters(mSubjectId)
     }
 
     private fun initObserver() {
