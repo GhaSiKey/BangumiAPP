@@ -1,6 +1,5 @@
 package com.example.bangumi.detail
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,8 +11,10 @@ import com.bumptech.glide.Glide
 import com.example.bangumi.R
 import com.example.bangumi.data.model.BangumiDetail
 import com.example.bangumi.databinding.ActivityBangumiDetailBinding
+import com.example.bangumi.detail.adapter.BangumiDetailPagerAdapter
 import com.example.bangumi.detail.model.BangumiDetailIntent
 import com.example.bangumi.detail.model.BangumiDetailState
+import com.example.bangumi.detail.model.BangumiDetailViewModel
 import com.example.bangumi.utils.BangumiUtils
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -51,7 +52,7 @@ class BangumiDetailActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val adapter = BangumiDetailPagerAdapter(this)
+        val adapter = BangumiDetailPagerAdapter(this, mSubjectId)
         mBinding.viewPager.adapter = adapter
         TabLayoutMediator(mBinding.tabLayout, mBinding.viewPager) { tab, position ->
             tab.text = adapter.getPageTitle(position)

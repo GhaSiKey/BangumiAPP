@@ -21,7 +21,7 @@
             app:tabMode="scrollable"
             app:tabRippleColor="@null"
             app:tabSelectedTextColor="@color/black"
-            app:tabTextColor="@color/black20" />
+            app:tabTextColor="@color/black_20" />
     </com.google.android.material.appbar.AppBarLayout>
 
 

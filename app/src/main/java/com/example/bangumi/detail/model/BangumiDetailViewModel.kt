@@ -1,12 +1,10 @@
-package com.example.bangumi.detail
+package com.example.bangumi.detail.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bangumi.data.api.BangumiClient
-import com.example.bangumi.detail.model.BangumiDetailIntent
-import com.example.bangumi.detail.model.BangumiDetailState
 import kotlinx.coroutines.launch
 
 /**

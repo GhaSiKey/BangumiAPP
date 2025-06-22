@@ -68,7 +68,7 @@
                 android:id="@+id/tv_sid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black40"
+                android:textColor="@color/black_40"
                 android:textSize="12sp"
                 tools:text="ID: 7638238991" />
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/black40"
+            android:textColor="@color/black_40"
             android:textSize="12sp"
             tools:text="2002-04-02开播" />
 
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/black40"
+            android:textColor="@color/black_40"
             android:textSize="12sp"
             tools:text="1K 人在追" />
 
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/black40"
+            android:textColor="@color/black_40"
             android:textSize="12sp"
             tools:text="10K 人评分" />
     </LinearLayout>
