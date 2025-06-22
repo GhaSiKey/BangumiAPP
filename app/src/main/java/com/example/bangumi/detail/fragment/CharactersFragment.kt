@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.bangumi.databinding.FragmentCharactersBinding
 import com.example.bangumi.detail.adapter.BangumiCharacterAdapter
-import com.example.bangumi.detail.model.BangumiCharacterState
-import com.example.bangumi.detail.model.BangumiCharactersViewModel
+import com.example.bangumi.detail.viewmodel.BangumiCharacterState
+import com.example.bangumi.detail.viewmodel.BangumiCharactersViewModel
 
 /**
  * Created by gaoshiqi

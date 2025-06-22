@@ -10,9 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
-import com.example.bangumi.data.model.BangumiCharacter
+import com.example.bangumi.data.bean.BangumiCharacter
 import com.example.bangumi.utils.BangumiUtils
-import org.w3c.dom.Text
 
 /**
  * Created by gaoshiqi

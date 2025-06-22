@@ -1,8 +1,8 @@
 package com.example.bangumi.data.api
 
-import com.example.bangumi.data.model.BangumiDetail
-import com.example.bangumi.data.model.CalendarResponse
-import com.example.bangumi.data.model.BangumiCharacter
+import com.example.bangumi.data.bean.BangumiDetail
+import com.example.bangumi.data.bean.CalendarResponse
+import com.example.bangumi.data.bean.BangumiCharacter
 import retrofit2.http.GET
 import retrofit2.http.Path
 

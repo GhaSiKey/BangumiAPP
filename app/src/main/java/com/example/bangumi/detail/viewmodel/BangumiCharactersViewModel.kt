@@ -1,4 +1,4 @@
-package com.example.bangumi.detail.model
+package com.example.bangumi.detail.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

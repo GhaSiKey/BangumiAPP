@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bangumi.data.model.SubjectSmall
+import com.example.bangumi.data.bean.SubjectSmall
 import com.example.bangumi.detail.BangumiDetailActivity
 import com.example.bangumi.utils.BangumiUtils
 

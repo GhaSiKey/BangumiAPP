@@ -1,6 +1,6 @@
-package com.example.bangumi.detail.model
+package com.example.bangumi.detail.viewmodel
 
-import com.example.bangumi.data.model.BangumiDetail
+import com.example.bangumi.data.bean.BangumiDetail
 
 /**
  * Created by gaoshiqi

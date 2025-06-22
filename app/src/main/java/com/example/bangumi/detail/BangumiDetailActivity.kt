@@ -9,12 +9,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.bangumi.R
-import com.example.bangumi.data.model.BangumiDetail
+import com.example.bangumi.data.bean.BangumiDetail
 import com.example.bangumi.databinding.ActivityBangumiDetailBinding
 import com.example.bangumi.detail.adapter.BangumiDetailPagerAdapter
-import com.example.bangumi.detail.model.BangumiDetailIntent
-import com.example.bangumi.detail.model.BangumiDetailState
-import com.example.bangumi.detail.model.BangumiDetailViewModel
+import com.example.bangumi.detail.viewmodel.BangumiDetailIntent
+import com.example.bangumi.detail.viewmodel.BangumiDetailState
+import com.example.bangumi.detail.viewmodel.BangumiDetailViewModel
 import com.example.bangumi.utils.BangumiUtils
 import com.google.android.material.tabs.TabLayoutMediator
 

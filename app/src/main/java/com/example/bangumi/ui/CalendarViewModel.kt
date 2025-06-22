@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bangumi.data.api.BangumiClient
-import com.example.bangumi.data.model.CalendarResponse
+import com.example.bangumi.data.bean.CalendarResponse
 import kotlinx.coroutines.launch
 
 /**

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bangumi.data.model.CalendarResponse
+import com.example.bangumi.data.bean.CalendarResponse
 import com.example.bangumi.databinding.ActivityBangumiApiTestBinding
 import com.example.bangumi.ui.BangumiAdapter
 import com.example.bangumi.ui.CalendarViewModel

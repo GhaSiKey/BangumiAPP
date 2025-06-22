@@ -1,4 +1,4 @@
-package com.example.bangumi.data.model
+package com.example.bangumi.data.bean
 
 import com.google.gson.annotations.SerializedName
 

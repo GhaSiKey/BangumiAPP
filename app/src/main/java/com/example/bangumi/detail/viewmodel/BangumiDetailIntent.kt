@@ -1,4 +1,4 @@
-package com.example.bangumi.detail.model
+package com.example.bangumi.detail.viewmodel
 
 /**
  * Created by gaoshiqi

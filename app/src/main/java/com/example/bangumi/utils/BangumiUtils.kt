@@ -1,7 +1,7 @@
 package com.example.bangumi.utils
 
 import android.content.Context
-import com.example.bangumi.data.model.BangumiDetail
+import com.example.bangumi.data.bean.BangumiDetail
 import com.example.bangumi.widget.TagGroupView.Tag
 import java.util.Calendar
 
