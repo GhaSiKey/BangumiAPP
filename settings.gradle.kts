@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bangumi"
 include(":app")
+include(":map")
