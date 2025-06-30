@@ -2,8 +2,11 @@ package com.example.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.WindowInsets
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +44,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        binding.btnToMap.setOnClickListener {
+            val gmmIntentUri = Uri.parse("geo:35.00116,135.7681?z=15&q=restaurant")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            mapIntent.resolveActivity(packageManager)?.let {
+                startActivity(mapIntent)
+            }
+        }
+
+        binding.btnToLocation.setOnClickListener {
+            val gmmIntentUri = Uri.parse("geo:0,0?z=15&q=35.00116,135.7681")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            mapIntent.resolveActivity(packageManager)?.let {
+                startActivity(mapIntent)
+            }
+        }
+
+        binding.btnNavigation.setOnClickListener {
+            val gmmIntentUri =
+                Uri.parse("google.navigation:q=35.00116,135.7681")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            startActivity(mapIntent)
+        }
+
+        binding.btnStreetView.setOnClickListener {
+            val gmmIntentUri =
+                Uri.parse("google.streetview:cbll=35.00116,135.7681")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            startActivity(mapIntent)
+        }
     }
 
     /**
@@ -61,7 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 .position(kyoto)
                 .title("Kyoto")
         )
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kyoto, 10f))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kyoto, 15f))
         enableMyLocation()
     }
 
