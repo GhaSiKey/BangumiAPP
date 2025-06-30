@@ -12,9 +12,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 object AnitabiClient {
 
     private const val BASE_URL = "https://api.anitabi.cn/"
+    private const val USER_AGENT = "BANGUMI/1.0 (gaoshiqi@bilibili.com)"
 
     val instance: AnitabiService by lazy {
-        val client = OkHttpClient.Builder().build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("User-Agent", USER_AGENT)
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
 
         Retrofit.Builder()
             .baseUrl(BASE_URL)
