@@ -33,7 +33,7 @@
             android:padding="4dp"
             tools:text="ID : 114514"
             android:textSize="8sp"
-            android:textColor="@color/white_85__only"
+            android:textColor="@color/white_85_only"
             android:background="@drawable/bangumi_tag_background_drawable" />
 
         <LinearLayout

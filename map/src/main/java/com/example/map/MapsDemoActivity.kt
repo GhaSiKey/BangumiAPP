@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.view.View
 import android.view.WindowInsets
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,14 +14,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import com.example.map.databinding.ActivityMapsBinding
 import com.example.map.utils.PermissionUtils
+import com.example.map.utils.widget.CustomInfoView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnPoiClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PointOfInterest
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
+class MapsDemoActivity : AppCompatActivity(), OnMapReadyCallback,
+    OnPoiClickListener,
     OnRequestPermissionsResultCallback {
 
     private lateinit var mMap: GoogleMap
@@ -93,13 +98,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap = googleMap
         val kyoto = LatLng(35.00116, 135.7681)
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        googleMap.addMarker(
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kyoto, 15f))
+        enableMyLocation()
+
+        googleMap.setOnPoiClickListener(this)
+        googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+            override fun getInfoContents(p0: Marker): View? {
+                return null
+            }
+
+            override fun getInfoWindow(p0: Marker): View? {
+                val view = CustomInfoView(this@MapsDemoActivity)
+                view.setMarker(p0)
+                return view
+            }
+        })
+
+        val marker = googleMap.addMarker(
             MarkerOptions()
                 .position(kyoto)
                 .title("Kyoto")
+                .snippet("35.00116, 135.7681")
+                .alpha(0.85f)
         )
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(kyoto, 15f))
-        enableMyLocation()
+        marker?.showInfoWindow()
+    }
+
+    override fun onPoiClick(poi: PointOfInterest) {
+        Toast.makeText(this, """Clicked: ${poi.name}
+            Place ID:${poi.placeId}
+            Latitude:${poi.latLng.latitude} Longitude:${poi.latLng.longitude}""",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun enableMyLocation() {
@@ -155,5 +185,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 114514
     }
+
 
 }
