@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import com.example.map.databinding.ActivityMapsBinding
 import com.example.map.utils.PermissionUtils
-import com.example.map.utils.widget.CustomInfoView
+import com.example.map.widget.CustomInfoView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnPoiClickListener
@@ -104,13 +104,13 @@ class MapsDemoActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap.setOnPoiClickListener(this)
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             override fun getInfoContents(p0: Marker): View? {
-                return null
-            }
-
-            override fun getInfoWindow(p0: Marker): View? {
                 val view = CustomInfoView(this@MapsDemoActivity)
                 view.setMarker(p0)
                 return view
+            }
+
+            override fun getInfoWindow(p0: Marker): View? {
+                return null
             }
         })
 

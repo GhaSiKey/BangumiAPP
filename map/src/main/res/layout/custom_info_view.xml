@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="@color/white_85_only"
+    android:background="@drawable/map_info_window_back_ground"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
