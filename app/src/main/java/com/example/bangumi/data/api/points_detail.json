@@ -1,0 +1,233 @@
+[
+  {
+    "id": "uf2raath2",
+    "cn": "东京赛马场",
+    "name": "東京競馬場",
+    "image": "https://image.anitabi.cn/points/509297/uf2raath2_1743958000623.jpg?plan=h160",
+    "ep": 1,
+    "s": 52,
+    "geo": [
+      35.661,
+      139.4892
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf2tzhxou",
+    "cn": "笠松赛马场 中央看台",
+    "name": "笠松競馬場 中央スタンド",
+    "image": "https://image.anitabi.cn/points/509297/uf2tzhxou_1743958215760.jpg?plan=h160",
+    "ep": 1,
+    "s": 152,
+    "geo": [
+      35.3727,
+      136.7664
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf2t8yros",
+    "cn": "笠松赛马场",
+    "name": "笠松競馬場",
+    "image": "https://image.anitabi.cn/points/509297/uf2t8yros_1743958125054.jpg?plan=h160",
+    "ep": 1,
+    "s": 169,
+    "geo": [
+      35.3727,
+      136.7697
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf2wk1i2u",
+    "cn": "笠松赛马场 沙圈",
+    "name": "笠松競馬場 パドック",
+    "image": "https://image.anitabi.cn/points/509297/uf2wk1i2u_1743958333962.jpg?plan=h160",
+    "ep": 1,
+    "s": 176,
+    "geo": [
+      35.3727,
+      136.767
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf2zclnjf",
+    "cn": "笠松町自行车道",
+    "name": "笠松町サイクリングロード",
+    "image": "https://image.anitabi.cn/points/509297/uf2zclnjf_1743958541921.jpg?plan=h160",
+    "ep": 1,
+    "s": 194,
+    "geo": [
+      35.3698,
+      136.7671
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf3upiegb",
+    "cn": "名铁竹鼻线 笠松1号道口",
+    "name": "名鉄竹鼻線 笠松1号踏切",
+    "image": "https://image.anitabi.cn/points/509297/uf3upiegb_1743960551345.jpg?plan=h160",
+    "ep": 1,
+    "s": 333,
+    "geo": [
+      35.3738,
+      136.7638
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf3t1a5js",
+    "cn": "岐阜工业高等学校 正门",
+    "name": "岐阜工業高等学校",
+    "image": "https://image.anitabi.cn/points/509297/uf3t1a5js_1743960286427.jpg?plan=h160",
+    "ep": 1,
+    "s": 350,
+    "geo": [
+      35.3741,
+      136.7611
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf42lepd6",
+    "cn": "岐阜工业高等学校",
+    "name": "岐阜工業高等学校",
+    "image": "https://image.anitabi.cn/points/509297/uf42lepd6_1743960876754.jpg?plan=h160",
+    "ep": 1,
+    "s": 354,
+    "geo": [
+      35.3742,
+      136.7609
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf47zdnai",
+    "cn": "笠松凑公园",
+    "name": "笠松みなと公園",
+    "image": "https://image.anitabi.cn/points/509297/uf47zdnai_1743961273761.jpg?plan=h160",
+    "ep": 1,
+    "s": 656,
+    "geo": [
+      35.3662,
+      136.7644
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf4adk0pg",
+    "cn": "笠松凑公园 时钟",
+    "name": "笠松みなと公園 時計",
+    "image": "https://image.anitabi.cn/points/509297/uf4adk0pg_1743961333184.jpg?plan=h160",
+    "ep": 1,
+    "s": 659,
+    "geo": [
+      35.3661,
+      136.7633
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf4pzt2td",
+    "cn": "笠松特雷森学园 跑道",
+    "name": "笠松トレセン学園",
+    "image": "https://image.anitabi.cn/points/509297/uf4pzt2td_1743962314619.jpg?plan=h160",
+    "ep": 1,
+    "s": 977,
+    "geo": [
+      35.373,
+      136.7599
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf37aakic",
+    "cn": "笠松赛马场&木曾川桥梁",
+    "name": "笠松競馬場&木曽川橋梁",
+    "image": "https://image.anitabi.cn/points/509297/uf37aakic_1743959007947.jpg?plan=h160",
+    "ep": "OP1",
+    "s": 10,
+    "geo": [
+      35.3651,
+      136.7697
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf390w5dq",
+    "cn": "木曾川桥梁",
+    "name": "木曽川橋梁",
+    "image": "https://image.anitabi.cn/points/509297/uf390w5dq_1743959103060.jpg?plan=h160",
+    "ep": "OP1",
+    "s": 16,
+    "geo": [
+      35.3683,
+      136.7663
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "uf3ryrkab",
+    "cn": "岐阜工业高等学校 正门前",
+    "name": "岐阜工業高等学校",
+    "image": "https://image.anitabi.cn/points/509297/uf3ryrkab_1743960219973.jpg?plan=h160",
+    "ep": "OP1",
+    "s": 33,
+    "geo": [
+      35.3741,
+      136.7612
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "nniu7hmu0",
+    "name": "金華山展望台",
+    "image": "https://image.anitabi.cn/points/509297/nniu7hmu0_1743959789392.jpg?plan=h160",
+    "ep": "OP1",
+    "s": 40,
+    "geo": [
+      35.4324,
+      136.7806
+    ],
+    "origin": "Anitabi@AmaiAya",
+    "originURL": "https://anitabi.cn/"
+  },
+  {
+    "id": "1fz5m67",
+    "name": "中京競馬場",
+    "image": "https://image.anitabi.cn/user/0/bangumi/509297/points/1fz5m67-1750153729463.jpg?plan=h160",
+    "ep": "5",
+    "s": "6:38",
+    "geo": [
+      35.0658,
+      136.9901
+    ]
+  },
+  {
+    "id": "1fzuhal",
+    "name": "中京競馬場西入場門",
+    "image": "https://image.anitabi.cn/user/0/bangumi/509297/points/1fzuhal-1750154414319.jpg?plan=h160",
+    "ep": "5",
+    "s": "0:04",
+    "geo": [
+      35.0652,
+      136.9869
+    ]
+  }
+]

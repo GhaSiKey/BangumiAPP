@@ -61,4 +61,7 @@ dependencies {
 
     // map
     implementation(project(":map"))
+
+    // play services
+    implementation(libs.play.services.maps)
 }

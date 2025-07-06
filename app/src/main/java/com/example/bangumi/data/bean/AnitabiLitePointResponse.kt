@@ -13,6 +13,6 @@ data class LitePoint(
     val image: String,         // 地标缩略图 URL
     val ep: String,               // 出现集数
     val s: String,                // 截图时间点（秒）
-    val geo: List<Float>          // GPS 位置信息
+    val geo: List<Double>          // GPS 位置信息
 )
 

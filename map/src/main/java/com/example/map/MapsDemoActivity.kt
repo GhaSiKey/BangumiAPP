@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
-import com.example.map.databinding.ActivityMapsBinding
+import com.example.map.databinding.ActivityDemoMapsBinding
 import com.example.map.utils.PermissionUtils
 import com.example.map.widget.CustomInfoView
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,13 +30,13 @@ class MapsDemoActivity : AppCompatActivity(), OnMapReadyCallback,
     OnRequestPermissionsResultCallback {
 
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityMapsBinding
+    private lateinit var binding: ActivityDemoMapsBinding
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMapsBinding.inflate(layoutInflater)
+        binding = ActivityDemoMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // 设置顶部 padding 以适配状态栏/导航栏
         binding.root.setOnApplyWindowInsetsListener { view, insets ->

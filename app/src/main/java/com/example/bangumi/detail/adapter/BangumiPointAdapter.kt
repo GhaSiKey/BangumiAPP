@@ -9,13 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bangumi.data.bean.LitePoint
+import com.example.map.MapBottomSheetFragment
 
 /**
  * Created by gaoshiqi
  * on 2025/6/22 21:46
  * email: gaoshiqi@bilibili.com
  */
-class BangumiPointAdapter(): RecyclerView.Adapter<BangumiPointAdapter.BangumiPointViewHolder>() {
+class BangumiPointAdapter(
+    private val OnItemClickListener: (LitePoint) -> Unit
+): RecyclerView.Adapter<BangumiPointAdapter.BangumiPointViewHolder>() {
     private var points: List<LitePoint> = emptyList()
 
     fun updateList(list: List<LitePoint>) {
@@ -38,6 +41,9 @@ class BangumiPointAdapter(): RecyclerView.Adapter<BangumiPointAdapter.BangumiPoi
     ) {
         val point = points[position]
         holder.bind(point)
+        holder.itemView.setOnClickListener {
+            OnItemClickListener(point)
+        }
     }
 
     override fun getItemCount(): Int {

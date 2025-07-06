@@ -11,6 +11,7 @@ import com.example.bangumi.databinding.FragmentPointsBinding
 import com.example.bangumi.detail.adapter.BangumiPointAdapter
 import com.example.bangumi.detail.viewmodel.BangumiPointsState
 import com.example.bangumi.detail.viewmodel.BangumiPointsViewModel
+import com.example.map.MapBottomSheetFragment
 
 /**
  * Created by gaoshiqi
@@ -35,7 +36,12 @@ class PointsFragment: Fragment() {
         arguments?.getInt(ARG_SUBJECT_ID, 0)?: 0
     }
     private lateinit var mBinding: FragmentPointsBinding
-    private val mAdapter: BangumiPointAdapter = BangumiPointAdapter()
+    private val mAdapter: BangumiPointAdapter = BangumiPointAdapter() { point ->
+        val geo = point.geo
+        if (geo.size != 2) return@BangumiPointAdapter
+        val fragment = MapBottomSheetFragment.newInstance(geo[0], geo[1], point.name)
+        fragment.show(parentFragmentManager, "MapBottomSheetFragment")
+    }
     private val mViewModel: BangumiPointsViewModel by lazy {
         ViewModelProvider(requireActivity())[BangumiPointsViewModel::class.java]
     }
