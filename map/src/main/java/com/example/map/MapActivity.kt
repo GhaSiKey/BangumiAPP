@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.example.map.data.LitePoint
 import com.example.map.databinding.ActivityMapsBinding
 import com.example.map.utils.PointListSingleton
+import com.example.map.widget.LitePointAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -45,13 +47,29 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback{
 
         mPoints = PointListSingleton.getPointList()
         PointListSingleton.clear()
+
+        mPoints?.let {
+            val adapter = LitePointAdapter(it)
+            mBinding.viewPager.adapter = adapter
+
+            mBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position < mMarkers.size) {
+                        val marker = mMarkers[position]
+                        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
+                        marker.showInfoWindow()
+                    }
+                }
+            })
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
-        mPoints?.forEach {
+        mPoints?.forEachIndexed { index, it ->
             val geo = it.geo
             if (geo.size == 2) {
                 val marker = googleMap.addMarker(
@@ -61,6 +79,7 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback{
                         .alpha(0.75f)
                 )
                 marker?.let {
+                    it.tag = index
                     mMarkers.add(it)
                 }
             }
@@ -70,6 +89,14 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback{
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it.position, 15f))
                 it.showInfoWindow()
             }
+        }
+
+        googleMap.setOnMarkerClickListener { marker ->
+            val position = marker.tag as? Int
+            position?.let {
+                mBinding.viewPager.currentItem = it
+            }
+            true
         }
     }
 }
