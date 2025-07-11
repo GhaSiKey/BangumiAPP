@@ -1,4 +1,4 @@
-package com.example.bangumi.data.bean
+package com.example.map.data
 
 /**
  * Created by gaoshiqi

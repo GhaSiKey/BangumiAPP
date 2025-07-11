@@ -1,6 +1,6 @@
 package com.example.bangumi.detail.viewmodel
 
-import com.example.bangumi.data.bean.LitePoint
+import com.example.map.data.LitePoint
 
 /**
  * Created by gaoshiqi

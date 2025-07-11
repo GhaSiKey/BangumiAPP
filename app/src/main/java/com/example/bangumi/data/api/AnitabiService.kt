@@ -1,6 +1,6 @@
 package com.example.bangumi.data.api
 
-import com.example.bangumi.data.bean.LitePoint
+import com.example.map.data.LitePoint
 import retrofit2.http.GET
 import retrofit2.http.Path
 

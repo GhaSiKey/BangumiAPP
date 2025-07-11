@@ -1,5 +1,6 @@
 package com.example.bangumi.detail.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,10 @@ import com.example.bangumi.databinding.FragmentPointsBinding
 import com.example.bangumi.detail.adapter.BangumiPointAdapter
 import com.example.bangumi.detail.viewmodel.BangumiPointsState
 import com.example.bangumi.detail.viewmodel.BangumiPointsViewModel
+import com.example.map.MapActivity
 import com.example.map.MapBottomSheetFragment
+import com.example.map.data.LitePoint
+import com.example.map.utils.PointListSingleton
 
 /**
  * Created by gaoshiqi
@@ -45,6 +49,7 @@ class PointsFragment: Fragment() {
     private val mViewModel: BangumiPointsViewModel by lazy {
         ViewModelProvider(requireActivity())[BangumiPointsViewModel::class.java]
     }
+    private var pointList: List<LitePoint> ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +70,13 @@ class PointsFragment: Fragment() {
         initObserver()
 
         mViewModel.loadPoints(mSubjectId)
+        mBinding.watchAll.setOnClickListener {
+            if (pointList.isNullOrEmpty()) return@setOnClickListener
+            PointListSingleton.setPointList(pointList!!)
+
+            val intent = Intent(requireContext(), MapActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initObserver() {
@@ -75,9 +87,12 @@ class PointsFragment: Fragment() {
                     hideLoading()
                     if (state.data.isEmpty()) {
                         showEmpty()
+                        mBinding.watchAll.visibility = View.GONE
                         return@observe
                     }
                     mAdapter.updateList(state.data)
+                    mBinding.watchAll.visibility = View.VISIBLE
+                    pointList = state.data
                 }
                 is BangumiPointsState.ERROR -> showEmpty()
             }

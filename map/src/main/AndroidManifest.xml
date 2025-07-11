@@ -13,6 +13,10 @@
             android:name=".MapsDemoActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
+
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
