@@ -3,15 +3,15 @@ package com.example.bangumi.detail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.bangumi.BangumiApplication
 import com.example.bangumi.R
 import com.example.bangumi.data.bean.BangumiDetail
 import com.example.bangumi.databinding.ActivityBangumiDetailBinding
@@ -20,12 +20,16 @@ import com.example.bangumi.detail.viewmodel.BangumiDetailIntent
 import com.example.bangumi.detail.viewmodel.BangumiDetailState
 import com.example.bangumi.detail.viewmodel.BangumiDetailViewModel
 import com.example.bangumi.utils.BangumiUtils
+import com.example.room.AnimeEntity
+import com.example.room.AnimeMarkRepository
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 class BangumiDetailActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityBangumiDetailBinding
     private val mViewModel: BangumiDetailViewModel by viewModels()
     private var mSubjectId: Int = -1
+    private lateinit var repository: AnimeMarkRepository
 
     companion object {
         const val ARG_SUBJECT_ID = "subject_id"
@@ -80,6 +84,9 @@ class BangumiDetailActivity : AppCompatActivity() {
                 is BangumiDetailState.SUCCESS -> {
                     hideLoading()
                     showBangumiDetail(state.data)
+
+                    repository = (application as BangumiApplication).animeMarkRepository
+                    setupMarkButton(state.data)
                 }
                 is BangumiDetailState.ERROR -> {
                     showError(state.msg)
@@ -88,6 +95,43 @@ class BangumiDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setupMarkButton(data: BangumiDetail) {
+        lifecycleScope.launch {
+            val isMarked = repository.isBookmarked(mSubjectId)
+            updateMarkButton(isMarked)
+
+            mBinding.btnMark.setOnClickListener {
+                lifecycleScope.launch {
+                    if (isMarked) {
+                        // 取消关注
+                        repository.removeAnimeMark(AnimeEntity(
+                            id = mSubjectId,
+                            name = data.name,
+                            nameCn = data.nameCn,
+                            imageUrl = data.images.large
+                        ))
+                        updateMarkButton(false)
+                        Toast.makeText(this@BangumiDetailActivity, "已取消收藏", Toast.LENGTH_SHORT).show()
+                    } else {
+                        repository.addAnimeMark(AnimeEntity(
+                            id = mSubjectId,
+                            name = data.name,
+                            nameCn = data.nameCn,
+                            imageUrl = data.images.large
+                        ))
+                        updateMarkButton(true)
+                        Toast.makeText(this@BangumiDetailActivity, "已收藏", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateMarkButton(isMarked: Boolean) {
+        mBinding.btnMark.text = if (isMarked) "已收藏" else "收藏"
+    }
+
 
     private fun showBangumiDetail(data: BangumiDetail) {
         // 标题
