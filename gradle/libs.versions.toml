@@ -1,18 +1,18 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.2"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-appcompat = "1.7.0"
+appcompat = "1.7.1"
 material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 lifecycle_version = "2.9.1"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
-playServicesMaps = "18.1.0"
+playServicesMaps = "19.2.0"
 room_version = "2.7.2"
 
 [libraries]

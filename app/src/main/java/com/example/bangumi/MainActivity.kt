@@ -3,6 +3,7 @@ package com.example.bangumi
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bangumi.collection.MyCollectionActivity
 import com.example.bangumi.databinding.ActivityMainBinding
 import com.example.bangumi.schedule.BangumiTodayActivity
 import com.example.bangumi.schedule.ScheduleActivity
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         mBinding.button2.setOnClickListener {
             val intent = Intent(this, MapsDemoActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button3.setOnClickListener {
+            val intent = Intent(this, MyCollectionActivity::class.java)
             startActivity(intent)
         }
     }
