@@ -1,5 +1,6 @@
 package com.example.bangumi.detail.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,15 +32,16 @@ class BangumiCommentAdapter: ListAdapter<CommentData, BangumiCommentAdapter.Comm
         holder: CommentViewHolder,
         position: Int
     ) {
-        holder.bind(getItem(position))
+        holder.bind(position, getItem(position))
     }
 
     inner class CommentViewHolder(
         private val mBinding: ItemCommentBinding
     ): RecyclerView.ViewHolder(mBinding.root) {
 
-        fun bind(item: CommentData) {
-            mBinding.userName.text = item.user.username
+        @SuppressLint("SetTextI18n")
+        fun bind(position: Int, item: CommentData) {
+            mBinding.userName.text = position.toString() + " " + item.user.username
             mBinding.comment.text = item.comment
         }
     }

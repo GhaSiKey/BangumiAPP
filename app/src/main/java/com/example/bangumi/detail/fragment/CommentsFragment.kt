@@ -112,7 +112,7 @@ class CommentsFragment: Fragment() {
                 val totalItemCount = layoutManager.itemCount
 
                 // 检查是否需要加载更多
-                if (!isLoadingMore && lastVisibleItem >= totalItemCount - 2) {
+                if (!isLoadingMore && lastVisibleItem >= totalItemCount - 5) {
                     mViewModel.handleIntent(CommentsIntent.LoadMore)
                 }
             }

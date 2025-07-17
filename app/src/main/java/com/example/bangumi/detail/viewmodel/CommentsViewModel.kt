@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bangumi.data.api.NextClient
+import com.example.bangumi.data.bean.CommentData
 import kotlinx.coroutines.launch
 
 /**
@@ -21,6 +22,8 @@ class CommentsViewModel(private val mSubjectId: Int) : ViewModel() {
     private var limit = 20
     private var total = 0
 
+    private var mComments: List<CommentData> = ArrayList()
+
     init {
         loadFirstPage()
     }
@@ -37,9 +40,10 @@ class CommentsViewModel(private val mSubjectId: Int) : ViewModel() {
         viewModelScope.launch {
             _state.value = CommentsState.Loading
             try {
-                val result = NextClient.instance.getSubjectComments(mSubjectId)
+                val result = NextClient.instance.getSubjectComments(mSubjectId, offset, limit)
                 total = result.total
-                _state.value = CommentsState.Success(result.data)
+                mComments = result.data
+                _state.value = CommentsState.Success(mComments)
             } catch (e: Exception) {
                 _state.value = CommentsState.Error(e.message ?: "加载失败")
             }
@@ -51,9 +55,10 @@ class CommentsViewModel(private val mSubjectId: Int) : ViewModel() {
         viewModelScope.launch {
             _state.value = CommentsState.Loading
             try {
-                val result = NextClient.instance.getSubjectComments(mSubjectId)
+                val result = NextClient.instance.getSubjectComments(mSubjectId, offset, limit)
                 total = result.total
-                _state.value = CommentsState.Success(result.data)
+                mComments = result.data
+                _state.value = CommentsState.Success(mComments)
             } catch (e: Exception) {
                 _state.value = CommentsState.Error(e.message ?: "刷新失败")
             }
@@ -73,14 +78,8 @@ class CommentsViewModel(private val mSubjectId: Int) : ViewModel() {
                 offset = nextOffset
                 total = result.total
 
-                // 合并数据
-                val currentData = (_state.value as? CommentsState.Success)?.data
-                if (currentData != null) {
-                    val mergedData = currentData + result.data
-                    _state.value = CommentsState.Success(mergedData)
-                } else {
-                    _state.value = CommentsState.Success(result.data)
-                }
+                mComments = mComments + result.data
+                _state.value = CommentsState.Success(mComments)
             } catch (e: Exception) {
                 _state.value = CommentsState.LoadMoreError(e.message ?: "加载更多失败")
             }
