@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.bangumi.data.bean.CommentData
 import com.example.bangumi.databinding.ItemCommentBinding
+import com.example.bangumi.utils.BangumiUtils
 
 /**
  * Created by gaoshiqi
@@ -32,7 +34,7 @@ class BangumiCommentAdapter: ListAdapter<CommentData, BangumiCommentAdapter.Comm
         holder: CommentViewHolder,
         position: Int
     ) {
-        holder.bind(position, getItem(position))
+        holder.bind(getItem(position))
     }
 
     inner class CommentViewHolder(
@@ -40,9 +42,15 @@ class BangumiCommentAdapter: ListAdapter<CommentData, BangumiCommentAdapter.Comm
     ): RecyclerView.ViewHolder(mBinding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(position: Int, item: CommentData) {
-            mBinding.userName.text = position.toString() + " " + item.user.username
+        fun bind(item: CommentData) {
+            mBinding.userName.text = item.user.nickname
+            mBinding.subInfo.text = BangumiUtils.getCollectionStatus(item.type) + " "+ BangumiUtils.formatTimeByInterval(item.updatedAt)
             mBinding.comment.text = item.comment
+
+            Glide.with(mBinding.userAvatar.context)
+                .load(item.user.avatar.large)
+                .placeholder(com.example.bangumi.R.drawable.ic_cover_placeholder_36)
+                .into(mBinding.userAvatar)
         }
     }
 }
