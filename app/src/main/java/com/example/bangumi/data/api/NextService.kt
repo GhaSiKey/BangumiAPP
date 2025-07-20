@@ -1,6 +1,7 @@
 package com.example.bangumi.data.api
 
 import com.example.bangumi.data.bean.CommentResponse
+import com.example.bangumi.data.bean.TrendingResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,4 +19,11 @@ interface NextService {
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = 20,
     ): CommentResponse
+
+    @GET("/p1/trending/subjects")
+    suspend fun getTrendingSubjects(
+        @Query("type") type: Int = 2,
+        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = 10,
+    ): TrendingResponse
 }

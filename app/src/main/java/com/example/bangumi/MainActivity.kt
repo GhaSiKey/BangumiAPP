@@ -7,6 +7,7 @@ import com.example.bangumi.collection.MyCollectionActivity
 import com.example.bangumi.databinding.ActivityMainBinding
 import com.example.bangumi.schedule.BangumiTodayActivity
 import com.example.bangumi.schedule.ScheduleActivity
+import com.example.bangumi.trending.AnimeTrendingActivity
 import com.example.map.MapsDemoActivity
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +44,11 @@ class MainActivity : AppCompatActivity() {
 
         mBinding.button3.setOnClickListener {
             val intent = Intent(this, MyCollectionActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button4.setOnClickListener {
+            val intent = Intent(this, AnimeTrendingActivity::class.java)
             startActivity(intent)
         }
     }
