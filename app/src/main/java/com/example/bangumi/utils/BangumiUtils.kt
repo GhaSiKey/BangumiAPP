@@ -95,6 +95,25 @@ object BangumiUtils {
     }
 
     /**
+     * subjectType
+     * 1 = 书籍
+     * 2 = 动画
+     * 3 = 音乐
+     * 4 = 游戏
+     * 6 = 三次元
+     */
+    fun getSubjectTypeName(type: Int): String {
+        return when (type) {
+            1 -> "书籍"
+            2 -> "动画"
+            3 -> "音乐"
+            4 -> "游戏"
+            6 -> "三次元"
+            else -> ""
+        }
+    }
+
+    /**
      * 根据时间戳与当前时间的间隔返回不同的展示内容
      * @param timestamp 时间戳（单位：秒）
      * @return 格式化后的时间字符串

@@ -14,7 +14,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.bangumi.R
 import com.example.bangumi.databinding.ActivityScheduleBinding
-import com.example.bangumi.ui.CalendarViewModel
+import com.example.bangumi.schedule.CalendarViewModel
+import com.example.bangumi.schedule.adapter.SchedulePagerAdapter
 import com.example.bangumi.utils.BangumiUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Calendar

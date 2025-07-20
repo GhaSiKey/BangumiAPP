@@ -1,8 +1,9 @@
-package com.example.bangumi.schedule
+package com.example.bangumi.schedule.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.bangumi.schedule.DailyFragment
 
 /**
  * Created by gaoshiqi
@@ -14,7 +15,7 @@ class SchedulePagerAdapter(
 ): FragmentStateAdapter(fragmentActivity) {
     override fun createFragment(position: Int): Fragment {
         val weekdayId = position + 1
-        return DailyFragment.newInstance(weekdayId)
+        return DailyFragment.Companion.newInstance(weekdayId)
     }
 
     override fun getItemCount(): Int = 7

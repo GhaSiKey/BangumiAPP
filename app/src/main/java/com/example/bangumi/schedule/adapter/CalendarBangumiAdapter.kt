@@ -1,4 +1,4 @@
-package com.example.bangumi.ui
+package com.example.bangumi.schedule.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bangumi.R
 import com.example.bangumi.data.bean.SubjectSmall
 import com.example.bangumi.detail.BangumiDetailActivity
 import com.example.bangumi.utils.BangumiUtils
@@ -31,7 +32,7 @@ class BangumiAdapter: RecyclerView.Adapter<BangumiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BangumiViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(com.example.bangumi.R.layout.item_bangumi_card, parent, false)
+            .inflate(R.layout.item_bangumi_card, parent, false)
         return BangumiViewHolder(view)
     }
 
@@ -54,23 +55,23 @@ class BangumiAdapter: RecyclerView.Adapter<BangumiViewHolder>() {
 }
 
 class BangumiViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-    val container: ConstraintLayout = view.findViewById(com.example.bangumi.R.id.bangumi_card_container)
-    val image: ImageView = view.findViewById(com.example.bangumi.R.id.iv_cover)
-    val title: TextView = view.findViewById(com.example.bangumi.R.id.tv_title)
-    val titleCn: TextView = view.findViewById(com.example.bangumi.R.id.tv_title_cn)
-    val sidContainer: LinearLayout = view.findViewById(com.example.bangumi.R.id.sid_container)
-    val sid: TextView = view.findViewById(com.example.bangumi.R.id.tv_sid)
-    val airDate: TextView = view.findViewById(com.example.bangumi.R.id.tv_air_date)
-    val onDoing: TextView = view.findViewById(com.example.bangumi.R.id.tv_on_doing)
-    val score: TextView = view.findViewById(com.example.bangumi.R.id.tv_score)
-    val scoreCount: TextView = view.findViewById(com.example.bangumi.R.id.tv_score_count)
+    val container: ConstraintLayout = view.findViewById(R.id.bangumi_card_container)
+    val image: ImageView = view.findViewById(R.id.iv_cover)
+    val title: TextView = view.findViewById(R.id.tv_title)
+    val titleCn: TextView = view.findViewById(R.id.tv_title_cn)
+    val sidContainer: LinearLayout = view.findViewById(R.id.sid_container)
+    val sid: TextView = view.findViewById(R.id.tv_sid)
+    val airDate: TextView = view.findViewById(R.id.tv_air_date)
+    val onDoing: TextView = view.findViewById(R.id.tv_on_doing)
+    val score: TextView = view.findViewById(R.id.tv_score)
+    val scoreCount: TextView = view.findViewById(R.id.tv_score_count)
 
     @SuppressLint("SetTextI18n")
     fun setView(data: SubjectSmall) {
         Glide.with(view.context)
             .load(data.images?.large)
             .centerCrop()
-            .placeholder(com.example.bangumi.R.drawable.ic_cover_placeholder_36)
+            .placeholder(R.drawable.ic_cover_placeholder_36)
             .into(image)
         title.text = data.name
         titleCn.text = data.nameCn

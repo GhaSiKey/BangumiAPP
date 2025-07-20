@@ -11,8 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bangumi.data.bean.CalendarResponse
 import com.example.bangumi.databinding.ActivityBangumiApiTestBinding
-import com.example.bangumi.ui.BangumiAdapter
-import com.example.bangumi.ui.CalendarViewModel
+import com.example.bangumi.schedule.adapter.BangumiAdapter
 import com.example.bangumi.utils.BangumiUtils
 
 class BangumiTodayActivity : AppCompatActivity() {

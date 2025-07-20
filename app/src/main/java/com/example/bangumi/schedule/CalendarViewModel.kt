@@ -1,4 +1,4 @@
-package com.example.bangumi.ui
+package com.example.bangumi.schedule
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
