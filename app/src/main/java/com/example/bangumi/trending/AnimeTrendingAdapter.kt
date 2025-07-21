@@ -1,6 +1,7 @@
 package com.example.bangumi.trending
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -46,10 +47,8 @@ class TrendingViewHolder(
             .centerCrop()
             .placeholder(com.example.bangumi.R.drawable.ic_cover_placeholder_36)
             .into(mBinding.ivCover)
-        if ((position + 1) < 100) {
-            mBinding.tvRank.visibility = android.view.View.VISIBLE
-            mBinding.tvRank.text = (position + 1).toString()
-        }
+        mBinding.tvRank.visibility = if ((position + 1) < 100) android.view.View.VISIBLE else android.view.View.GONE
+        mBinding.tvRank.text = (position + 1).toString()
         mBinding.tvTitle.text = item.subject.name
         mBinding.tvTitleCn.text = item.subject.nameCN
         mBinding.tvSid.text = "ID: " + item.subject.id
