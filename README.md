@@ -1,4 +1,4 @@
-# **BangumiAPP主要目的是为了圣地巡礼**
+# **Android BangumiAPP主要目的是为了圣地巡礼**
 
 📊ANIME的数据来自Bangumi网站，
 
@@ -9,26 +9,28 @@
 新番详情页中可以查看部分番剧现有的圣地巡礼地点，支持我的收藏
 
 ## 番剧详情页-圣地巡礼页
-![img.png](assets/detail_img_4.webp)
+<img src="assets/detail_img_4.webp" alt="image" width="50%">
 
 ### 圣地巡礼页支持两种地图查看方式
 #### 1. 半屏弹窗查看单个巡礼地点
-![img.png](assets/point_img_1.webp)
+<img src="assets/point_img_1.webp" alt="image" width="50%">
+
 #### 2. 全屏地图查看所有巡礼地点，底部卡片支持左右滑动切换地点
-![img.png](assets/point_img_2.webp)
+<img src="assets/point_img_2.webp" alt="image" width="50%">
 
 ## Bangumi排行榜
-![img_1.png](assets/trending_img.webp)
+<img src="assets/trending_img.webp" alt="image" width="50%">
 
 ## 时间表
-![img.png](assets/schedule_img_1.webp)
-![img.png](assets/schedule_img_2.webp)
+<img src="assets/schedule_img_1.webp" alt="image" width="50%"><img src="assets/schedule_img_2.webp" alt="image" width="50%">
 
 ## 番剧详情页-简介
-![img.png](assets/detail_img_1.webp)
+<img src="assets/detail_img_1.webp" alt="image" width="50%">
+
 ## 番剧详情页-角色
-![img.png](assets/detail_img_2.webp)
+<img src="assets/detail_img_2.webp" alt="image" width="50%">
+
 ## 番剧详情页-吐槽箱
-![img.png](assets/detail_img_3.webp)
+<img src="assets/detail_img_3.webp" alt="image" width="50%">
 
 ### 持续更新中。。。
