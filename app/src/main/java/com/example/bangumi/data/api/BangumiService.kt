@@ -3,8 +3,10 @@ package com.example.bangumi.data.api
 import com.example.bangumi.data.bean.BangumiDetail
 import com.example.bangumi.data.bean.CalendarResponse
 import com.example.bangumi.data.bean.BangumiCharacter
+import com.example.bangumi.data.bean.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by gaoshiqi
@@ -25,4 +27,13 @@ interface BangumiService {
     suspend fun getSubjectCharacters(
         @Path("subject_id") subjectId: Int,
     ): List<BangumiCharacter>
+
+    @GET("/search/subject/{keywords}")
+    suspend fun searchSubject(
+        @Path("keywords") keywords: String,
+        @Query("type") type: Int = 2,
+        @Query("responseGroup") responseGroup: String = "large",
+        @Query("start") start: Int = 1,
+        @Query("max_results") limit: Int = 10,
+    ): SearchResponse
 }

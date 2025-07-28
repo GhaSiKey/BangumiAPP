@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015-2018 BiliBili Inc.
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="30dp"/>
+    <stroke android:color="@color/black_85" android:width="1.5dp"/>
+</shape>
