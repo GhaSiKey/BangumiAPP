@@ -6,6 +6,6 @@ package com.example.bangumi.data.bean
  * email: gaoshiqi@bilibili.com
  */
 data class SearchResponse(
-    val result: Int? = null,
+    val results: Int? = null,
     val list: List<SubjectSmall>? =null
 )
