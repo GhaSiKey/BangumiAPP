@@ -1,4 +1,4 @@
-package com.example.bangumi.ui.schedule
+package com.example.bangumi.homepage
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -16,14 +16,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Calendar
 
 class ScheduleFragment : Fragment() {
-    
+
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: CalendarViewModel by lazy {
         ViewModelProvider(requireActivity())[CalendarViewModel::class.java]
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,31 +32,31 @@ class ScheduleFragment : Fragment() {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
-    
+
     @SuppressLint("NewApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         initView()
         initObserver()
-        
+
         viewModel.loadCalendarData()
     }
-    
+
     private fun initView() {
         val mPagerAdapter = SchedulePagerAdapter(requireActivity())
         binding.viewPager.adapter = mPagerAdapter
-        
+
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = BangumiUtils.getWeekdayName(position + 1)
         }.attach()
-        
+
         val calendar = Calendar.getInstance()
         var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         dayOfWeek = if (dayOfWeek == Calendar.SUNDAY) 7 else dayOfWeek - 1
         binding.viewPager.setCurrentItem(dayOfWeek - 1, false)
     }
-    
+
     private fun initObserver() {
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
@@ -64,7 +64,7 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

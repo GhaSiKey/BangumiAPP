@@ -1,10 +1,11 @@
-package com.example.bangumi.ui.collection
+package com.example.bangumi.homepage
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,7 +20,7 @@ class CollectionFragment : Fragment() {
 
     private var _binding: FragmentCollectionBinding? = null
     private val binding get() = _binding!!
-    
+
     private lateinit var mRepository: AnimeMarkRepository
     private lateinit var mAdapter: CollectionAdapter
 
@@ -34,7 +35,7 @@ class CollectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupRepository()
         setupRecyclerView()
         initData()
@@ -52,7 +53,7 @@ class CollectionFragment : Fragment() {
 
     private fun initData() {
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.CREATED) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 mRepository.allAnimeMarks.collectLatest { animeList ->
                     mAdapter.submitList(animeList)
                 }

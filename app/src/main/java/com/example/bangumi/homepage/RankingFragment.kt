@@ -1,4 +1,4 @@
-package com.example.bangumi.ui.ranking
+package com.example.bangumi.homepage
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ class RankingFragment : Fragment() {
 
     private var _binding: FragmentRankingBinding? = null
     private val binding get() = _binding!!
-    
+
     private val mViewModel: AnimeTrendingViewModel by lazy {
         ViewModelProvider(requireActivity())[AnimeTrendingViewModel::class.java]
     }
@@ -37,7 +37,7 @@ class RankingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         initView()
         initObserve()
     }

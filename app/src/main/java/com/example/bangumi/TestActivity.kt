@@ -4,17 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bangumi.collection.MyCollectionActivity
-import com.example.bangumi.databinding.ActivityMainBinding
+import com.example.bangumi.databinding.ActivityTestBinding
 import com.example.bangumi.schedule.BangumiTodayActivity
 import com.example.bangumi.schedule.ScheduleActivity
 import com.example.bangumi.search.SearchActivity
 import com.example.bangumi.trending.AnimeTrendingActivity
 import com.example.map.MapsDemoActivity
 
-class MainActivity : AppCompatActivity() {
+class TestActivity : AppCompatActivity() {
 
-    private val mBinding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val mBinding: ActivityTestBinding by lazy {
+        ActivityTestBinding.inflate(layoutInflater)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -5,10 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.bangumi.databinding.ActivityMainTabBinding
-import com.example.bangumi.ui.collection.CollectionFragment
-import com.example.bangumi.ui.ranking.RankingFragment
-import com.example.bangumi.ui.schedule.ScheduleFragment
-import com.example.bangumi.ui.settings.SettingsFragment
+import com.example.bangumi.homepage.CollectionFragment
+import com.example.bangumi.homepage.RankingFragment
+import com.example.bangumi.homepage.ScheduleFragment
+import com.example.bangumi.homepage.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainTabActivity : AppCompatActivity() {
