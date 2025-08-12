@@ -5,30 +5,63 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.bangumi.R
+import com.example.bangumi.BangumiApplication
+import com.example.bangumi.collection.adapter.CollectionAdapter
+import com.example.bangumi.databinding.FragmentCollectionBinding
+import com.example.room.AnimeMarkRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class CollectionFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
+    private var _binding: FragmentCollectionBinding? = null
+    private val binding get() = _binding!!
+    
+    private lateinit var mRepository: AnimeMarkRepository
+    private lateinit var mAdapter: CollectionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_collection, container, false)
+        _binding = FragmentCollectionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        recyclerView = view.findViewById(R.id.recycler_view_collection)
+        setupRepository()
         setupRecyclerView()
+        initData()
+    }
+
+    private fun setupRepository() {
+        mRepository = (requireActivity().application as BangumiApplication).animeMarkRepository
+        mAdapter = CollectionAdapter(requireContext())
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerViewCollection.adapter = mAdapter
+        binding.recyclerViewCollection.layoutManager = GridLayoutManager(requireContext(), 3)
+    }
+
+    private fun initData() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.CREATED) {
+                mRepository.allAnimeMarks.collectLatest { animeList ->
+                    mAdapter.submitList(animeList)
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
