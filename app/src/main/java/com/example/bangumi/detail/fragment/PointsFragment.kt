@@ -14,6 +14,7 @@ import com.example.bangumi.detail.adapter.BangumiPointAdapter
 import com.example.bangumi.detail.viewmodel.BangumiPointsState
 import com.example.bangumi.detail.viewmodel.BangumiPointsViewModel
 import com.example.map.MapActivity
+import com.google.android.material.chip.Chip
 import com.example.map.MapBottomSheetFragment
 import com.example.map.data.LitePoint
 import com.example.map.utils.PointListSingleton
@@ -68,16 +69,11 @@ class PointsFragment: Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
         }
+        // 初始时隐藏集数选择器
+        mBinding.episodeScrollView.visibility = View.GONE
+
         initObserver()
-
         mViewModel.loadPoints(mSubjectId)
-        mBinding.watchAll.setOnClickListener {
-            if (pointList.isNullOrEmpty()) return@setOnClickListener
-            PointListSingleton.setPointList(pointList!!)
-
-            val intent = Intent(requireContext(), MapActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun initObserver() {
@@ -89,17 +85,29 @@ class PointsFragment: Fragment() {
                     if (state.data.isEmpty()) {
                         showEmpty()
                         mBinding.watchAll.visibility = View.GONE
+                        mBinding.episodeScrollView.visibility = View.GONE
                         return@observe
                     }
                     mAdapter.updateList(state.data)
                     mBinding.watchAll.visibility = View.VISIBLE
+                    mBinding.episodeScrollView.visibility = View.VISIBLE
                     pointList = mViewModel.getRawPoints()
+                    updateEpisodeChips()
                 }
                 is BangumiPointsState.ERROR -> {
                     Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                    mBinding.episodeScrollView.visibility = View.GONE
                     showEmpty()
                 }
             }
+        }
+
+        mBinding.watchAll.setOnClickListener {
+            if (pointList.isNullOrEmpty()) return@setOnClickListener
+            PointListSingleton.setPointList(pointList!!)
+
+            val intent = Intent(requireContext(), MapActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -119,4 +127,56 @@ class PointsFragment: Fragment() {
         mBinding.loadingView.visibility = View.GONE
         mBinding.rvPoints.visibility = View.VISIBLE
     }
+
+    private fun updateEpisodeChips() {
+        val episodes = mViewModel.getEpisodeList()
+        if (episodes.isEmpty()) return
+
+        mBinding.chipGroupEpisodes.removeAllViews()
+
+        episodes.forEachIndexed { index, episode ->
+            val chip = Chip(requireContext()).apply {
+                text = formatEpisodeDisplayName(episode)
+                isCheckable = true
+                isClickable = true
+                
+                // 为每个chip设置tag来标识对应的episode
+                tag = episode
+            }
+            mBinding.chipGroupEpisodes.addView(chip)
+        }
+        
+        // 设置ChipGroup的选中监听器
+        mBinding.chipGroupEpisodes.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                val checkedChip = group.findViewById<Chip>(checkedIds[0])
+                val episode = checkedChip.tag as String
+                scrollToEpisode(episode)
+            }
+        }
+        
+        // 设置第一个Chip为默认选中
+        if (episodes.isNotEmpty()) {
+            mBinding.chipGroupEpisodes.check(mBinding.chipGroupEpisodes.getChildAt(0).id)
+        }
+    }
+
+    private fun formatEpisodeDisplayName(episode: String): String {
+        return when {
+            episode == "其他" -> "其他"
+            episode.matches("\\d+".toRegex()) -> "第${episode}集"
+            else -> episode
+        }
+    }
+
+    private fun scrollToEpisode(episode: String) {
+        val position = mViewModel.getPositionForEpisode(episode)
+        if (position != -1) {
+            // 使用LinearLayoutManager将标题精确滑动到顶部
+            (mBinding.rvPoints.layoutManager as? LinearLayoutManager)?.let { layoutManager ->
+                layoutManager.scrollToPositionWithOffset(position, 0)
+            }
+        }
+    }
+    
 }

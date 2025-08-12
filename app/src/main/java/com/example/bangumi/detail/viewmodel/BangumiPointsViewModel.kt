@@ -82,4 +82,27 @@ class BangumiPointsViewModel: ViewModel() {
             else -> emptyList()
         }
     }
+    
+    // 获取所有集数列表（用于Chip选择栏）
+    fun getEpisodeList(): List<String> {
+        return when (val currentState = _state.value) {
+            is BangumiPointsState.SUCCESS -> {
+                currentState.data.filterIsInstance<PointListItem.Header>()
+                    .map { it.episode }
+            }
+            else -> emptyList()
+        }
+    }
+    
+    // 根据集数查找在列表中的位置
+    fun getPositionForEpisode(episode: String): Int {
+        return when (val currentState = _state.value) {
+            is BangumiPointsState.SUCCESS -> {
+                currentState.data.indexOfFirst { 
+                    it is PointListItem.Header && it.episode == episode 
+                }
+            }
+            else -> -1
+        }
+    }
 }
