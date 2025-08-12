@@ -57,10 +57,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-
-        mBinding.buttonNewHome.setOnClickListener {
-            val intent = Intent(this, MainTabActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
