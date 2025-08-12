@@ -1,9 +1,12 @@
 package com.example.map
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
 import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.map.data.LitePoint
 import com.example.map.databinding.ActivityMapsBinding
@@ -16,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlin.math.abs
 
 /**
  * Created by gaoshiqi
@@ -51,7 +55,7 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback{
         mPoints?.let {
             val adapter = LitePointAdapter(it)
             mBinding.viewPager.adapter = adapter
-
+            mBinding.viewPager.offscreenPageLimit = 1
             mBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -62,6 +66,17 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback{
                     }
                 }
             })
+            mBinding.viewPager.addItemDecoration(object: RecyclerView.ItemDecoration(){
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                    outRect.left = 100
+                    outRect.right = 100
+                }
+            })
+            mBinding.viewPager.setPageTransformer { page, position ->
+                page.translationX = -350 * position
+                page.scaleX = 1 - abs(position) * 0.4f
+                page.scaleY = 1 - abs(position) * 0.4f
+            }
         }
     }
 
