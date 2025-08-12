@@ -35,6 +35,9 @@
             android:name=".schedule.BangumiTodayActivity"
             android:exported="false" />
         <activity
+            android:name=".MainTabActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
