@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,9 +93,12 @@ class PointsFragment: Fragment() {
                     }
                     mAdapter.updateList(state.data)
                     mBinding.watchAll.visibility = View.VISIBLE
-                    pointList = state.data
+                    pointList = mViewModel.getRawPoints()
                 }
-                is BangumiPointsState.ERROR -> showEmpty()
+                is BangumiPointsState.ERROR -> {
+                    Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                    showEmpty()
+                }
             }
         }
     }

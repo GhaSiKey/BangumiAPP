@@ -1,6 +1,6 @@
 package com.example.bangumi.detail.viewmodel
 
-import com.example.map.data.LitePoint
+import com.example.bangumi.detail.adapter.PointListItem
 
 /**
  * Created by gaoshiqi
@@ -9,6 +9,6 @@ import com.example.map.data.LitePoint
  */
 sealed class BangumiPointsState {
     object LOADING: BangumiPointsState()
-    data class SUCCESS(val data: List<LitePoint>): BangumiPointsState()
+    data class SUCCESS(val data: List<PointListItem>): BangumiPointsState()
     data class ERROR(val msg: String): BangumiPointsState()
 }

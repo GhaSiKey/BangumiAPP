@@ -11,8 +11,8 @@ data class LitePoint(
     val cn: String,            // 地标中文译名
     val name: String,          // 地标原名
     val image: String,         // 地标缩略图 URL
-    val ep: String,               // 出现集数
-    val s: String,                // 截图时间点（秒）
+    val ep: String?,               // 出现集数（可为空）
+    val s: String?,                // 截图时间点（秒，可为空）
     val geo: List<Double>          // GPS 位置信息
 )
 
