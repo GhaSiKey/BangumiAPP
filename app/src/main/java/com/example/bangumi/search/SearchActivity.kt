@@ -3,7 +3,12 @@ package com.example.bangumi.search
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.TextWatcher
+import android.text.Editable
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -44,9 +49,59 @@ class SearchActivity : AppCompatActivity() {
         mBinding.rvSearchResult.adapter = mAdapter
         mBinding.rvSearchResult.layoutManager = LinearLayoutManager(this)
 
+        setupSearchBar()
+
         Handler(Looper.getMainLooper()).postDelayed({
             KeyboardUtils.showSoftKeyboard(this, mBinding.searchBar)
         }, 300)
+    }
+
+    private fun setupSearchBar() {
+        // 设置键盘回车监听
+        mBinding.searchBar.setOnEditorActionListener { _, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    performSearch()
+                    true
+                }
+                else -> {
+                    // 处理硬件键盘回车
+                    if (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                        performSearch()
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
+        }
+
+        // 添加文本变化监听（可选：实时搜索或验证）
+        mBinding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            
+            override fun afterTextChanged(s: Editable?) {
+                // 可以在这里添加实时搜索或者清空结果的逻辑
+                val query = s?.toString()?.trim()
+                if (query.isNullOrEmpty()) {
+                    // 当搜索框为空时显示空状态
+                    showEmpty()
+                }
+            }
+        })
+    }
+
+    private fun performSearch() {
+        val query = mBinding.searchBar.text?.toString()?.trim()
+        if (!query.isNullOrBlank()) {
+            mViewModel.handleIntent(SearchIntent.Search(query))
+            mBinding.searchBar.clearFocus()
+            KeyboardUtils.hideSoftKeyboard(this, mBinding.searchBar)
+        } else {
+            Toast.makeText(this, "请输入搜索内容", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initObserver() {
@@ -68,12 +123,11 @@ class SearchActivity : AppCompatActivity() {
         })
 
         mBinding.tvSearch.setOnClickListener {
-            val query = mBinding.searchBar.text
-            if (query.isNotBlank()) {
-                mViewModel.handleIntent(SearchIntent.Search(query.toString()))
-                mBinding.searchBar.clearFocus()
-                KeyboardUtils.hideSoftKeyboard(this, mBinding.searchBar)
-            }
+            performSearch()
+        }
+
+        mBinding.action.setOnClickListener {
+            onBackPressed()
         }
 
         mViewModel.state.observe(this) { state ->
