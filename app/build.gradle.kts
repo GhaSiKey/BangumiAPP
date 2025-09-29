@@ -68,4 +68,7 @@ dependencies {
 
     // play services
     implementation(libs.play.services.maps)
+
+    // splash
+    implementation(libs.splash.screen)
 }
