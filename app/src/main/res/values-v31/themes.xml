@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Bangumi.Starting" parent="Theme.SplashScreen">
+        <!-- 启动屏幕背景色（整个屏幕） -->
+        <item name="windowSplashScreenBackground">@color/transparent</item>
+
+        <!-- 中心显示的图标（使用专用图标，避免裁切） -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_screen_icon</item>
+
+        <!-- 退出启动屏幕后切换到的真正主题 -->
+        <item name="postSplashScreenTheme">@style/Theme.Bangumi</item>
+
+    </style>
+</resources>
