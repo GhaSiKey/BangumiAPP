@@ -36,7 +36,8 @@
             android:exported="false" />
         <activity
             android:name=".MainTabActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Bangumi.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
