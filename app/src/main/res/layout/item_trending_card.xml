@@ -102,6 +102,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black_40"
             android:textSize="12sp"
+            android:maxLines="6"
+            android:ellipsize="end"
             tools:text="13话 / 2025年7月6日 / 石立太一 / あらゐけいいち（講談社「モーニング」所載） / 徳山珠美" />
 
     </LinearLayout>
