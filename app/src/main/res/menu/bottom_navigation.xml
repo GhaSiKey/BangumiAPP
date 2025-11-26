@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
     <item
-        android:id="@+id/nav_collection"
-        android:icon="@drawable/ic_favorite"
-        android:title="我的收藏" />
-    
-    <item
         android:id="@+id/nav_ranking"
         android:icon="@drawable/ic_trending_up"
         android:title="排行榜" />
+
+    <item
+        android:id="@+id/nav_collection"
+        android:icon="@drawable/ic_favorite"
+        android:title="我的收藏" />
     
     <item
         android:id="@+id/nav_schedule"
