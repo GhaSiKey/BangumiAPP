@@ -68,11 +68,11 @@ class MainTabActivity : AppCompatActivity() {
                     showFragment(0)
                     true
                 }
-                R.id.nav_collection -> {
+                R.id.nav_schedule -> {
                     showFragment(1)
                     true
                 }
-                R.id.nav_schedule -> {
+                R.id.nav_collection -> {
                     showFragment(2)
                     true
                 }
@@ -101,18 +101,18 @@ class MainTabActivity : AppCompatActivity() {
                 rankingFragment
             }
             1 -> {
-                if (collectionFragment == null) {
-                    collectionFragment = CollectionFragment()
-                    transaction.add(R.id.fragment_container, collectionFragment!!)
-                }
-                collectionFragment
-            }
-            2 -> {
                 if (scheduleFragment == null) {
                     scheduleFragment = ScheduleFragment()
                     transaction.add(R.id.fragment_container, scheduleFragment!!)
                 }
                 scheduleFragment
+            }
+            2 -> {
+                if (collectionFragment == null) {
+                    collectionFragment = CollectionFragment()
+                    transaction.add(R.id.fragment_container, collectionFragment!!)
+                }
+                collectionFragment
             }
             3 -> {
                 if (settingsFragment == null) {
