@@ -11,4 +11,7 @@
 
     <!-- CollectionFragment -->
     <string name="collection_empty_action">去找更多</string>
+
+    <!-- ScheduleFragment -->
+    <string name="schedule_title">每日放送</string>
 </resources>

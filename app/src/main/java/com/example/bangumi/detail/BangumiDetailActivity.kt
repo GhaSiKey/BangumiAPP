@@ -154,23 +154,18 @@ class BangumiDetailActivity : AppCompatActivity() {
 
 
     private fun showLoading() {
-        mBinding.loadingView.visibility = View.VISIBLE
+        mBinding.loadingStateView.showLoading()
         mBinding.detailContainer.visibility = View.GONE
-
-        mBinding.loadingView.text = getString(R.string.loading)
     }
 
     private fun hideLoading() {
-        mBinding.loadingView.visibility = View.GONE
+        mBinding.loadingStateView.hide()
         mBinding.detailContainer.visibility = View.VISIBLE
     }
 
     private fun showError(msg: String) {
-        mBinding.loadingView.visibility = View.VISIBLE
         mBinding.detailContainer.visibility = View.GONE
-
-        mBinding.loadingView.text = msg + "\n点击重试"
-        mBinding.loadingView.setOnClickListener {
+        mBinding.loadingStateView.showError(message = msg) {
             mViewModel.processIntent(BangumiDetailIntent.Retry)
         }
     }

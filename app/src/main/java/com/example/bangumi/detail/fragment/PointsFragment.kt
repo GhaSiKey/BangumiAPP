@@ -81,13 +81,13 @@ class PointsFragment: Fragment() {
             when (state) {
                 is BangumiPointsState.LOADING -> showLoading()
                 is BangumiPointsState.SUCCESS -> {
-                    hideLoading()
                     if (state.data.isEmpty()) {
                         showEmpty()
                         mBinding.watchAll.visibility = View.GONE
                         mBinding.episodeScrollView.visibility = View.GONE
                         return@observe
                     }
+                    hideLoading()
                     mAdapter.updateList(state.data)
                     mBinding.watchAll.visibility = View.VISIBLE
                     mBinding.episodeScrollView.visibility = View.VISIBLE
@@ -112,19 +112,17 @@ class PointsFragment: Fragment() {
     }
 
     private fun showLoading() {
-        mBinding.loadingView.visibility = View.VISIBLE
+        mBinding.loadingStateView.showLoading()
         mBinding.rvPoints.visibility = View.GONE
-        mBinding.loadingView.text = "正在加载..."
     }
 
     private fun showEmpty() {
-        mBinding.loadingView.visibility = View.VISIBLE
+        mBinding.loadingStateView.showEmpty()
         mBinding.rvPoints.visibility = View.GONE
-        mBinding.loadingView.text = "暂无数据"
     }
 
     private fun hideLoading() {
-        mBinding.loadingView.visibility = View.GONE
+        mBinding.loadingStateView.hide()
         mBinding.rvPoints.visibility = View.VISIBLE
     }
 

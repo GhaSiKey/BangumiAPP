@@ -70,19 +70,35 @@ class DailyFragment: Fragment() {
         viewModel.calendarData.observe(viewLifecycleOwner) { response ->
             val today = response.firstOrNull { it.weekday?.id == mWeekdayId }
             today?.let {
-                mAdapter.setData(it.items ?: emptyList())
+                val items = it.items ?: emptyList()
+                if (items.isEmpty()) {
+                    showEmpty()
+                } else {
+                    hideLoadingState()
+                    mAdapter.setData(items)
+                }
             }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
-                mBinding.tv.text = "正在加载..."
-                mBinding.tv.visibility = View.VISIBLE
-                mBinding.recyclerView.visibility = View.GONE
-            } else {
-                mBinding.tv.visibility = View.GONE
-                mBinding.recyclerView.visibility = View.VISIBLE
+                showLoading()
             }
         }
+    }
+
+    private fun showLoading() {
+        mBinding.loadingStateView.showLoading()
+        mBinding.recyclerView.visibility = View.GONE
+    }
+
+    private fun showEmpty() {
+        mBinding.loadingStateView.showEmpty()
+        mBinding.recyclerView.visibility = View.GONE
+    }
+
+    private fun hideLoadingState() {
+        mBinding.loadingStateView.hide()
+        mBinding.recyclerView.visibility = View.VISIBLE
     }
 }
