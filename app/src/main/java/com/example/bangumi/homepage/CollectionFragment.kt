@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bangumi.BangumiApplication
+import com.example.bangumi.MainTabActivity
+import com.example.bangumi.R
 import com.example.bangumi.collection.adapter.CollectionAdapter
 import com.example.bangumi.databinding.FragmentCollectionBinding
 import com.example.room.AnimeMarkRepository
@@ -55,9 +57,36 @@ class CollectionFragment : Fragment() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 mRepository.allAnimeMarks.collectLatest { animeList ->
-                    mAdapter.submitList(animeList)
+                    if (animeList.isEmpty()) {
+                        showEmpty()
+                    } else {
+                        hideLoadingState()
+                        mAdapter.submitList(animeList)
+                    }
                 }
             }
+        }
+    }
+
+    private fun showEmpty() {
+        binding.loadingStateView.showEmpty(
+            buttonText = getString(R.string.collection_empty_action)
+        ) {
+            navigateToRanking()
+        }
+        binding.recyclerViewCollection.visibility = View.GONE
+    }
+
+    private fun hideLoadingState() {
+        binding.loadingStateView.hide()
+        binding.recyclerViewCollection.visibility = View.VISIBLE
+    }
+
+    private fun navigateToRanking() {
+        (requireActivity() as? MainTabActivity)?.let { activity ->
+            activity.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
+                R.id.bottom_navigation
+            )?.selectedItemId = R.id.nav_ranking
         }
     }
 

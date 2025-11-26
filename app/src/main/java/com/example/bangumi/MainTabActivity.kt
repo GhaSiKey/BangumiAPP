@@ -64,15 +64,15 @@ class MainTabActivity : AppCompatActivity() {
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_collection -> {
+                R.id.nav_ranking -> {
                     showFragment(0)
                     true
                 }
-                R.id.nav_ranking -> {
+                R.id.nav_schedule -> {
                     showFragment(1)
                     true
                 }
-                R.id.nav_schedule -> {
+                R.id.nav_collection -> {
                     showFragment(2)
                     true
                 }
@@ -94,25 +94,25 @@ class MainTabActivity : AppCompatActivity() {
         
         val targetFragment = when (index) {
             0 -> {
-                if (collectionFragment == null) {
-                    collectionFragment = CollectionFragment()
-                    transaction.add(R.id.fragment_container, collectionFragment!!)
-                }
-                collectionFragment
-            }
-            1 -> {
                 if (rankingFragment == null) {
                     rankingFragment = RankingFragment()
                     transaction.add(R.id.fragment_container, rankingFragment!!)
                 }
                 rankingFragment
             }
-            2 -> {
+            1 -> {
                 if (scheduleFragment == null) {
                     scheduleFragment = ScheduleFragment()
                     transaction.add(R.id.fragment_container, scheduleFragment!!)
                 }
                 scheduleFragment
+            }
+            2 -> {
+                if (collectionFragment == null) {
+                    collectionFragment = CollectionFragment()
+                    transaction.add(R.id.fragment_container, collectionFragment!!)
+                }
+                collectionFragment
             }
             3 -> {
                 if (settingsFragment == null) {

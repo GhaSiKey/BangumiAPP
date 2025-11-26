@@ -161,19 +161,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        mBinding.loadingView.visibility = View.VISIBLE
+        mBinding.loadingStateView.showLoading()
         mBinding.rvSearchResult.visibility = View.GONE
-        mBinding.loadingView.text = "正在加载..."
     }
 
     private fun showEmpty() {
-        mBinding.loadingView.visibility = View.VISIBLE
+        mBinding.loadingStateView.showEmpty()
         mBinding.rvSearchResult.visibility = View.GONE
-        mBinding.loadingView.text = "暂无数据"
     }
 
     private fun hideLoading() {
-        mBinding.loadingView.visibility = View.GONE
+        mBinding.loadingStateView.hide()
         mBinding.rvSearchResult.visibility = View.VISIBLE
     }
 

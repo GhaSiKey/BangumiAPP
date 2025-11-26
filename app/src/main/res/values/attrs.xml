@@ -8,4 +8,17 @@
         <attr name="defaultTextColor" format="color" />
         <attr name="defaultBgColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="LoadingStateView">
+        <attr name="emptyIcon" format="reference" />
+        <attr name="errorIcon" format="reference" />
+        <attr name="emptyText" format="string" />
+        <attr name="errorText" format="string" />
+        <attr name="loadingText" format="string" />
+        <attr name="messageTextColor" format="color" />
+        <attr name="messageTextSize" format="dimension" />
+        <attr name="actionButtonText" format="string" />
+        <attr name="emptyActionButtonText" format="string" />
+        <attr name="errorActionButtonText" format="string" />
+    </declare-styleable>
 </resources>

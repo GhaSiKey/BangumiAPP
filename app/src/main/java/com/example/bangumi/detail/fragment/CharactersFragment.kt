@@ -89,18 +89,16 @@ class CharactersFragment: Fragment() {
 
     private fun showLoading() {
         mBinding.recyclerView.visibility = View.GONE
-        mBinding.loadingView.visibility = View.VISIBLE
-        mBinding.loadingView.text = "正在加载..."
+        mBinding.loadingStateView.showLoading()
     }
 
     private fun showEmpty() {
         mBinding.recyclerView.visibility = View.GONE
-        mBinding.loadingView.visibility = View.VISIBLE
-        mBinding.loadingView.text = "暂无数据"
+        mBinding.loadingStateView.showEmpty()
     }
 
     private fun hideLoading() {
         mBinding.recyclerView.visibility = View.VISIBLE
-        mBinding.loadingView.visibility = View.GONE
+        mBinding.loadingStateView.hide()
     }
 }

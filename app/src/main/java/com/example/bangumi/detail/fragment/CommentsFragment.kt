@@ -68,34 +68,54 @@ class CommentsFragment: Fragment() {
                 is CommentsState.Idle -> {
                 }
                 is CommentsState.Loading -> {
-                    // 显示加载指示器
-                    mBinding.swipeRefreshLayout.isRefreshing = true
+                    showLoading()
                 }
                 is CommentsState.Error -> {
-                    // 显示错误
                     mBinding.swipeRefreshLayout.isRefreshing = false
-                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                     isLoadingMore = false
+                    showError(state.message)
                 }
                 is CommentsState.Success -> {
-                    // 更新数据
                     mBinding.swipeRefreshLayout.isRefreshing = false
-                    mAdapter.submitList(state.data)
                     isLoadingMore = false
+                    if (state.data.isEmpty()) {
+                        showEmpty()
+                    } else {
+                        hideLoadingState()
+                        mAdapter.submitList(state.data)
+                    }
                 }
-
                 is CommentsState.LoadingMore -> {
-                    // 显示加载更多指示器
                     isLoadingMore = true
                 }
-
                 is CommentsState.LoadMoreError -> {
-                    // 加载更多错误
                     isLoadingMore = false
                     Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun showLoading() {
+        mBinding.loadingStateView.showLoading()
+        mBinding.swipeRefreshLayout.visibility = View.GONE
+    }
+
+    private fun showEmpty() {
+        mBinding.loadingStateView.showEmpty()
+        mBinding.swipeRefreshLayout.visibility = View.GONE
+    }
+
+    private fun showError(message: String) {
+        mBinding.swipeRefreshLayout.visibility = View.GONE
+        mBinding.loadingStateView.showError(message = message) {
+            mViewModel.handleIntent(CommentsIntent.Refresh)
+        }
+    }
+
+    private fun hideLoadingState() {
+        mBinding.loadingStateView.hide()
+        mBinding.swipeRefreshLayout.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView() {
