@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Bangumi</string>
     <string name="loading">正在加载…</string>
+
+    <!-- LoadingStateView -->
+    <string name="loading_state_loading">加载中…</string>
+    <string name="loading_state_empty">暂无数据</string>
+    <string name="loading_state_error">加载失败</string>
+    <string name="loading_state_retry">点击重试</string>
+    <string name="loading_state_icon_desc">状态图标</string>
+
+    <!-- CollectionFragment -->
+    <string name="collection_empty_action">去找更多</string>
 </resources>
