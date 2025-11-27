@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gaoshiqi.otakumap.data.bean.BangumiDetail
 import com.gaoshiqi.otakumap.databinding.FragmentDetailBinding
+import com.gaoshiqi.otakumap.databinding.ItemCollectionStatBinding
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailViewModel
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailState
 
@@ -61,19 +62,48 @@ class DetailFragment: Fragment() {
     }
 
     private fun showDetails(detail: BangumiDetail) {
-        mBinding.bangumiSummary.text = detail.summary
+        // 简介
+        mBinding.bangumiSummary.text = detail.summary?.ifEmpty { "暂无简介" } ?: "暂无简介"
 
-        val more = buildString {
-            append("放送日期: ${detail.date ?: "未定"}\n")
-            append("话数: ${detail.eps ?: "未知"}\n\n")
-            append("评分: ${detail.rating?.score ?: "暂无"}\n")
-            append("排名: ${detail.rating?.rank ?: "暂无"}\n\n")
-            append("想看: ${detail.collection?.wish ?: 0}\n")
-            append("看过: ${detail.collection?.collect ?: 0}\n")
-            append("在看: ${detail.collection?.doing ?: 0}\n")
-            append("搁置: ${detail.collection?.onHold ?: 0}\n")
-            append("抛弃: ${detail.collection?.dropped ?: 0}\n\n")
+        // 评分
+        val score = detail.rating?.score
+        if (score != null && score > 0) {
+            mBinding.tvScore.text = String.format("%.1f", score)
+            mBinding.progressScore.progress = (score * 10).toInt()
+        } else {
+            mBinding.tvScore.text = "暂无"
+            mBinding.progressScore.progress = 0
         }
-        mBinding.bangumiMore.text = more
+
+        // 排名
+        val rank = detail.rating?.rank
+        mBinding.tvRank.text = if (rank != null && rank > 0) "排名 #$rank" else "暂无排名"
+
+        // 放送日期
+        mBinding.tvAirDate.text = detail.date ?: "未定"
+
+        // 话数
+        val eps = detail.eps
+        mBinding.tvEps.text = if (eps != null && eps > 0) "${eps}话" else "未知"
+
+        // 收藏统计
+        bindStatItem(mBinding.statWish, "想看", detail.collection?.wish ?: 0)
+        bindStatItem(mBinding.statDoing, "在看", detail.collection?.doing ?: 0)
+        bindStatItem(mBinding.statCollect, "看过", detail.collection?.collect ?: 0)
+        bindStatItem(mBinding.statOnHold, "搁置", detail.collection?.onHold ?: 0)
+        bindStatItem(mBinding.statDropped, "抛弃", detail.collection?.dropped ?: 0)
+    }
+
+    private fun bindStatItem(binding: ItemCollectionStatBinding, label: String, count: Int) {
+        binding.tvLabel.text = label
+        binding.tvCount.text = formatCount(count)
+    }
+
+    private fun formatCount(count: Int): String {
+        return when {
+            count >= 10000 -> String.format("%.1fw", count / 10000.0)
+            count >= 1000 -> String.format("%.1fk", count / 1000.0)
+            else -> count.toString()
+        }
     }
 }
