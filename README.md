@@ -1,19 +1,21 @@
-# 🌸 Bangumi 圣地巡礼
+# 🌸 OtakuMap 圣地巡礼
 
-> 一款专为动漫爱好者设计的圣地巡礼Android应用，让你的动漫之旅更加精彩！
+> 一款专为动漫爱好者设计的圣地巡礼Android应用，让你的日本之旅更加精彩！
 
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
+[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
 
 ## 📱 应用简介
 
-Bangumi 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查看的综合性Android应用。通过整合Bangumi和Anitabi的丰富数据，为用户提供完整的动漫观看和圣地探访体验。
+OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查看的综合性Android应用。通过整合Bangumi和Anitabi的丰富数据，为用户提供完整的动漫观看和圣地探访体验。
 
 ### ✨ 核心特性
 - 📚 **我的收藏** - 3列网格布局，管理你的动漫收藏
 - 🏆 **排行榜** - 实时动漫排行，支持下拉刷新和上拉加载
 - 📅 **每日更新** - 一周新番时间表，不错过任何精彩内容
+- 🔍 **智能搜索** - 快速查找你想要的番剧
 - ⚙️ **个人设置** - 简洁的设置界面，包含开发者选项
 
 ### 🎯 主要功能
@@ -35,10 +37,10 @@ Bangumi 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查
 
 感谢以下优秀的开源项目和API服务：
 
-> 📊 **ANIME数据来源**: [Bangumi](https://github.com/bangumi/dev-docs)  
+> 📊 **ANIME数据来源**: [Bangumi](https://github.com/bangumi/dev-docs)
 > 提供番剧信息、排行榜、用户评论等丰富数据
 
-> 🗺️ **圣地巡礼数据**: [Anitabi](https://github.com/anitabi/anitabi.cn-document)  
+> 🗺️ **圣地巡礼数据**: [Anitabi](https://github.com/anitabi/anitabi.cn-document)
 > 提供圣地巡礼地点、坐标、图片等地理信息
 
 ## 📸 应用截图
@@ -46,24 +48,29 @@ Bangumi 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查
 ### 🗺️ 圣地巡礼功能
 
 #### 番剧圣地巡礼列表，按集数分组展示，方便用户按集数查看
-<img src="assets/point_img_3.webp" alt="圣地巡礼列表" width="45%">
-<img src="assets/point_img_4.webp" alt="圣地巡礼列表" width="45%">
+<img src="assets/point_img_3.webp" alt="圣地巡礼列表" width="45%"> <img src="assets/point_img_4.webp" alt="圣地巡礼列表" width="45%">
 
 #### 📍 半屏弹窗查看模式
 轻触地点标记，底部弹出详情卡片，支持拖拽调整高度
 
-<img src="assets/point_img_1.webp" alt="半屏弹窗模式" width="45%">
+<img src="assets/point_img_1.webp" alt="半屏弹窗模式" width="45%"> <img src="assets/point_img_5.webp" alt="半屏弹窗模式" width="45%">
 
 #### 🌍 全屏地图浏览模式
 全屏展示所有巡礼地点，底部卡片支持左右滑动切换
 
 <img src="assets/point_img_2.webp" alt="全屏地图模式" width="45%">
 
-#### 📚 我的收藏页面
-<img src="assets/collection_img_1.webp" alt="我的收藏" width="45%">
+### 🎄 圣地收藏页面
+<img src="assets/point_collection_img.webp" alt="我的收藏" width="45%">
 
-#### 🏆 排行榜页面
+### 📚 我的收藏页面
+<img src="assets/collection_img.webp" alt="我的收藏" width="45%">
+
+### 🏆 排行榜页面
 <img src="assets/trending_img.webp" alt="排行榜" width="45%">
+
+### 🔍 搜索功能
+<img src="assets/search_img.webp" alt="搜索页面" width="45%">
 
 ### 📅 时间表页面
 一周新番时间表，按星期分组展示
@@ -81,6 +88,27 @@ Bangumi 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查
 #### 吐槽箱页面
 <img src="assets/detail_img_3.webp" alt="用户评论" width="45%">
 
+## 🔄 更新日志
+
+### v1.2.0 (当前版本)
+- ✨ 优化番剧详情页简介布局，采用卡片式设计
+- ✨ 评分可视化展示（进度条 + 大字号评分）
+- ✨ 收藏统计网格化展示
+- ✨ 放送信息图标化展示
+- 🔍 新增搜索功能入口
+- 🐛 修复收藏功能相关问题
+
+### v1.1.0
+- ✨ 新增启动动画
+- 🔍 新增番剧搜索功能
+- 🐛 Bug修复与性能优化
+
+### v1.0.0
+- 🎉 首次发布
+- 📺 番剧信息浏览
+- 🗺️ 圣地巡礼地图功能
+- 📚 收藏管理功能
+
 ## 🤝 贡献指南
 
 欢迎任何形式的贡献！
@@ -93,7 +121,8 @@ Bangumi 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点查
 
 ### 开发计划
 - [ ] **搜索功能增强**: 支持更多搜索条件
-- [ ] **离线缓存**: 支持离线查看收藏内容  
+- [ ] **离线缓存**: 支持离线查看收藏内容
+- [ ] **深色模式**: 支持系统深色模式
 
 ## 📄 开源协议
 
