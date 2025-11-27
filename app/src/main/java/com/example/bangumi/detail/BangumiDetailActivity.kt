@@ -20,8 +20,8 @@ import com.example.bangumi.detail.viewmodel.BangumiDetailIntent
 import com.example.bangumi.detail.viewmodel.BangumiDetailState
 import com.example.bangumi.detail.viewmodel.BangumiDetailViewModel
 import com.example.bangumi.utils.BangumiUtils
-import com.example.room.AnimeEntity
-import com.example.room.AnimeMarkRepository
+import com.gaoshiqi.room.AnimeEntity
+import com.gaoshiqi.room.AnimeMarkRepository
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 

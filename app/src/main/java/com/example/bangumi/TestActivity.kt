@@ -9,7 +9,7 @@ import com.example.bangumi.schedule.BangumiTodayActivity
 import com.example.bangumi.schedule.ScheduleActivity
 import com.example.bangumi.search.SearchActivity
 import com.example.bangumi.trending.AnimeTrendingActivity
-import com.example.map.MapsDemoActivity
+import com.gaoshiqi.map.MapsDemoActivity
 
 class TestActivity : AppCompatActivity() {
 

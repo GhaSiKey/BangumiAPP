@@ -14,7 +14,7 @@ import com.example.bangumi.MainTabActivity
 import com.example.bangumi.R
 import com.example.bangumi.collection.adapter.CollectionAdapter
 import com.example.bangumi.databinding.FragmentCollectionBinding
-import com.example.room.AnimeMarkRepository
+import com.gaoshiqi.room.AnimeMarkRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

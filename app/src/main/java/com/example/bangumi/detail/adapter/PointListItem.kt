@@ -1,6 +1,6 @@
 package com.example.bangumi.detail.adapter
 
-import com.example.map.data.LitePoint
+import com.gaoshiqi.map.data.LitePoint
 
 /**
  * Created by gaoshiqi

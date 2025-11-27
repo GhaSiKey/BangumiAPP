@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bangumi.databinding.ItemMyCollectionBinding
 import com.example.bangumi.detail.BangumiDetailActivity
-import com.example.room.AnimeEntity
+import com.gaoshiqi.room.AnimeEntity
 
 
 /**

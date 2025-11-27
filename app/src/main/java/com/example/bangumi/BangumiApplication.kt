@@ -1,7 +1,7 @@
 package com.example.bangumi
 
 import android.app.Application
-import com.example.room.AnimeMarkRepository
+import com.gaoshiqi.room.AnimeMarkRepository
 
 class BangumiApplication: Application() {
     lateinit var animeMarkRepository: AnimeMarkRepository

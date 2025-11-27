@@ -12,7 +12,7 @@ import com.example.bangumi.BangumiApplication
 import com.example.bangumi.R
 import com.example.bangumi.collection.adapter.CollectionAdapter
 import com.example.bangumi.databinding.ActivityMyCollectionBinding
-import com.example.room.AnimeMarkRepository
+import com.gaoshiqi.room.AnimeMarkRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

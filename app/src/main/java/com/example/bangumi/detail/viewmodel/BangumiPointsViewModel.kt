@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bangumi.data.api.AnitabiClient
 import com.example.bangumi.detail.adapter.PointListItem
-import com.example.map.data.LitePoint
+import com.gaoshiqi.map.data.LitePoint
 import kotlinx.coroutines.launch
 
 /**

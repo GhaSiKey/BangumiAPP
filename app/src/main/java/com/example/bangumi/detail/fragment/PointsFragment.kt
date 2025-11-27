@@ -13,11 +13,11 @@ import com.example.bangumi.databinding.FragmentPointsBinding
 import com.example.bangumi.detail.adapter.BangumiPointAdapter
 import com.example.bangumi.detail.viewmodel.BangumiPointsState
 import com.example.bangumi.detail.viewmodel.BangumiPointsViewModel
-import com.example.map.MapActivity
+import com.gaoshiqi.map.MapActivity
 import com.google.android.material.chip.Chip
-import com.example.map.MapBottomSheetFragment
-import com.example.map.data.LitePoint
-import com.example.map.utils.PointListSingleton
+import com.gaoshiqi.map.MapBottomSheetFragment
+import com.gaoshiqi.map.data.LitePoint
+import com.gaoshiqi.map.utils.PointListSingleton
 
 /**
  * Created by gaoshiqi
