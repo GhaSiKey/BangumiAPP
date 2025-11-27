@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:text="番剧收藏"
+        android:text="@string/my_saved_points"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/black_85"
@@ -18,9 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_collection"
+        android:id="@+id/recycler_view_saved_points"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -28,7 +30,7 @@
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:emptyText="还没有收藏任何番剧"
+        app:emptyText="@string/saved_points_empty"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintBottom_toBottomOf="parent" />
 

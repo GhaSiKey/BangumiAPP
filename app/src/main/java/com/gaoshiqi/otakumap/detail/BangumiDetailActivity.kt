@@ -20,6 +20,7 @@ import com.gaoshiqi.otakumap.detail.adapter.BangumiDetailPagerAdapter
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailIntent
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailState
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailViewModel
+import com.gaoshiqi.otakumap.detail.viewmodel.BangumiPointsViewModel
 import com.gaoshiqi.otakumap.utils.BangumiUtils
 import com.gaoshiqi.room.AnimeEntity
 import com.gaoshiqi.room.AnimeMarkRepository
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 class BangumiDetailActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityBangumiDetailBinding
     private val mViewModel: BangumiDetailViewModel by viewModels()
+    private val mPointsViewModel: BangumiPointsViewModel by viewModels()
     private var mSubjectId: Int = -1
     private lateinit var repository: AnimeMarkRepository
 
@@ -89,6 +91,13 @@ class BangumiDetailActivity : AppCompatActivity() {
                 is BangumiDetailState.SUCCESS -> {
                     hideLoading()
                     showBangumiDetail(state.data)
+
+                    // 设置番剧信息到 PointsViewModel，供圣地巡礼页面使用
+                    mPointsViewModel.setSubjectInfo(
+                        id = mSubjectId,
+                        name = state.data.displayTitle(),
+                        cover = state.data.images.large
+                    )
 
                     repository = (application as BangumiApplication).animeMarkRepository
                     setupMarkButton(state.data)

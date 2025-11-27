@@ -24,4 +24,11 @@
     <string name="mark_operation_failed">操作失败，请重试</string>
     <string name="mark_button_marked">已收藏</string>
     <string name="mark_button_unmarked">收藏</string>
+
+    <!-- MySavedPointsFragment -->
+    <string name="my_saved_points">圣地收藏</string>
+    <string name="saved_points_empty">还没有收藏的圣地</string>
+    <string name="saved_points_empty_action">去发现更多</string>
+    <string name="go_to_detail">查看详情</string>
+    <string name="point_count_format">%d个地点</string>
 </resources>

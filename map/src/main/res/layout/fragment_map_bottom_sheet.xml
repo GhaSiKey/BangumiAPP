@@ -35,17 +35,17 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_close"
+            app:layout_constraintEnd_toStartOf="@id/btn_save"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btn_close"
+            android:id="@+id/btn_save"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/close"
-            android:src="@drawable/ic_close"
+            android:contentDescription="@string/save_point"
+            android:src="@drawable/ic_bookmark_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
