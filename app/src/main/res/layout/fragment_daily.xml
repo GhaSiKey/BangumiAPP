@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/item_bangumi_card" />
 
-    <com.example.bangumi.widget.LoadingStateView
+    <com.gaoshiqi.otakumap.widget.LoadingStateView
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

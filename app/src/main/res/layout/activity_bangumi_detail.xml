@@ -106,7 +106,7 @@
                             android:text="风格：" />
 
 
-                        <com.example.bangumi.widget.TagGroupView
+                        <com.gaoshiqi.otakumap.widget.TagGroupView
                             android:id="@+id/bangumi_tags"
                             android:layout_marginTop="4dp"
                             android:layout_width="match_parent"
@@ -152,7 +152,7 @@
 
 
     <!-- 加载中视图 -->
-    <com.example.bangumi.widget.LoadingStateView
+    <com.gaoshiqi.otakumap.widget.LoadingStateView
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

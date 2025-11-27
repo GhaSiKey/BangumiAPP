@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.room"
+    namespace = "com.gaoshiqi.room"
     compileSdk = 35
 
     defaultConfig {

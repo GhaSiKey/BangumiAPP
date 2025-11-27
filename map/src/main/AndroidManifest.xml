@@ -10,12 +10,12 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".MapsDemoActivity"
+            android:name="com.gaoshiqi.map.MapsDemoActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
 
         <activity
-            android:name=".MapActivity"
+            android:name="com.gaoshiqi.map.MapActivity"
             android:exported="false" />
     </application>
 

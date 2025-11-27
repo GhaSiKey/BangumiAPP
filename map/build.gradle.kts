@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.map"
+    namespace = "com.gaoshiqi.map"
     compileSdk = 35
 
     defaultConfig {

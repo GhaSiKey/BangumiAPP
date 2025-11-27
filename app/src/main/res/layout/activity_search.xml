@@ -82,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@id/search_container"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <com.example.bangumi.widget.LoadingStateView
+    <com.gaoshiqi.otakumap.widget.LoadingStateView
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -53,7 +53,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 地图区域：拦截触摸事件，阻止 BottomSheet 拖拽 -->
-    <com.example.map.TouchInterceptLayout
+    <com.gaoshiqi.map.TouchInterceptLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -94,7 +94,7 @@
 
         </androidx.cardview.widget.CardView>
 
-    </com.example.map.TouchInterceptLayout>
+    </com.gaoshiqi.map.TouchInterceptLayout>
 
 </LinearLayout>
 
