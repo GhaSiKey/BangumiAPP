@@ -151,9 +151,14 @@ class SearchActivity : AppCompatActivity() {
                     showLoading()
                 }
                 is SearchState.Success -> {
-                    mAdapter.setData(state.data)
                     isLoadingMore = false
-                    hideLoading()
+                    if (state.data.isEmpty()) {
+                        mAdapter.setData(emptyList())
+                        showNoResult()
+                    } else {
+                        mAdapter.setData(state.data)
+                        hideLoading()
+                    }
                 }
             }
         }
@@ -165,7 +170,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showEmpty() {
-        mBinding.loadingStateView.showEmpty()
+        mBinding.loadingStateView.showEmpty(message = "搜索你想看的番剧")
+        mBinding.rvSearchResult.visibility = View.GONE
+    }
+
+    private fun showNoResult() {
+        mBinding.loadingStateView.showEmpty(message = "没有找到相关结果")
         mBinding.rvSearchResult.visibility = View.GONE
     }
 

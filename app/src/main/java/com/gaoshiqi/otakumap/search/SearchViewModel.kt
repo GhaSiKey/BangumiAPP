@@ -18,7 +18,7 @@ class SearchViewModel: ViewModel() {
     val state = _state
 
     private var query: String? = null
-    private var start = 1
+    private var start = 0
     private var limit = 10
     private var total = 0
 
@@ -38,9 +38,10 @@ class SearchViewModel: ViewModel() {
     }
 
     private fun search(q: String?) {
-        start = 1
+        start = 0
         query = q
-        query.isNullOrEmpty() ?: return
+        mList = emptyList()
+        if (query.isNullOrEmpty()) return
         viewModelScope.launch {
             _state.value = SearchState.Loading
             try {
@@ -49,8 +50,8 @@ class SearchViewModel: ViewModel() {
                     start = start,
                     limit = limit
                 )
-                result.results?.let { total = it }
-                result.list?.let { mList = it }
+                total = result.results ?: 0
+                mList = result.list ?: emptyList()
                 _state.value = SearchState.Success(mList)
             } catch (e: Exception) {
                 _state.value = SearchState.Error(e.message ?: "搜索失败")
@@ -59,7 +60,8 @@ class SearchViewModel: ViewModel() {
     }
 
     private fun loadMore() {
-        if (start >= total || query.isNullOrEmpty()) {
+        // 已加载的数量 >= 总数，没有更多数据
+        if (start + limit >= total || query.isNullOrEmpty()) {
             return
         }
         val next = start + limit
@@ -72,7 +74,7 @@ class SearchViewModel: ViewModel() {
                     limit = limit
                 )
                 start = next
-                result.results?.let { total = it }
+                total = result.results ?: total
                 result.list?.let { mList = mList + it }
 
                 _state.value = SearchState.Success(mList)
