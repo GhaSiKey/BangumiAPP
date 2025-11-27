@@ -1,5 +1,6 @@
 package com.gaoshiqi.otakumap.homepage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gaoshiqi.otakumap.databinding.FragmentRankingBinding
+import com.gaoshiqi.otakumap.search.SearchActivity
 import com.gaoshiqi.otakumap.trending.AnimeTrendingAdapter
 import com.gaoshiqi.otakumap.trending.AnimeTrendingViewModel
 import com.gaoshiqi.otakumap.trending.TrendingIntent
@@ -45,6 +47,10 @@ class RankingFragment : Fragment() {
     private fun initView() {
         binding.recyclerViewRanking.adapter = mAdapter
         binding.recyclerViewRanking.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.btnSearch.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
+        }
     }
 
     private fun initObserve() {
