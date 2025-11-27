@@ -45,8 +45,7 @@ class PointsFragment: Fragment() {
     private val mAdapter: BangumiPointAdapter = BangumiPointAdapter() { point ->
         val geo = point.geo
         if (geo.size != 2) return@BangumiPointAdapter
-        val fragment = MapBottomSheetFragment.newInstance(geo[0], geo[1], point.name)
-        fragment.show(parentFragmentManager, "MapBottomSheetFragment")
+        MapBottomSheetFragment.show(parentFragmentManager, geo[0], geo[1], point.name)
     }
     private val mViewModel: BangumiPointsViewModel by lazy {
         ViewModelProvider(requireActivity())[BangumiPointsViewModel::class.java]

@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import com.example.map.databinding.FragmentMapBottomSheetBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -19,9 +19,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
  * on 2025/7/6 16:24
  * email: gaoshiqi@bilibili.com
  */
-class MapBottomSheetFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
+class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
-    private lateinit var mapView: MapView
+    private var _binding: FragmentMapBottomSheetBinding? = null
+    private val binding get() = _binding!!
+
     private var location: LatLng? = null
     private var name: String? = null
 
@@ -37,78 +39,88 @@ class MapBottomSheetFragment: BottomSheetDialogFragment(), OnMapReadyCallback {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_map_bottom_sheet, container, false)
-        mapView = view.findViewById(R.id.map)
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
-        return view
+    ): View {
+        _binding = FragmentMapBottomSheetBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dialog = dialog as? BottomSheetDialog
-        dialog?.let {
-            val bottomSheet = it.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let {
-                val behavior = BottomSheetBehavior.from(bottomSheet)
-                behavior.isDraggable = false
-            }
+
+        binding.tvTitle.text = name ?: ""
+        binding.btnClose.setOnClickListener { dismiss() }
+
+        (dialog as? BottomSheetDialog)?.findViewById<View>(
+            com.google.android.material.R.id.design_bottom_sheet
+        )?.setBackgroundResource(android.R.color.transparent)
+
+        // 延迟初始化地图，让弹窗先显示出来
+        view.post {
+            binding.map.onCreate(null)
+            binding.map.getMapAsync(this)
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        binding.loadingContainer.visibility = View.GONE
+
         location?.let {
-            val marker = googleMap.addMarker(
+            googleMap.addMarker(
                 MarkerOptions()
                     .position(it)
                     .title(name)
-            )
-            marker?.showInfoWindow()
+            )?.showInfoWindow()
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
         }
     }
 
-    // MapView生命周期方法
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        _binding?.map?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        _binding?.map?.onPause()
     }
 
     override fun onDestroyView() {
+        _binding?.map?.onDestroy()
+        _binding = null
         super.onDestroyView()
-        mapView.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        _binding?.map?.onLowMemory()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
+        _binding?.map?.onSaveInstanceState(outState)
     }
 
     companion object {
+        private const val TAG = "MapBottomSheetFragment"
         private const val ARG_LAT = "latitude"
         private const val ARG_LNG = "longitude"
         private const val ARG_NAME = "name"
 
-        fun newInstance(lat: Double, lng: Double, name: String? = null): MapBottomSheetFragment {
-            val fragment = MapBottomSheetFragment()
-            val args = Bundle().apply {
-                putDouble(ARG_LAT, lat)
-                putDouble(ARG_LNG, lng)
-                putString(ARG_NAME, name)
+        /**
+         * 显示地图弹窗，自动防止重复显示
+         */
+        fun show(fragmentManager: FragmentManager, lat: Double, lng: Double, name: String? = null) {
+            // 防止重复显示
+            if (fragmentManager.findFragmentByTag(TAG) != null) return
+
+            val fragment = MapBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble(ARG_LAT, lat)
+                    putDouble(ARG_LNG, lng)
+                    putString(ARG_NAME, name)
+                }
             }
-            fragment.arguments = args
-            return fragment
+            fragment.show(fragmentManager, TAG)
         }
     }
 }
