@@ -13,6 +13,7 @@ import com.gaoshiqi.otakumap.homepage.CollectionFragment
 import com.gaoshiqi.otakumap.homepage.RankingFragment
 import com.gaoshiqi.otakumap.homepage.ScheduleFragment
 import com.gaoshiqi.otakumap.homepage.SettingsFragment
+import com.gaoshiqi.otakumap.savedpoints.MySavedPointsFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,7 @@ class MainTabActivity : AppCompatActivity() {
     private var collectionFragment: CollectionFragment? = null
     private var rankingFragment: RankingFragment? = null
     private var scheduleFragment: ScheduleFragment? = null
+    private var savedPointsFragment: MySavedPointsFragment? = null
     private var settingsFragment: SettingsFragment? = null
     
     private var currentFragment: Fragment? = null
@@ -76,8 +78,12 @@ class MainTabActivity : AppCompatActivity() {
                     showFragment(2)
                     true
                 }
-                R.id.nav_settings -> {
+                R.id.nav_saved_points -> {
                     showFragment(3)
+                    true
+                }
+                R.id.nav_settings -> {
+                    showFragment(4)
                     true
                 }
                 else -> false
@@ -115,6 +121,13 @@ class MainTabActivity : AppCompatActivity() {
                 collectionFragment
             }
             3 -> {
+                if (savedPointsFragment == null) {
+                    savedPointsFragment = MySavedPointsFragment()
+                    transaction.add(R.id.fragment_container, savedPointsFragment!!)
+                }
+                savedPointsFragment
+            }
+            4 -> {
                 if (settingsFragment == null) {
                     settingsFragment = SettingsFragment()
                     transaction.add(R.id.fragment_container, settingsFragment!!)

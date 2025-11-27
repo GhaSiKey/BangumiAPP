@@ -43,9 +43,9 @@ class PointsFragment: Fragment() {
     }
     private lateinit var mBinding: FragmentPointsBinding
     private val mAdapter: BangumiPointAdapter = BangumiPointAdapter() { point ->
-        val geo = point.geo
-        if (geo.size != 2) return@BangumiPointAdapter
-        MapBottomSheetFragment.show(parentFragmentManager, geo[0], geo[1], point.name)
+        if (point.geo.size != 2) return@BangumiPointAdapter
+        // 使用完整的 LitePoint 传递，支持收藏功能
+        MapBottomSheetFragment.show(parentFragmentManager, point)
     }
     private val mViewModel: BangumiPointsViewModel by lazy {
         ViewModelProvider(requireActivity())[BangumiPointsViewModel::class.java]
