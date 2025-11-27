@@ -1,4 +1,8 @@
 <resources>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="close">关闭</string>
+    <string name="save_point">收藏地点</string>
+    <string name="point_saved">已收藏</string>
+    <string name="point_unsaved">已取消收藏</string>
+    <string name="point_save_failed">操作失败</string>
 </resources>

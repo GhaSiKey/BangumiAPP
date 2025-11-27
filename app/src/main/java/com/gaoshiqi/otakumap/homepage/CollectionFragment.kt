@@ -55,7 +55,9 @@ class CollectionFragment : Fragment() {
 
     private fun initData() {
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            // 使用 STARTED 状态：在前台时收集数据，切到后台时暂停
+            // 这样返回页面时能自动恢复数据监听，及时更新收藏列表
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mRepository.allAnimeMarks.collectLatest { animeList ->
                     if (animeList.isEmpty()) {
                         showEmpty()

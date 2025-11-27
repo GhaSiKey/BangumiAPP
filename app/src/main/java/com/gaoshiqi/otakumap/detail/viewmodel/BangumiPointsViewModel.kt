@@ -17,11 +17,30 @@ class BangumiPointsViewModel: ViewModel() {
     private val _state = MutableLiveData<BangumiPointsState>(null)
     val state = _state
 
+    // 番剧信息，用于绑定到 LitePoint
+    private var subjectId: Int = 0
+    private var subjectName: String = ""
+    private var subjectCover: String = ""
+
+    /** 设置番剧信息，在加载地点前调用 */
+    fun setSubjectInfo(id: Int, name: String, cover: String) {
+        subjectId = id
+        subjectName = name
+        subjectCover = cover
+    }
+
     fun loadPoints(subjectId: Int) {
+        this.subjectId = subjectId
         _state.value = BangumiPointsState.LOADING
         viewModelScope.launch {
             try {
                 val result = AnitabiClient.instance.getSubjectPoints(subjectId)
+                // 绑定番剧信息到每个 LitePoint
+                result.forEach { point ->
+                    point.subjectId = this@BangumiPointsViewModel.subjectId
+                    point.subjectName = subjectName
+                    point.subjectCover = subjectCover
+                }
                 val processedItems = handlePoints(result)
                 _state.value = BangumiPointsState.SUCCESS(processedItems)
             } catch (e: Exception) {

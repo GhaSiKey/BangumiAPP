@@ -5,9 +5,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black_85">#D9000000</color>
     <color name="black_60">#99000000</color>
+    <color name="black_45">#73000000</color>
     <color name="black_40">#66000000</color>
     <color name="black_20">#33000000</color>
     <color name="black_10">#1A000000</color>
+
+    <color name="gray_100">#F5F5F5</color>
 
     <color name="score">#FF6D00</color>
     <color name="black_20_only">#33000000</color>

@@ -48,6 +48,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // room module
+    implementation(project(":room"))
 
     // glide
     implementation(libs.glide)
