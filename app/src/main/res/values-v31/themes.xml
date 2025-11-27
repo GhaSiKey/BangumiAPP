@@ -8,6 +8,9 @@
         <!-- 中心显示的图标（使用专用图标，避免裁切） -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_screen_icon</item>
 
+        <!-- 底部品牌图片 -->
+        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_brand_wrapper</item>
+
         <!-- 退出启动屏幕后切换到的真正主题 -->
         <item name="postSplashScreenTheme">@style/Theme.Bangumi</item>
 
