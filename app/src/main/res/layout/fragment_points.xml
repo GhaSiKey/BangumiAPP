@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.bangumi.widget.LoadingStateView
+    <com.gaoshiqi.otakumap.widget.LoadingStateView
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

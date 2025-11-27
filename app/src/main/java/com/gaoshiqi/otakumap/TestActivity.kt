@@ -1,0 +1,61 @@
+package com.gaoshiqi.otakumap
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.gaoshiqi.otakumap.collection.MyCollectionActivity
+import com.gaoshiqi.otakumap.databinding.ActivityTestBinding
+import com.gaoshiqi.otakumap.schedule.BangumiTodayActivity
+import com.gaoshiqi.otakumap.schedule.ScheduleActivity
+import com.gaoshiqi.otakumap.search.SearchActivity
+import com.gaoshiqi.otakumap.trending.AnimeTrendingActivity
+import com.gaoshiqi.map.MapsDemoActivity
+
+class TestActivity : AppCompatActivity() {
+
+    private val mBinding: ActivityTestBinding by lazy {
+        ActivityTestBinding.inflate(layoutInflater)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(mBinding.root)
+
+        initView()
+        initEvent()
+    }
+
+    private fun initView() {
+    }
+
+    private fun initEvent() {
+        mBinding.button.setOnClickListener {
+            val intent = Intent(this, BangumiTodayActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button1.setOnClickListener {
+            val intent = Intent(this, ScheduleActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button2.setOnClickListener {
+            val intent = Intent(this, MapsDemoActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button3.setOnClickListener {
+            val intent = Intent(this, MyCollectionActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button4.setOnClickListener {
+            val intent = Intent(this, AnimeTrendingActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding.button5.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+    }
+}

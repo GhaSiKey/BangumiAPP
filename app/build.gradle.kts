@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bangumi"
+    namespace = "com.gaoshiqi.otakumap"
     compileSdk = 35
 
     buildFeatures {
@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.bangumi"
+        applicationId = "com.gaoshiqi.otakumap"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
