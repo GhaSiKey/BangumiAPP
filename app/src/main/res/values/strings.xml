@@ -14,4 +14,14 @@
 
     <!-- ScheduleFragment -->
     <string name="schedule_title">每日放送</string>
+
+    <!-- RankingFragment -->
+    <string name="search">搜索</string>
+
+    <!-- Collection/Mark -->
+    <string name="mark_added">已收藏</string>
+    <string name="mark_removed">已取消收藏</string>
+    <string name="mark_operation_failed">操作失败，请重试</string>
+    <string name="mark_button_marked">已收藏</string>
+    <string name="mark_button_unmarked">收藏</string>
 </resources>

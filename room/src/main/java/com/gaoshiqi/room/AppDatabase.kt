@@ -20,12 +20,12 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "anime_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    // 注意：不使用 fallbackToDestructiveMigration()，避免用户数据丢失
+                    // 如果需要迁移，请添加 Migration 对象：.addMigrations(MIGRATION_1_2, ...)
                     .build()
                 INSTANCE = instance
                 instance
             }
         }
     }
-
 }

@@ -11,7 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import androidx.annotation.StringRes
 import com.gaoshiqi.otakumap.BangumiApplication
+import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.BangumiDetail
 import com.gaoshiqi.otakumap.databinding.ActivityBangumiDetailBinding
 import com.gaoshiqi.otakumap.detail.adapter.BangumiDetailPagerAdapter
@@ -29,6 +31,10 @@ class BangumiDetailActivity : AppCompatActivity() {
     private val mViewModel: BangumiDetailViewModel by viewModels()
     private var mSubjectId: Int = -1
     private lateinit var repository: AnimeMarkRepository
+
+    // 收藏状态管理
+    private var isMarked: Boolean = false
+    private var isMarkOperating: Boolean = false  // 防抖标志
 
     companion object {
         const val ARG_SUBJECT_ID = "subject_id"
@@ -97,38 +103,54 @@ class BangumiDetailActivity : AppCompatActivity() {
 
     private fun setupMarkButton(data: BangumiDetail) {
         lifecycleScope.launch {
-            val isMarked = repository.isBookmarked(mSubjectId)
+            isMarked = repository.isBookmarked(mSubjectId)
             updateMarkButton(isMarked)
+        }
 
-            mBinding.btnMark.setOnClickListener {
-                lifecycleScope.launch {
+        mBinding.btnMark.setOnClickListener {
+            if (isMarkOperating) return@setOnClickListener  // 防抖：操作进行中则忽略点击
+
+            lifecycleScope.launch {
+                isMarkOperating = true
+                mBinding.btnMark.isEnabled = false
+
+                try {
                     if (isMarked) {
-                        // 取消关注
+                        // 取消收藏
                         repository.removeAnimeMark(AnimeEntity(
                             id = mSubjectId,
                             name = data.name,
                             nameCn = data.nameCn,
                             imageUrl = data.images.large
                         ))
+                        isMarked = false
                         updateMarkButton(false)
-                        Toast.makeText(this@BangumiDetailActivity, "已取消收藏", Toast.LENGTH_SHORT).show()
+                        showToast(R.string.mark_removed)
                     } else {
+                        // 添加收藏
                         repository.addAnimeMark(AnimeEntity(
                             id = mSubjectId,
                             name = data.name,
                             nameCn = data.nameCn,
                             imageUrl = data.images.large
                         ))
+                        isMarked = true
                         updateMarkButton(true)
-                        Toast.makeText(this@BangumiDetailActivity, "已收藏", Toast.LENGTH_SHORT).show()
+                        showToast(R.string.mark_added)
                     }
+                } catch (e: Exception) {
+                    // 操作失败，保持原状态
+                    showToast(R.string.mark_operation_failed)
+                } finally {
+                    isMarkOperating = false
+                    mBinding.btnMark.isEnabled = true
                 }
             }
         }
     }
 
     private fun updateMarkButton(isMarked: Boolean) {
-        mBinding.btnMark.text = if (isMarked) "已收藏" else "收藏"
+        mBinding.btnMark.text = getString(if (isMarked) R.string.mark_button_marked else R.string.mark_button_unmarked)
     }
 
 
@@ -167,5 +189,9 @@ class BangumiDetailActivity : AppCompatActivity() {
         mBinding.loadingStateView.showError(message = msg) {
             mViewModel.processIntent(BangumiDetailIntent.Retry)
         }
+    }
+
+    private fun showToast(@StringRes resId: Int) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 }
