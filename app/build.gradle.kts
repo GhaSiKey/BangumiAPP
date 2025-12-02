@@ -65,6 +65,8 @@ dependencies {
     implementation(project(":map"))
     // room
     implementation(project(":room"))
+    // image
+    implementation(project(":image"))
 
     // play services
     implementation(libs.play.services.maps)
