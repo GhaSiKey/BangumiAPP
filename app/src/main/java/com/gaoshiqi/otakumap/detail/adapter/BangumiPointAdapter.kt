@@ -1,5 +1,6 @@
 package com.gaoshiqi.otakumap.detail.adapter
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gaoshiqi.image.viewer.ImageViewerActivity
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.map.data.LitePoint
 
@@ -108,6 +110,14 @@ class BangumiPointAdapter(
             pointName.text = point.name
             pointId.text = "ID: " + point.id
             setEpAndTimeText(pointEp, point.ep, point.s)
+
+            // 点击图片打开图片查看器
+            point.image.let { imageUrl ->
+                pointImage.setOnClickListener {
+                    val activity = itemView.context as? Activity ?: return@setOnClickListener
+                    ImageViewerActivity.startWithSharedElement(activity, imageUrl, pointImage)
+                }
+            }
         }
 
         private fun setEpAndTimeText(textView: TextView, ep: String?, s: String?) {
