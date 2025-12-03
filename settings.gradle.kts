@@ -23,3 +23,4 @@ rootProject.name = "Bangumi"
 include(":app")
 include(":map")
 include(":room")
+include(":image")

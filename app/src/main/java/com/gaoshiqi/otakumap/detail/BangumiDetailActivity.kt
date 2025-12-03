@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +25,7 @@ import com.gaoshiqi.otakumap.detail.viewmodel.BangumiPointsViewModel
 import com.gaoshiqi.otakumap.utils.BangumiUtils
 import com.gaoshiqi.room.AnimeEntity
 import com.gaoshiqi.room.AnimeMarkRepository
+import com.gaoshiqi.image.viewer.ImageViewerActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
@@ -172,6 +174,10 @@ class BangumiDetailActivity : AppCompatActivity() {
             .centerCrop()
             .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
             .into(mBinding.ivCover)
+        // 点击封面查看大图（带共享元素转场动画）
+        mBinding.ivCover.setOnClickListener {
+            ImageViewerActivity.startWithSharedElement(this, data.images.large, mBinding.ivCover)
+        }
         // 信息
         mBinding.bangumiAirDate.text = data.date
         mBinding.bangumiScoreCount.text = BangumiUtils.convertCount(data.rating?.total ?: 0) + " 人打分："

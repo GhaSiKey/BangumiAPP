@@ -1,5 +1,6 @@
 package com.gaoshiqi.otakumap.detail.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.gaoshiqi.image.viewer.ImageViewerActivity
 import com.gaoshiqi.otakumap.data.bean.BangumiCharacter
 import com.gaoshiqi.otakumap.utils.BangumiUtils
 
@@ -80,6 +82,13 @@ class BangumiCharacterAdapter(
                     .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
                     .override(columnWidth, Target.SIZE_ORIGINAL)
                     .into(characterImage)
+
+                // 点击图片打开图片查看器（使用大图）
+                val largeImageUrl = character.images.large ?: imageUrl
+                characterImage.setOnClickListener {
+                    val activity = itemView.context as? Activity ?: return@setOnClickListener
+                    ImageViewerActivity.startWithSharedElement(activity, largeImageUrl, characterImage)
+                }
             }
 
             characterId.setOnClickListener {
