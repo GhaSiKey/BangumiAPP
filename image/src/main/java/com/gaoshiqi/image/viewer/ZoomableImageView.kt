@@ -44,6 +44,9 @@ class ZoomableImageView @JvmOverloads constructor(
     private val lastTouchPoint = PointF()
     private var activePointerId = MotionEvent.INVALID_POINTER_ID
 
+    // 长按回调
+    private var onLongClickListener: OnLongClickListener? = null
+
     init {
         scaleType = ScaleType.MATRIX
         scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureListener())
@@ -267,6 +270,14 @@ class ZoomableImageView @JvmOverloads constructor(
             performClick()
             return true
         }
+
+        override fun onLongPress(e: MotionEvent) {
+            onLongClickListener?.onLongClick(this@ZoomableImageView)
+        }
+    }
+
+    override fun setOnLongClickListener(listener: OnLongClickListener?) {
+        onLongClickListener = listener
     }
 
     override fun performClick(): Boolean {

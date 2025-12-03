@@ -40,9 +40,14 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.activity)
 
     // Glide
     implementation(libs.glide)
+
+    // Lifecycle
+    implementation(libs.viewmodel.ktx)
+    implementation(libs.liveData.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

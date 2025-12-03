@@ -1,20 +1,27 @@
 package com.gaoshiqi.image.viewer
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import android.widget.FrameLayout
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -22,6 +29,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.gaoshiqi.image.R
 import com.gaoshiqi.image.databinding.ActivityImageViewerBinding
+import com.gaoshiqi.image.util.ImageSaver
+import kotlinx.coroutines.launch
 
 /**
  * 图片查看器 Activity
@@ -30,6 +39,19 @@ import com.gaoshiqi.image.databinding.ActivityImageViewerBinding
 class ImageViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityImageViewerBinding
+    private var imageUrl: String? = null
+    private var loadingDialog: AlertDialog? = null
+
+    // 权限请求
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            saveImage()
+        } else {
+            Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     companion object {
         private const val EXTRA_IMAGE_URL = "extra_image_url"
@@ -106,6 +128,67 @@ class ImageViewerActivity : AppCompatActivity() {
         binding.zoomableImageView.setOnClickListener {
             finishWithTransition()
         }
+
+        binding.zoomableImageView.setOnLongClickListener {
+            showBottomSheet()
+            true
+        }
+    }
+
+    private fun showBottomSheet() {
+        ImageMenuBottomSheet.newInstance()
+            .setOnSaveClickListener { checkPermissionAndSave() }
+            .show(supportFragmentManager, ImageMenuBottomSheet.TAG)
+    }
+
+    private fun checkPermissionAndSave() {
+        // Android 10+ 不需要权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            saveImage()
+            return
+        }
+
+        // Android 9及以下需要检查权限
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                saveImage()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+    private fun saveImage() {
+        val url = imageUrl ?: return
+
+        showLoadingDialog()
+
+        lifecycleScope.launch {
+            val result = ImageSaver.saveImage(this@ImageViewerActivity, url)
+            hideLoadingDialog()
+
+            result.onSuccess {
+                Toast.makeText(this@ImageViewerActivity, R.string.save_success, Toast.LENGTH_SHORT).show()
+            }.onFailure {
+                Toast.makeText(this@ImageViewerActivity, R.string.save_failed, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog = AlertDialog.Builder(this)
+            .setMessage(R.string.saving)
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
     }
 
     private fun finishWithTransition() {
@@ -113,7 +196,7 @@ class ImageViewerActivity : AppCompatActivity() {
     }
 
     private fun loadImage() {
-        val imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL)
+        imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL)
         if (imageUrl.isNullOrEmpty()) {
             showError()
             supportStartPostponedEnterTransition()
