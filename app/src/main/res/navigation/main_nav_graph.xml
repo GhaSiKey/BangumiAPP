@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/nav_ranking">
+
+    <fragment
+        android:id="@+id/nav_ranking"
+        android:name="com.gaoshiqi.otakumap.homepage.RankingFragment"
+        android:label="排行榜" />
+
+    <fragment
+        android:id="@+id/nav_schedule"
+        android:name="com.gaoshiqi.otakumap.homepage.ScheduleFragment"
+        android:label="每日更新" />
+
+    <fragment
+        android:id="@+id/nav_collection"
+        android:name="com.gaoshiqi.otakumap.homepage.CollectionFragment"
+        android:label="番剧收藏" />
+
+    <fragment
+        android:id="@+id/nav_saved_points"
+        android:name="com.gaoshiqi.otakumap.savedpoints.MySavedPointsFragment"
+        android:label="圣地收藏" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.gaoshiqi.otakumap.homepage.SettingsFragment"
+        android:label="设置" />
+
+</navigation>

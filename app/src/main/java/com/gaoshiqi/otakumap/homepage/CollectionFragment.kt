@@ -9,8 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
 import com.gaoshiqi.otakumap.BangumiApplication
-import com.gaoshiqi.otakumap.MainTabActivity
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.collection.adapter.CollectionAdapter
 import com.gaoshiqi.otakumap.databinding.FragmentCollectionBinding
@@ -85,11 +85,7 @@ class CollectionFragment : Fragment() {
     }
 
     private fun navigateToRanking() {
-        (requireActivity() as? MainTabActivity)?.let { activity ->
-            activity.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
-                R.id.bottom_navigation
-            )?.selectedItemId = R.id.nav_ranking
-        }
+        findNavController().navigate(R.id.nav_ranking)
     }
 
     override fun onDestroyView() {

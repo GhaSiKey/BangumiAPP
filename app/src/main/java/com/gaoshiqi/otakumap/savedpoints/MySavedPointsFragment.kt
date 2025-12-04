@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gaoshiqi.map.MapBottomSheetFragment
 import com.gaoshiqi.map.data.LitePoint
 import com.gaoshiqi.otakumap.BangumiApplication
-import com.gaoshiqi.otakumap.MainTabActivity
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.databinding.FragmentMySavedPointsBinding
 import com.gaoshiqi.otakumap.detail.BangumiDetailActivity
@@ -131,11 +131,7 @@ class MySavedPointsFragment : Fragment() {
     }
 
     private fun navigateToRanking() {
-        (requireActivity() as? MainTabActivity)?.let { activity ->
-            activity.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
-                R.id.bottom_navigation
-            )?.selectedItemId = R.id.nav_ranking
-        }
+        findNavController().navigate(R.id.nav_ranking)
     }
 
     override fun onDestroyView() {
