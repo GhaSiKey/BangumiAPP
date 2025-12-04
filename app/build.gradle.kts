@@ -73,4 +73,8 @@ dependencies {
 
     // splash
     implementation(libs.splash.screen)
+
+    // navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 }
