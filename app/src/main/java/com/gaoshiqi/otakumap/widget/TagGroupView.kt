@@ -44,10 +44,13 @@ class TagGroupView @JvmOverloads constructor(
     private var tagPaddingHorizontal = -1 // 标签左右边距，-1表示使用默认值
     private var tagPaddingVertical = -1 // 标签上下边距，-1表示使用默认值
     private var tagHeight = -1 // 标签高度，-1表示使用默认值
+    private var maxLines = Int.MAX_VALUE // 最大行数，默认不限制
     private var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
     private var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
 
     private val tags = mutableListOf<Tag>()
+    private var isExpanded = false // 是否展开
+    private var totalLineCount = 0 // 实际总行数
     
     init {
         context.obtainStyledAttributes(attrs, com.gaoshiqi.otakumap.R.styleable.TagGroupView).apply {
@@ -58,11 +61,32 @@ class TagGroupView @JvmOverloads constructor(
             tagPaddingVertical = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagPaddingVertical, tagPaddingVertical)
             tagRadius = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagRadius, tagRadius)
             tagHeight = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagHeight, tagHeight)
+            maxLines = getInt(com.gaoshiqi.otakumap.R.styleable.TagGroupView_maxLines, maxLines)
             defaultTextColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultTextColor, defaultTextColor)
             defaultBgColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultBgColor, defaultBgColor)
             recycle()
         }
     }
+
+    /**
+     * 设置是否展开
+     */
+    fun setExpanded(expanded: Boolean) {
+        if (isExpanded != expanded) {
+            isExpanded = expanded
+            requestLayout()
+        }
+    }
+
+    /**
+     * 是否可展开（总行数超过最大行数）
+     */
+    fun isExpandable(): Boolean = totalLineCount > maxLines
+
+    /**
+     * 当前是否已展开
+     */
+    fun isExpanded(): Boolean = isExpanded
 
     /**
      * 设置标签数据
@@ -135,6 +159,8 @@ class TagGroupView @JvmOverloads constructor(
         var currentLineWidth = 0
         var currentLineHeight = 0
         var currentLineStartIndex = 0
+        var lineCount = 1
+        val effectiveMaxLines = if (isExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
@@ -144,7 +170,7 @@ class TagGroupView @JvmOverloads constructor(
             val childHeight = child.measuredHeight
 
             // 检查是否需要换行
-            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight) {
+            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight && currentLineWidth > 0) {
                 // 测量当前行高度
                 totalHeight += currentLineHeight
                 if (totalHeight > 0) totalHeight += lineSpacing
@@ -152,12 +178,21 @@ class TagGroupView @JvmOverloads constructor(
                 currentLineWidth = 0
                 currentLineHeight = 0
                 currentLineStartIndex = i
+                lineCount++
+
+                // 如果超过最大行数限制，停止测量
+                if (lineCount > effectiveMaxLines) {
+                    break
+                }
             }
 
             // 添加当前标签
             currentLineWidth += childWidth + if (i > currentLineStartIndex) tagSpacing else 0
             currentLineHeight = maxOf(currentLineHeight, childHeight)
         }
+
+        // 记录实际总行数（需要完整计算）
+        totalLineCount = calculateTotalLineCount(widthSize)
 
         // 添加最后一行高度
         totalHeight += currentLineHeight + paddingTop + paddingBottom
@@ -172,26 +207,58 @@ class TagGroupView @JvmOverloads constructor(
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
+    private fun calculateTotalLineCount(widthSize: Int): Int {
+        var currentLineWidth = 0
+        var lineCount = 1
+        var currentLineStartIndex = 0
+
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val childWidth = child.measuredWidth
+
+            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight && currentLineWidth > 0) {
+                currentLineWidth = 0
+                currentLineStartIndex = i
+                lineCount++
+            }
+
+            currentLineWidth += childWidth + if (i > currentLineStartIndex) tagSpacing else 0
+        }
+
+        return lineCount
+    }
+
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = r - l
         var currentLeft = paddingLeft
         var currentTop = paddingTop
         var currentLineHeight = 0
+        var lineCount = 1
+        val effectiveMaxLines = if (isExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            if (child.visibility == View.GONE) continue
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
 
             // 检查是否需要换行
-            if (currentLeft + childWidth > width - paddingRight) {
+            if (currentLeft + childWidth > width - paddingRight && currentLeft > paddingLeft) {
                 currentLeft = paddingLeft
                 currentTop += currentLineHeight + lineSpacing
                 currentLineHeight = 0
+                lineCount++
+
+                // 如果超过最大行数限制，隐藏剩余子 View
+                if (lineCount > effectiveMaxLines) {
+                    for (j in i until childCount) {
+                        getChildAt(j).visibility = View.GONE
+                    }
+                    return
+                }
             }
 
+            child.visibility = View.VISIBLE
             child.layout(
                 currentLeft,
                 currentTop,

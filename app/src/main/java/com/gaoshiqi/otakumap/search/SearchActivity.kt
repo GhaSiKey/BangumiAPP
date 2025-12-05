@@ -69,6 +69,14 @@ class SearchActivity : AppCompatActivity() {
             showClearHistoryDialog()
         }
 
+        mHistoryBinding.tvExpandHistory.setOnClickListener {
+            val isExpanded = mHistoryBinding.tagGroupHistory.isExpanded()
+            mHistoryBinding.tagGroupHistory.setExpanded(!isExpanded)
+            mHistoryBinding.tvExpandHistory.text = getString(
+                if (!isExpanded) R.string.search_history_collapse else R.string.search_history_expand
+            )
+        }
+
         mHistoryBinding.tagGroupHistory.setOnTagClickListener(object : TagGroupView.OnTagClickListener {
             override fun onTagClick(tag: TagGroupView.Tag, position: Int) {
                 mBinding.searchBar.setText(tag.text)
@@ -96,6 +104,14 @@ class SearchActivity : AppCompatActivity() {
             mBinding.searchHistoryContainer.root.visibility = View.VISIBLE
             val tags = history.map { TagGroupView.Tag(text = it.keyword) }
             mHistoryBinding.tagGroupHistory.setTags(tags)
+            // 重置展开状态
+            mHistoryBinding.tagGroupHistory.setExpanded(false)
+            mHistoryBinding.tvExpandHistory.text = getString(R.string.search_history_expand)
+            // 布局完成后更新展开按钮可见性
+            mHistoryBinding.tagGroupHistory.post {
+                mHistoryBinding.tvExpandHistory.visibility =
+                    if (mHistoryBinding.tagGroupHistory.isExpandable()) View.VISIBLE else View.GONE
+            }
         }
     }
 

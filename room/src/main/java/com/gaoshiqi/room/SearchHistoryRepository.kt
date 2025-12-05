@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 class SearchHistoryRepository(context: Context) {
 
     companion object {
-        const val MAX_HISTORY_COUNT = 10
+        const val MAX_HISTORY_COUNT = 25
     }
 
     private val searchHistoryDao = AppDatabase.getDatabase(context).searchHistoryDao()

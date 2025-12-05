@@ -31,6 +31,17 @@
             android:textColor="@color/black_45"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp" />
+
+        <TextView
+            android:id="@+id/tv_expand_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_history_expand"
+            android:textSize="12sp"
+            android:textColor="@color/black_45"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <com.gaoshiqi.otakumap.widget.TagGroupView
@@ -44,6 +55,7 @@
         app:tagPaddingHorizontal="8dp"
         app:tagPaddingVertical="8dp"
         app:tagRadius="8dp"
+        app:maxLines="3"
         app:defaultBgColor="@color/gray_f5"
         app:defaultTextColor="@color/black_60" />
 

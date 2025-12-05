@@ -9,6 +9,7 @@
         <attr name="tagTextSize" format="dimension" />
         <attr name="tagRadius" format="dimension" />
         <attr name="tagHeight" format="dimension" />
+        <attr name="maxLines" format="integer" />
         <attr name="defaultTextColor" format="color" />
         <attr name="defaultBgColor" format="color" />
     </declare-styleable>
