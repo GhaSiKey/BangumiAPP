@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [AnimeEntity::class, SavedPointEntity::class],
-    version = 2,
+    entities = [AnimeEntity::class, SavedPointEntity::class, SearchHistoryEntity::class],
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun animeDao(): AnimeDao
     abstract fun savedPointDao(): SavedPointDao
+    abstract fun searchHistoryDao(): SearchHistoryDao
 
     companion object {
         @Volatile

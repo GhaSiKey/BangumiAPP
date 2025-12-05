@@ -11,6 +11,7 @@
     <color name="black_10">#1A000000</color>
 
     <color name="gray_100">#F5F5F5</color>
+    <color name="gray_f5">#F5F5F5</color>
 
     <color name="score">#FF6D00</color>
     <color name="black_20_only">#33000000</color>

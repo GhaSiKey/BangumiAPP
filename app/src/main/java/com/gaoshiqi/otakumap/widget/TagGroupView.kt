@@ -22,10 +22,20 @@ class TagGroupView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): ViewGroup(context, attrs, defStyleAttr) {
 
+    interface OnTagClickListener {
+        fun onTagClick(tag: Tag, position: Int)
+    }
+
     data class Tag(
         val text: String,
         @DrawableRes val iconRes: Int? = null
     )
+
+    private var tagClickListener: OnTagClickListener? = null
+
+    fun setOnTagClickListener(listener: OnTagClickListener?) {
+        tagClickListener = listener
+    }
 
     private var tagSpacing = dpToPx(8f) // 标签之间的间距
     private var lineSpacing = dpToPx(8f) // 行间距
@@ -90,6 +100,11 @@ class TagGroupView @JvmOverloads constructor(
         }
         // 设置标签背景
         mBinding.tagContainer.background = createRoundRectDrawable(defaultBgColor, tagRadius)
+        // 设置点击事件
+        mBinding.root.setOnClickListener {
+            val position = tags.indexOf(tag)
+            tagClickListener?.onTagClick(tag, position)
+        }
         addView(mBinding.root)
     }
 
