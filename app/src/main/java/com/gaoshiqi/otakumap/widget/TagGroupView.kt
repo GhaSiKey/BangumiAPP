@@ -39,7 +39,11 @@ class TagGroupView @JvmOverloads constructor(
 
     private var tagSpacing = dpToPx(8f) // 标签之间的间距
     private var lineSpacing = dpToPx(8f) // 行间距
-    private var tagRadius = 8 // 标签圆角半径
+    private var tagRadius = dpToPx(8f) // 标签圆角半径
+    private var tagTextSize = 0f // 标签文字大小，0表示使用默认值
+    private var tagPaddingHorizontal = -1 // 标签左右边距，-1表示使用默认值
+    private var tagPaddingVertical = -1 // 标签上下边距，-1表示使用默认值
+    private var tagHeight = -1 // 标签高度，-1表示使用默认值
     private var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
     private var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
 
@@ -49,6 +53,11 @@ class TagGroupView @JvmOverloads constructor(
         context.obtainStyledAttributes(attrs, com.gaoshiqi.otakumap.R.styleable.TagGroupView).apply {
             tagSpacing = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagSpacing, tagSpacing)
             lineSpacing = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_lineSpacing, lineSpacing)
+            tagTextSize = getDimension(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagTextSize, tagTextSize)
+            tagPaddingHorizontal = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagPaddingHorizontal, tagPaddingHorizontal)
+            tagPaddingVertical = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagPaddingVertical, tagPaddingVertical)
+            tagRadius = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagRadius, tagRadius)
+            tagHeight = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagHeight, tagHeight)
             defaultTextColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultTextColor, defaultTextColor)
             defaultBgColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultBgColor, defaultBgColor)
             recycle()
@@ -73,18 +82,29 @@ class TagGroupView @JvmOverloads constructor(
     }
     
     private fun createTagViews() {
-        for (tag in tags) {
-            addTagView(tag)
+        tags.forEachIndexed { index, tag ->
+            addTagView(tag, index)
         }
     }
 
-    private fun addTagView(tag: Tag) {
+    private fun addTagView(tag: Tag, index: Int) {
         val mBinding = ItemTagBinding.inflate(LayoutInflater.from(context), this, false)
 
         // 设置标签文字
         mBinding.tagText.apply {
             text = tag.text
             setTextColor(defaultTextColor)
+            if (tagTextSize > 0) {
+                setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, tagTextSize)
+            }
+        }
+        // 设置标签边距
+        val paddingH = if (tagPaddingHorizontal >= 0) tagPaddingHorizontal else mBinding.tagContainer.paddingLeft
+        val paddingV = if (tagPaddingVertical >= 0) tagPaddingVertical else mBinding.tagContainer.paddingTop
+        mBinding.tagContainer.setPadding(paddingH, paddingV, paddingH, paddingV)
+        // 设置标签高度
+        if (tagHeight > 0) {
+            mBinding.tagContainer.layoutParams.height = tagHeight
         }
         // 设置标签图标
         if (tag.iconRes != null) {
@@ -102,8 +122,7 @@ class TagGroupView @JvmOverloads constructor(
         mBinding.tagContainer.background = createRoundRectDrawable(defaultBgColor, tagRadius)
         // 设置点击事件
         mBinding.root.setOnClickListener {
-            val position = tags.indexOf(tag)
-            tagClickListener?.onTagClick(tag, position)
+            tagClickListener?.onTagClick(tag, index)
         }
         addView(mBinding.root)
     }
@@ -185,12 +204,8 @@ class TagGroupView @JvmOverloads constructor(
         }
     }
 
-    private fun dpToPx(dp: Float): Int{
+    private fun dpToPx(dp: Float): Int {
         return (dp * resources.displayMetrics.density).toInt()
-    }
-
-    private fun pxToDp(px: Int): Float{
-        return px / resources.displayMetrics.density
     }
 
     private fun createRoundRectDrawable(@ColorInt color: Int, cornerRadius: Int): Drawable {

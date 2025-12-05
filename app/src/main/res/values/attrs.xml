@@ -4,7 +4,11 @@
     <declare-styleable name="TagGroupView">
         <attr name="tagSpacing" format="dimension" />
         <attr name="lineSpacing" format="dimension" />
-        <attr name="tagPadding" format="dimension" />
+        <attr name="tagPaddingHorizontal" format="dimension" />
+        <attr name="tagPaddingVertical" format="dimension" />
+        <attr name="tagTextSize" format="dimension" />
+        <attr name="tagRadius" format="dimension" />
+        <attr name="tagHeight" format="dimension" />
         <attr name="defaultTextColor" format="color" />
         <attr name="defaultBgColor" format="color" />
     </declare-styleable>

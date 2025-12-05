@@ -38,8 +38,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:tagSpacing="8dp"
-        app:lineSpacing="8dp"
+        app:tagSpacing="10dp"
+        app:lineSpacing="10dp"
+        app:tagTextSize="14sp"
+        app:tagPaddingHorizontal="8dp"
+        app:tagPaddingVertical="8dp"
+        app:tagRadius="8dp"
         app:defaultBgColor="@color/gray_f5"
         app:defaultTextColor="@color/black_60" />
 
