@@ -26,4 +26,7 @@ interface SearchHistoryDao {
         )
     """)
     suspend fun trimToLimit(limit: Int = 10)
+
+    @Query("DELETE FROM search_history WHERE keyword = :keyword")
+    suspend fun deleteByKeyword(keyword: String)
 }

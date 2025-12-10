@@ -30,10 +30,12 @@
     <string name="go_to_detail">查看详情</string>
     <string name="point_count_format">%d个地点</string>
     <!-- SearchActivity -->
-    <string name="search_history_title">搜索历史</string>
+    <string name="search_history_title">History</string>
     <string name="search_history_clear">清空</string>
     <string name="search_history_clear_confirm_title">清空搜索历史</string>
     <string name="search_history_clear_confirm_message">确定要清空所有搜索历史吗？</string>
     <string name="search_history_expand">展开</string>
     <string name="search_history_collapse">收起</string>
+    <string name="search_history_delete_all">Delete all</string>
+    <string name="search_history_finish">Finish</string>
 </resources>

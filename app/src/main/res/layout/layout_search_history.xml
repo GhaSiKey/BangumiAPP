@@ -22,21 +22,42 @@
             android:textSize="14sp"
             android:textColor="@color/black_60" />
 
+        <!-- 正常状态：垃圾箱图标 -->
+        <ImageView
+            android:id="@+id/iv_trash"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="2dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_trash" />
+
+        <!-- 编辑状态：Delete all -->
         <TextView
-            android:id="@+id/tv_clear_history"
+            android:id="@+id/tv_delete_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_history_clear"
+            android:text="@string/search_history_delete_all"
             android:textSize="12sp"
             android:textColor="@color/black_45"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp" />
+            android:paddingVertical="4dp"
+            android:visibility="gone" />
 
+        <!-- 分隔线 -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="12dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@color/black_20"
+            android:visibility="gone" />
+
+        <!-- 编辑状态：Finish -->
         <TextView
-            android:id="@+id/tv_expand_history"
+            android:id="@+id/tv_finish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_history_expand"
+            android:text="@string/search_history_finish"
             android:textSize="12sp"
             android:textColor="@color/black_45"
             android:paddingHorizontal="8dp"
@@ -44,7 +65,7 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <com.gaoshiqi.otakumap.widget.TagGroupView
+    <com.gaoshiqi.otakumap.widget.SearchHistoryTagGroupView
         android:id="@+id/tag_group_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +76,7 @@
         app:tagPaddingHorizontal="8dp"
         app:tagPaddingVertical="8dp"
         app:tagRadius="8dp"
-        app:maxLines="3"
+        app:maxLines="1"
         app:defaultBgColor="@color/gray_f5"
         app:defaultTextColor="@color/black_60" />
 

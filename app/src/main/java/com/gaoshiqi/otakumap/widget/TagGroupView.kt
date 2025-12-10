@@ -16,7 +16,7 @@ import com.gaoshiqi.otakumap.databinding.ItemTagBinding
  * on 2025/6/1 21:23
  * email: gaoshiqi@bilibili.com
  */
-class TagGroupView @JvmOverloads constructor(
+open class TagGroupView @JvmOverloads constructor(
     context: Context,
     attrs: android.util.AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -28,7 +28,7 @@ class TagGroupView @JvmOverloads constructor(
 
     data class Tag(
         val text: String,
-        @DrawableRes val iconRes: Int? = null
+        @param:DrawableRes val iconRes: Int? = null
     )
 
     private var tagClickListener: OnTagClickListener? = null
@@ -37,20 +37,20 @@ class TagGroupView @JvmOverloads constructor(
         tagClickListener = listener
     }
 
-    private var tagSpacing = dpToPx(8f) // 标签之间的间距
-    private var lineSpacing = dpToPx(8f) // 行间距
-    private var tagRadius = dpToPx(8f) // 标签圆角半径
-    private var tagTextSize = 0f // 标签文字大小，0表示使用默认值
-    private var tagPaddingHorizontal = -1 // 标签左右边距，-1表示使用默认值
-    private var tagPaddingVertical = -1 // 标签上下边距，-1表示使用默认值
-    private var tagHeight = -1 // 标签高度，-1表示使用默认值
-    private var maxLines = Int.MAX_VALUE // 最大行数，默认不限制
-    private var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
-    private var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
+    protected var tagSpacing = dpToPx(8f) // 标签之间的间距
+    protected var lineSpacing = dpToPx(8f) // 行间距
+    protected var tagRadius = dpToPx(8f) // 标签圆角半径
+    protected var tagTextSize = 0f // 标签文字大小，0表示使用默认值
+    protected var tagPaddingHorizontal = -1 // 标签左右边距，-1表示使用默认值
+    protected var tagPaddingVertical = -1 // 标签上下边距，-1表示使用默认值
+    protected var tagHeight = -1 // 标签高度，-1表示使用默认值
+    protected var maxLines = Int.MAX_VALUE // 最大行数，默认不限制
+    protected var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
+    protected var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
 
-    private val tags = mutableListOf<Tag>()
-    private var isExpanded = false // 是否展开
-    private var totalLineCount = 0 // 实际总行数
+    protected val tags = mutableListOf<Tag>()
+    @JvmField protected var mIsExpanded = false // 是否展开
+    protected var totalLineCount = 0 // 实际总行数
     
     init {
         context.obtainStyledAttributes(attrs, com.gaoshiqi.otakumap.R.styleable.TagGroupView).apply {
@@ -71,9 +71,9 @@ class TagGroupView @JvmOverloads constructor(
     /**
      * 设置是否展开
      */
-    fun setExpanded(expanded: Boolean) {
-        if (isExpanded != expanded) {
-            isExpanded = expanded
+    open fun setExpanded(expanded: Boolean) {
+        if (mIsExpanded != expanded) {
+            mIsExpanded = expanded
             requestLayout()
         }
     }
@@ -81,37 +81,37 @@ class TagGroupView @JvmOverloads constructor(
     /**
      * 是否可展开（总行数超过最大行数）
      */
-    fun isExpandable(): Boolean = totalLineCount > maxLines
+    open fun isExpandable(): Boolean = totalLineCount > maxLines
 
     /**
      * 当前是否已展开
      */
-    fun isExpanded(): Boolean = isExpanded
+    open fun isExpanded(): Boolean = mIsExpanded
 
     /**
      * 设置标签数据
      */
-    fun setTags(tagList: List<Tag>) {
+    open fun setTags(tagList: List<Tag>) {
         tags.clear()
         tags.addAll(tagList)
         removeAllViews()
         createTagViews()
         requestLayout()
     }
-    
+
     fun clearTags() {
         tags.clear()
         removeAllViews()
         requestLayout()
     }
-    
-    private fun createTagViews() {
+
+    protected open fun createTagViews() {
         tags.forEachIndexed { index, tag ->
             addTagView(tag, index)
         }
     }
 
-    private fun addTagView(tag: Tag, index: Int) {
+    protected open fun addTagView(tag: Tag, index: Int) {
         val mBinding = ItemTagBinding.inflate(LayoutInflater.from(context), this, false)
 
         // 设置标签文字
@@ -160,7 +160,7 @@ class TagGroupView @JvmOverloads constructor(
         var currentLineHeight = 0
         var currentLineStartIndex = 0
         var lineCount = 1
-        val effectiveMaxLines = if (isExpanded) Int.MAX_VALUE else maxLines
+        val effectiveMaxLines = if (mIsExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
@@ -207,7 +207,7 @@ class TagGroupView @JvmOverloads constructor(
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
-    private fun calculateTotalLineCount(widthSize: Int): Int {
+    protected fun calculateTotalLineCount(widthSize: Int): Int {
         var currentLineWidth = 0
         var lineCount = 1
         var currentLineStartIndex = 0
@@ -234,7 +234,7 @@ class TagGroupView @JvmOverloads constructor(
         var currentTop = paddingTop
         var currentLineHeight = 0
         var lineCount = 1
-        val effectiveMaxLines = if (isExpanded) Int.MAX_VALUE else maxLines
+        val effectiveMaxLines = if (mIsExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
@@ -271,11 +271,11 @@ class TagGroupView @JvmOverloads constructor(
         }
     }
 
-    private fun dpToPx(dp: Float): Int {
+    protected fun dpToPx(dp: Float): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    private fun createRoundRectDrawable(@ColorInt color: Int, cornerRadius: Int): Drawable {
+    protected fun createRoundRectDrawable(@ColorInt color: Int, cornerRadius: Int): Drawable {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.RECTANGLE
         drawable.cornerRadius = cornerRadius.toFloat()

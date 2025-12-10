@@ -42,14 +42,20 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         when (intent) {
             is SearchIntent.Search -> search(intent.query)
             is SearchIntent.LoadMore -> loadMore()
-            is SearchIntent.Clear -> {}
             is SearchIntent.ClearAllHistory -> clearAllHistory()
+            is SearchIntent.DeleteHistory -> deleteHistory(intent.keyword)
         }
     }
 
     private fun clearAllHistory() {
         viewModelScope.launch {
             searchHistoryRepository.clearAllHistory()
+        }
+    }
+
+    private fun deleteHistory(keyword: String) {
+        viewModelScope.launch {
+            searchHistoryRepository.deleteHistory(keyword)
         }
     }
 
@@ -110,9 +116,9 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
 sealed class SearchIntent {
     data class Search(val query: String?): SearchIntent()
-    object LoadMore: SearchIntent()
-    object Clear: SearchIntent()
-    object ClearAllHistory: SearchIntent()
+    data object LoadMore: SearchIntent()
+    data object ClearAllHistory: SearchIntent()
+    data class DeleteHistory(val keyword: String): SearchIntent()
 }
 
 sealed class SearchState {

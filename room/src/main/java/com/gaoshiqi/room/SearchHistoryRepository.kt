@@ -25,4 +25,8 @@ class SearchHistoryRepository(context: Context) {
     suspend fun clearAllHistory() {
         searchHistoryDao.clearAll()
     }
+
+    suspend fun deleteHistory(keyword: String) {
+        searchHistoryDao.deleteByKeyword(keyword)
+    }
 }
