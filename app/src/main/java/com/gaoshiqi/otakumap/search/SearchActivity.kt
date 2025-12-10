@@ -198,21 +198,31 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        // 添加文本变化监听（可选：实时搜索或验证）
+        // 添加文本变化监听
         mBinding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                // 可以在这里添加实时搜索或者清空结果的逻辑
                 val query = s?.toString()?.trim()
                 if (query.isNullOrEmpty()) {
-                    // 当搜索框为空时显示空状态
-                    showEmpty()
+                    // 搜索框清空时：重置状态，显示空态和历史记录
+                    resetToInitialState()
                 }
             }
         })
+    }
+
+    /**
+     * 重置到初始状态（搜索框为空时的状态）
+     * 清空搜索结果，显示空态提示和历史记录
+     */
+    private fun resetToInitialState() {
+        hasSearchResult = false
+        mAdapter.setData(emptyList())
+        showEmpty()
+        updateHistoryVisibility()
     }
 
     private fun performSearch() {
@@ -263,12 +273,15 @@ class SearchActivity : AppCompatActivity() {
         mViewModel.state.observe(this) { state ->
             when (state) {
                 is SearchState.Error -> {
+                    // 搜索失败：显示错误提示，回到初始状态
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                     isLoadingMore = false
                     hasSearchResult = false
+                    mAdapter.setData(emptyList())
                     showEmpty()
                 }
                 SearchState.Idle -> {
+                    // 初始状态：显示空态和历史记录
                     hasSearchResult = false
                     showEmpty()
                 }
@@ -280,6 +293,7 @@ class SearchActivity : AppCompatActivity() {
                     isLoadingMore = false
                 }
                 SearchState.Loading -> {
+                    // 搜索中：显示加载状态，隐藏历史记录
                     hasSearchResult = false
                     mAdapter.setData(emptyList())
                     showLoading()
@@ -288,9 +302,11 @@ class SearchActivity : AppCompatActivity() {
                     isLoadingMore = false
                     hasSearchResult = state.data.isNotEmpty()
                     if (state.data.isEmpty()) {
+                        // 搜索成功但无结果：显示"没有找到结果"
                         mAdapter.setData(emptyList())
                         showNoResult()
                     } else {
+                        // 搜索成功有结果：显示结果列表
                         mAdapter.setData(state.data)
                         hideLoading()
                     }
