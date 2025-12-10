@@ -9,8 +9,10 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,14 +20,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.databinding.ActivitySearchBinding
+import com.gaoshiqi.otakumap.databinding.LayoutSearchHistoryBinding
 import com.gaoshiqi.otakumap.schedule.adapter.BangumiAdapter
 import com.gaoshiqi.otakumap.utils.KeyboardUtils
+import com.gaoshiqi.otakumap.widget.SearchHistoryTagGroupView
+import com.gaoshiqi.otakumap.widget.TagGroupView
+import com.gaoshiqi.room.SearchHistoryEntity
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivitySearchBinding
+    private lateinit var mHistoryBinding: LayoutSearchHistoryBinding
     private val mViewModel: SearchViewModel by viewModels()
     private val mAdapter = BangumiAdapter()
     private var isLoadingMore = false
+    private var hasSearchResult = false
+    private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
 
         initView()
         initObserver()
+        setupBackPressHandler()
     }
 
     private fun initView() {
@@ -49,10 +59,123 @@ class SearchActivity : AppCompatActivity() {
         mBinding.rvSearchResult.layoutManager = LinearLayoutManager(this)
 
         setupSearchBar()
+        setupHistoryView()
 
         Handler(Looper.getMainLooper()).postDelayed({
             KeyboardUtils.showSoftKeyboard(this, mBinding.searchBar)
         }, 300)
+    }
+
+    private fun setupHistoryView() {
+        mHistoryBinding = LayoutSearchHistoryBinding.bind(mBinding.searchHistoryContainer.root)
+
+        // 垃圾箱点击 -> 进入编辑模式
+        mHistoryBinding.ivTrash.setOnClickListener {
+            enterEditMode()
+        }
+
+        // Delete all 点击 -> 弹窗确认清空
+        mHistoryBinding.tvDeleteAll.setOnClickListener {
+            showClearHistoryDialog()
+        }
+
+        // Finish 点击 -> 退出编辑模式
+        mHistoryBinding.tvFinish.setOnClickListener {
+            exitEditMode()
+        }
+
+        // TagGroupView 回调
+        mHistoryBinding.tagGroupHistory.setOnHistoryTagActionListener(
+            object : SearchHistoryTagGroupView.OnHistoryTagActionListener {
+                override fun onTagClick(keyword: String, position: Int) {
+                    // 编辑模式检查已在 SearchHistoryTagGroupView 内部处理
+                    mBinding.searchBar.setText(keyword)
+                    mBinding.searchBar.setSelection(keyword.length)
+                    performSearch()
+                }
+
+                override fun onTagDelete(keyword: String, position: Int) {
+                    mViewModel.handleIntent(SearchIntent.DeleteHistory(keyword))
+                }
+            }
+        )
+    }
+
+    private fun enterEditMode() {
+        isEditMode = true
+        updateEditModeUI()
+        mHistoryBinding.tagGroupHistory.setEditMode(true)
+    }
+
+    private fun exitEditMode() {
+        isEditMode = false
+        updateEditModeUI()
+        mHistoryBinding.tagGroupHistory.setEditMode(false)
+        // 回到默认收起状态
+        mHistoryBinding.tagGroupHistory.setExpanded(false)
+    }
+
+    private fun updateEditModeUI() {
+        if (isEditMode) {
+            mHistoryBinding.ivTrash.visibility = View.GONE
+            mHistoryBinding.tvDeleteAll.visibility = View.VISIBLE
+            mHistoryBinding.divider.visibility = View.VISIBLE
+            mHistoryBinding.tvFinish.visibility = View.VISIBLE
+        } else {
+            mHistoryBinding.ivTrash.visibility = View.VISIBLE
+            mHistoryBinding.tvDeleteAll.visibility = View.GONE
+            mHistoryBinding.divider.visibility = View.GONE
+            mHistoryBinding.tvFinish.visibility = View.GONE
+        }
+    }
+
+    private fun setupBackPressHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isEditMode) {
+                    // 编辑模式下按返回：退出编辑模式
+                    exitEditMode()
+                } else {
+                    // 正常退出
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+    }
+
+    private fun showClearHistoryDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.search_history_clear_confirm_title)
+            .setMessage(R.string.search_history_clear_confirm_message)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                mViewModel.handleIntent(SearchIntent.ClearAllHistory)
+                // 清空后退出编辑模式
+                exitEditMode()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun updateHistoryView(history: List<SearchHistoryEntity>) {
+        if (history.isEmpty()) {
+            mBinding.searchHistoryContainer.root.visibility = View.GONE
+            // 历史为空时退出编辑模式
+            if (isEditMode) {
+                exitEditMode()
+            }
+        } else if (hasSearchResult) {
+            mBinding.searchHistoryContainer.root.visibility = View.GONE
+        } else {
+            mBinding.searchHistoryContainer.root.visibility = View.VISIBLE
+            val tags = history.map { TagGroupView.Tag(text = it.keyword) }
+            mHistoryBinding.tagGroupHistory.setTags(tags)
+
+            // 如果不在编辑模式，重置为收起状态
+            if (!isEditMode) {
+                mHistoryBinding.tagGroupHistory.setExpanded(false)
+            }
+        }
     }
 
     private fun setupSearchBar() {
@@ -75,26 +198,40 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        // 添加文本变化监听（可选：实时搜索或验证）
+        // 添加文本变化监听
         mBinding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            
+
             override fun afterTextChanged(s: Editable?) {
-                // 可以在这里添加实时搜索或者清空结果的逻辑
                 val query = s?.toString()?.trim()
                 if (query.isNullOrEmpty()) {
-                    // 当搜索框为空时显示空状态
-                    showEmpty()
+                    // 搜索框清空时：重置状态，显示空态和历史记录
+                    resetToInitialState()
                 }
             }
         })
     }
 
+    /**
+     * 重置到初始状态（搜索框为空时的状态）
+     * 清空搜索结果，显示空态提示和历史记录
+     */
+    private fun resetToInitialState() {
+        hasSearchResult = false
+        mAdapter.setData(emptyList())
+        showEmpty()
+        updateHistoryVisibility()
+    }
+
     private fun performSearch() {
         val query = mBinding.searchBar.text?.toString()?.trim()
         if (!query.isNullOrBlank()) {
+            // 搜索前退出编辑模式
+            if (isEditMode) {
+                exitEditMode()
+            }
             mViewModel.handleIntent(SearchIntent.Search(query))
             mBinding.searchBar.clearFocus()
             KeyboardUtils.hideSoftKeyboard(this, mBinding.searchBar)
@@ -126,17 +263,26 @@ class SearchActivity : AppCompatActivity() {
         }
 
         mBinding.action.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        mViewModel.searchHistory.observe(this) { history ->
+            updateHistoryView(history)
         }
 
         mViewModel.state.observe(this) { state ->
             when (state) {
                 is SearchState.Error -> {
+                    // 搜索失败：显示错误提示，回到初始状态
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                     isLoadingMore = false
+                    hasSearchResult = false
+                    mAdapter.setData(emptyList())
                     showEmpty()
                 }
                 SearchState.Idle -> {
+                    // 初始状态：显示空态和历史记录
+                    hasSearchResult = false
                     showEmpty()
                 }
                 SearchState.LoadMore -> {
@@ -147,21 +293,32 @@ class SearchActivity : AppCompatActivity() {
                     isLoadingMore = false
                 }
                 SearchState.Loading -> {
+                    // 搜索中：显示加载状态，隐藏历史记录
+                    hasSearchResult = false
                     mAdapter.setData(emptyList())
                     showLoading()
                 }
                 is SearchState.Success -> {
                     isLoadingMore = false
+                    hasSearchResult = state.data.isNotEmpty()
                     if (state.data.isEmpty()) {
+                        // 搜索成功但无结果：显示"没有找到结果"
                         mAdapter.setData(emptyList())
                         showNoResult()
                     } else {
+                        // 搜索成功有结果：显示结果列表
                         mAdapter.setData(state.data)
                         hideLoading()
                     }
                 }
             }
+            updateHistoryVisibility()
         }
+    }
+
+    private fun updateHistoryVisibility() {
+        val history = mViewModel.searchHistory.value ?: emptyList()
+        updateHistoryView(history)
     }
 
     private fun showLoading() {
@@ -183,6 +340,4 @@ class SearchActivity : AppCompatActivity() {
         mBinding.loadingStateView.hide()
         mBinding.rvSearchResult.visibility = View.VISIBLE
     }
-
-
 }

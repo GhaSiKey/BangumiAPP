@@ -16,29 +16,52 @@ import com.gaoshiqi.otakumap.databinding.ItemTagBinding
  * on 2025/6/1 21:23
  * email: gaoshiqi@bilibili.com
  */
-class TagGroupView @JvmOverloads constructor(
+open class TagGroupView @JvmOverloads constructor(
     context: Context,
     attrs: android.util.AttributeSet? = null,
     defStyleAttr: Int = 0
 ): ViewGroup(context, attrs, defStyleAttr) {
 
+    interface OnTagClickListener {
+        fun onTagClick(tag: Tag, position: Int)
+    }
+
     data class Tag(
         val text: String,
-        @DrawableRes val iconRes: Int? = null
+        @param:DrawableRes val iconRes: Int? = null
     )
 
-    private var tagSpacing = dpToPx(8f) // 标签之间的间距
-    private var lineSpacing = dpToPx(8f) // 行间距
-    private var tagRadius = 8 // 标签圆角半径
-    private var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
-    private var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
+    private var tagClickListener: OnTagClickListener? = null
 
-    private val tags = mutableListOf<Tag>()
+    fun setOnTagClickListener(listener: OnTagClickListener?) {
+        tagClickListener = listener
+    }
+
+    protected var tagSpacing = dpToPx(8f) // 标签之间的间距
+    protected var lineSpacing = dpToPx(8f) // 行间距
+    protected var tagRadius = dpToPx(8f) // 标签圆角半径
+    protected var tagTextSize = 0f // 标签文字大小，0表示使用默认值
+    protected var tagPaddingHorizontal = -1 // 标签左右边距，-1表示使用默认值
+    protected var tagPaddingVertical = -1 // 标签上下边距，-1表示使用默认值
+    protected var tagHeight = -1 // 标签高度，-1表示使用默认值
+    protected var maxLines = Int.MAX_VALUE // 最大行数，默认不限制
+    protected var defaultTextColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.black_85)
+    protected var defaultBgColor = ContextCompat.getColor(context, com.gaoshiqi.otakumap.R.color.transparent)
+
+    protected val tags = mutableListOf<Tag>()
+    @JvmField protected var mIsExpanded = false // 是否展开
+    protected var totalLineCount = 0 // 实际总行数
     
     init {
         context.obtainStyledAttributes(attrs, com.gaoshiqi.otakumap.R.styleable.TagGroupView).apply {
             tagSpacing = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagSpacing, tagSpacing)
             lineSpacing = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_lineSpacing, lineSpacing)
+            tagTextSize = getDimension(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagTextSize, tagTextSize)
+            tagPaddingHorizontal = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagPaddingHorizontal, tagPaddingHorizontal)
+            tagPaddingVertical = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagPaddingVertical, tagPaddingVertical)
+            tagRadius = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagRadius, tagRadius)
+            tagHeight = getDimensionPixelSize(com.gaoshiqi.otakumap.R.styleable.TagGroupView_tagHeight, tagHeight)
+            maxLines = getInt(com.gaoshiqi.otakumap.R.styleable.TagGroupView_maxLines, maxLines)
             defaultTextColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultTextColor, defaultTextColor)
             defaultBgColor = getColor(com.gaoshiqi.otakumap.R.styleable.TagGroupView_defaultBgColor, defaultBgColor)
             recycle()
@@ -46,35 +69,66 @@ class TagGroupView @JvmOverloads constructor(
     }
 
     /**
+     * 设置是否展开
+     */
+    open fun setExpanded(expanded: Boolean) {
+        if (mIsExpanded != expanded) {
+            mIsExpanded = expanded
+            requestLayout()
+        }
+    }
+
+    /**
+     * 是否可展开（总行数超过最大行数）
+     */
+    open fun isExpandable(): Boolean = totalLineCount > maxLines
+
+    /**
+     * 当前是否已展开
+     */
+    open fun isExpanded(): Boolean = mIsExpanded
+
+    /**
      * 设置标签数据
      */
-    fun setTags(tagList: List<Tag>) {
+    open fun setTags(tagList: List<Tag>) {
         tags.clear()
         tags.addAll(tagList)
         removeAllViews()
         createTagViews()
         requestLayout()
     }
-    
+
     fun clearTags() {
         tags.clear()
         removeAllViews()
         requestLayout()
     }
-    
-    private fun createTagViews() {
-        for (tag in tags) {
-            addTagView(tag)
+
+    protected open fun createTagViews() {
+        tags.forEachIndexed { index, tag ->
+            addTagView(tag, index)
         }
     }
 
-    private fun addTagView(tag: Tag) {
+    protected open fun addTagView(tag: Tag, index: Int) {
         val mBinding = ItemTagBinding.inflate(LayoutInflater.from(context), this, false)
 
         // 设置标签文字
         mBinding.tagText.apply {
             text = tag.text
             setTextColor(defaultTextColor)
+            if (tagTextSize > 0) {
+                setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, tagTextSize)
+            }
+        }
+        // 设置标签边距
+        val paddingH = if (tagPaddingHorizontal >= 0) tagPaddingHorizontal else mBinding.tagContainer.paddingLeft
+        val paddingV = if (tagPaddingVertical >= 0) tagPaddingVertical else mBinding.tagContainer.paddingTop
+        mBinding.tagContainer.setPadding(paddingH, paddingV, paddingH, paddingV)
+        // 设置标签高度
+        if (tagHeight > 0) {
+            mBinding.tagContainer.layoutParams.height = tagHeight
         }
         // 设置标签图标
         if (tag.iconRes != null) {
@@ -90,6 +144,10 @@ class TagGroupView @JvmOverloads constructor(
         }
         // 设置标签背景
         mBinding.tagContainer.background = createRoundRectDrawable(defaultBgColor, tagRadius)
+        // 设置点击事件
+        mBinding.root.setOnClickListener {
+            tagClickListener?.onTagClick(tag, index)
+        }
         addView(mBinding.root)
     }
 
@@ -101,6 +159,8 @@ class TagGroupView @JvmOverloads constructor(
         var currentLineWidth = 0
         var currentLineHeight = 0
         var currentLineStartIndex = 0
+        var lineCount = 1
+        val effectiveMaxLines = if (mIsExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
@@ -110,7 +170,7 @@ class TagGroupView @JvmOverloads constructor(
             val childHeight = child.measuredHeight
 
             // 检查是否需要换行
-            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight) {
+            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight && currentLineWidth > 0) {
                 // 测量当前行高度
                 totalHeight += currentLineHeight
                 if (totalHeight > 0) totalHeight += lineSpacing
@@ -118,12 +178,21 @@ class TagGroupView @JvmOverloads constructor(
                 currentLineWidth = 0
                 currentLineHeight = 0
                 currentLineStartIndex = i
+                lineCount++
+
+                // 如果超过最大行数限制，停止测量
+                if (lineCount > effectiveMaxLines) {
+                    break
+                }
             }
 
             // 添加当前标签
             currentLineWidth += childWidth + if (i > currentLineStartIndex) tagSpacing else 0
             currentLineHeight = maxOf(currentLineHeight, childHeight)
         }
+
+        // 记录实际总行数（需要完整计算）
+        totalLineCount = calculateTotalLineCount(widthSize)
 
         // 添加最后一行高度
         totalHeight += currentLineHeight + paddingTop + paddingBottom
@@ -138,26 +207,58 @@ class TagGroupView @JvmOverloads constructor(
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
+    protected fun calculateTotalLineCount(widthSize: Int): Int {
+        var currentLineWidth = 0
+        var lineCount = 1
+        var currentLineStartIndex = 0
+
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val childWidth = child.measuredWidth
+
+            if (currentLineWidth + childWidth > widthSize - paddingLeft - paddingRight && currentLineWidth > 0) {
+                currentLineWidth = 0
+                currentLineStartIndex = i
+                lineCount++
+            }
+
+            currentLineWidth += childWidth + if (i > currentLineStartIndex) tagSpacing else 0
+        }
+
+        return lineCount
+    }
+
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = r - l
         var currentLeft = paddingLeft
         var currentTop = paddingTop
         var currentLineHeight = 0
+        var lineCount = 1
+        val effectiveMaxLines = if (mIsExpanded) Int.MAX_VALUE else maxLines
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            if (child.visibility == View.GONE) continue
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
 
             // 检查是否需要换行
-            if (currentLeft + childWidth > width - paddingRight) {
+            if (currentLeft + childWidth > width - paddingRight && currentLeft > paddingLeft) {
                 currentLeft = paddingLeft
                 currentTop += currentLineHeight + lineSpacing
                 currentLineHeight = 0
+                lineCount++
+
+                // 如果超过最大行数限制，隐藏剩余子 View
+                if (lineCount > effectiveMaxLines) {
+                    for (j in i until childCount) {
+                        getChildAt(j).visibility = View.GONE
+                    }
+                    return
+                }
             }
 
+            child.visibility = View.VISIBLE
             child.layout(
                 currentLeft,
                 currentTop,
@@ -170,15 +271,11 @@ class TagGroupView @JvmOverloads constructor(
         }
     }
 
-    private fun dpToPx(dp: Float): Int{
+    protected fun dpToPx(dp: Float): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    private fun pxToDp(px: Int): Float{
-        return px / resources.displayMetrics.density
-    }
-
-    private fun createRoundRectDrawable(@ColorInt color: Int, cornerRadius: Int): Drawable {
+    protected fun createRoundRectDrawable(@ColorInt color: Int, cornerRadius: Int): Drawable {
         val drawable = GradientDrawable()
         drawable.shape = GradientDrawable.RECTANGLE
         drawable.cornerRadius = cornerRadius.toFloat()

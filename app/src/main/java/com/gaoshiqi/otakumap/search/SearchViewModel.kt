@@ -1,10 +1,15 @@
 package com.gaoshiqi.otakumap.search
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.gaoshiqi.otakumap.data.api.BangumiClient
 import com.gaoshiqi.otakumap.data.bean.SubjectSmall
+import com.gaoshiqi.room.SearchHistoryEntity
+import com.gaoshiqi.room.SearchHistoryRepository
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 
@@ -13,9 +18,13 @@ import java.util.ArrayList
  * on 2025/7/31 17:40
  * email: gaoshiqi@bilibili.com
  */
-class SearchViewModel: ViewModel() {
+class SearchViewModel(application: Application): AndroidViewModel(application) {
     private val _state = MutableLiveData<SearchState>(SearchState.Idle)
     val state = _state
+
+    private val searchHistoryRepository = SearchHistoryRepository(application)
+    val searchHistory: LiveData<List<SearchHistoryEntity>> =
+        searchHistoryRepository.allHistory.asLiveData()
 
     private var query: String? = null
     private var start = 0
@@ -33,7 +42,26 @@ class SearchViewModel: ViewModel() {
         when (intent) {
             is SearchIntent.Search -> search(intent.query)
             is SearchIntent.LoadMore -> loadMore()
-            is SearchIntent.Clear -> {}
+            is SearchIntent.ClearAllHistory -> clearAllHistory()
+            is SearchIntent.DeleteHistory -> deleteHistory(intent.keyword)
+        }
+    }
+
+    private fun clearAllHistory() {
+        viewModelScope.launch {
+            searchHistoryRepository.clearAllHistory()
+        }
+    }
+
+    private fun deleteHistory(keyword: String) {
+        viewModelScope.launch {
+            searchHistoryRepository.deleteHistory(keyword)
+        }
+    }
+
+    private fun saveHistory(keyword: String) {
+        viewModelScope.launch {
+            searchHistoryRepository.addHistory(keyword)
         }
     }
 
@@ -53,6 +81,7 @@ class SearchViewModel: ViewModel() {
                 total = result.results ?: 0
                 mList = result.list ?: emptyList()
                 _state.value = SearchState.Success(mList)
+                saveHistory(query!!)
             } catch (e: Exception) {
                 _state.value = SearchState.Error(e.message ?: "搜索失败")
             }
@@ -87,8 +116,9 @@ class SearchViewModel: ViewModel() {
 
 sealed class SearchIntent {
     data class Search(val query: String?): SearchIntent()
-    object LoadMore: SearchIntent()
-    object Clear: SearchIntent()
+    data object LoadMore: SearchIntent()
+    data object ClearAllHistory: SearchIntent()
+    data class DeleteHistory(val keyword: String): SearchIntent()
 }
 
 sealed class SearchState {
