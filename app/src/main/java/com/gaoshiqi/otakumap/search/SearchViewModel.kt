@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.gaoshiqi.otakumap.data.api.BangumiClient
-import com.gaoshiqi.otakumap.data.bean.SubjectSmall
+import com.gaoshiqi.otakumap.data.bean.SearchFilter
+import com.gaoshiqi.otakumap.data.bean.SearchRequest
+import com.gaoshiqi.otakumap.data.bean.SearchSubject
 import com.gaoshiqi.room.SearchHistoryEntity
 import com.gaoshiqi.room.SearchHistoryRepository
 import kotlinx.coroutines.launch
@@ -27,11 +29,11 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         searchHistoryRepository.allHistory.asLiveData()
 
     private var query: String? = null
-    private var start = 0
+    private var offset = 0
     private var limit = 10
     private var total = 0
 
-    private var mList: List<SubjectSmall> = ArrayList()
+    private var mList: List<SearchSubject> = emptyList()
 
     init {
         _state.value = SearchState.Idle
@@ -66,20 +68,23 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     }
 
     private fun search(q: String?) {
-        start = 0
+        offset = 0
         query = q
         mList = emptyList()
         if (query.isNullOrEmpty()) return
         viewModelScope.launch {
             _state.value = SearchState.Loading
             try {
-                val result = BangumiClient.instance.searchSubject(
-                    keywords = query!!,
-                    start = start,
-                    limit = limit
+                val result = BangumiClient.instance.searchSubjectsV2(
+                    limit = limit,
+                    offset = offset,
+                    request = SearchRequest(
+                        keyword = query!!,
+                        filter = SearchFilter(type = listOf(2))
+                    )
                 )
-                total = result.results ?: 0
-                mList = result.list ?: emptyList()
+                total = result.total ?: 0
+                mList = result.data ?: emptyList()
                 _state.value = SearchState.Success(mList)
                 saveHistory(query!!)
             } catch (e: Exception) {
@@ -90,21 +95,24 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private fun loadMore() {
         // 已加载的数量 >= 总数，没有更多数据
-        if (start + limit >= total || query.isNullOrEmpty()) {
+        if (offset + limit >= total || query.isNullOrEmpty()) {
             return
         }
-        val next = start + limit
+        val nextOffset = offset + limit
         viewModelScope.launch {
             _state.value = SearchState.LoadMore
             try {
-                val result = BangumiClient.instance.searchSubject(
-                    keywords = query!!,
-                    start = next,
-                    limit = limit
+                val result = BangumiClient.instance.searchSubjectsV2(
+                    limit = limit,
+                    offset = nextOffset,
+                    request = SearchRequest(
+                        keyword = query!!,
+                        filter = SearchFilter(type = listOf(2))
+                    )
                 )
-                start = next
-                total = result.results ?: total
-                result.list?.let { mList = mList + it }
+                offset = nextOffset
+                total = result.total ?: total
+                result.data?.let { mList = mList + it }
 
                 _state.value = SearchState.Success(mList)
             } catch (e: Exception) {
@@ -122,10 +130,10 @@ sealed class SearchIntent {
 }
 
 sealed class SearchState {
-    object Idle: SearchState()
-    object Loading: SearchState()
-    data class Success(val data: List<SubjectSmall>): SearchState()
+    data object Idle: SearchState()
+    data object Loading: SearchState()
+    data class Success(val data: List<SearchSubject>): SearchState()
     data class Error(val message: String): SearchState()
-    object LoadMore: SearchState()
+    data object LoadMore: SearchState()
     data class LoadMoreError(val message: String): SearchState()
 }

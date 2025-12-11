@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".search.SearchOldTestActivity">
+
+    <!-- 标题栏 -->
+    <LinearLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_toolbar_title_back"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="旧搜索接口测试"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black_85" />
+    </LinearLayout>
+
+    <!-- 搜索栏 -->
+    <LinearLayout
+        android:id="@+id/search_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/title_bar">
+
+        <LinearLayout
+            android:id="@+id/search_bar_input"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_roundrect_search_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="0dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_vector_search_16"
+                android:contentDescription="@null" />
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="输入关键词搜索"
+                android:background="@color/transparent"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                android:gravity="start|center_vertical"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingHorizontal="8dp"
+                android:singleLine="true"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:gravity="center"
+            android:text="搜索"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black_85" />
+    </LinearLayout>
+
+    <!-- 结果统计 -->
+    <TextView
+        android:id="@+id/tv_result_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:textSize="12sp"
+        android:textColor="@color/black_40"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/search_container"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="共找到 100 条结果"
+        tools:visibility="visible" />
+
+    <!-- 搜索结果列表 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_result_count"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- 加载状态 -->
+    <com.gaoshiqi.otakumap.widget.LoadingStateView
+        android:id="@+id/loading_state_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_result_count"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

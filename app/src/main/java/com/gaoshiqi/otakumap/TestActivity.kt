@@ -8,6 +8,8 @@ import com.gaoshiqi.otakumap.databinding.ActivityTestBinding
 import com.gaoshiqi.otakumap.schedule.BangumiTodayActivity
 import com.gaoshiqi.otakumap.schedule.ScheduleActivity
 import com.gaoshiqi.otakumap.search.SearchActivity
+import com.gaoshiqi.otakumap.search.SearchOldTestActivity
+import com.gaoshiqi.otakumap.search.SearchTestActivity
 import com.gaoshiqi.otakumap.trending.AnimeTrendingActivity
 import com.gaoshiqi.map.MapsDemoActivity
 
@@ -56,6 +58,14 @@ class TestActivity : AppCompatActivity() {
         mBinding.button5.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
+        }
+
+        mBinding.button6.setOnClickListener {
+            SearchTestActivity.start(this)
+        }
+
+        mBinding.button7.setOnClickListener {
+            SearchOldTestActivity.start(this)
         }
     }
 }

@@ -20,6 +20,12 @@
             android:name="com.gaoshiqi.otakumap.search.SearchActivity"
             android:exported="false" />
         <activity
+            android:name="com.gaoshiqi.otakumap.search.SearchTestActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.gaoshiqi.otakumap.search.SearchOldTestActivity"
+            android:exported="false" />
+        <activity
             android:name="com.gaoshiqi.otakumap.trending.AnimeTrendingActivity"
             android:exported="false" />
         <activity
