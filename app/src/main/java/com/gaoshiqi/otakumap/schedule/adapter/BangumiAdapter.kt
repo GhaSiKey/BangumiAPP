@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.SubjectSmall
 import com.gaoshiqi.otakumap.detail.BangumiDetailActivity
@@ -68,11 +68,7 @@ class BangumiViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 
     @SuppressLint("SetTextI18n")
     fun setView(data: SubjectSmall) {
-        Glide.with(view.context)
-            .load(data.images?.large)
-            .centerCrop()
-            .placeholder(R.drawable.ic_cover_placeholder_36)
-            .into(image)
+        image.loadCover(data.images?.large, R.drawable.ic_cover_placeholder_36)
         title.text = data.name
         titleCn.text = data.nameCn
         sid.text = "ID: " + data.id

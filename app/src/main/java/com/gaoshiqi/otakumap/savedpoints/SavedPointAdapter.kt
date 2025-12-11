@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.databinding.ItemSavedPointBinding
 import com.gaoshiqi.room.SavedPointEntity
@@ -34,11 +34,7 @@ class SavedPointAdapter(
 
         fun bind(point: SavedPointEntity) {
             // 地点图片
-            Glide.with(binding.ivPointImage)
-                .load(point.pointImage)
-                .centerCrop()
-                .placeholder(R.drawable.ic_cover_placeholder_36)
-                .into(binding.ivPointImage)
+            binding.ivPointImage.loadCover(point.pointImage, R.drawable.ic_cover_placeholder_36)
 
             // 地点名称（优先中文名）
             binding.tvPointName.text = point.pointNameCn.ifEmpty { point.pointName }

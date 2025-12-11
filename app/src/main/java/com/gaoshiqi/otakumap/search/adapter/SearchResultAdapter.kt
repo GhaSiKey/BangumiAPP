@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.SearchSubject
 import com.gaoshiqi.otakumap.detail.BangumiDetailActivity
@@ -60,11 +60,7 @@ class SearchResultViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     fun setView(data: SearchSubject) {
         // 图片优先使用 images.large，如果没有则使用 image 字段
         val imageUrl = data.images?.large ?: data.image
-        Glide.with(view.context)
-            .load(imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.ic_cover_placeholder_36)
-            .into(image)
+        image.loadCover(imageUrl, R.drawable.ic_cover_placeholder_36)
 
         title.text = data.name
         titleCn.text = data.nameCn

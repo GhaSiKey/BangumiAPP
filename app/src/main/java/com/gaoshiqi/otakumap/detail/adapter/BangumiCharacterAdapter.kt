@@ -9,9 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
+import com.gaoshiqi.image.loadWithOriginalRatio
 import com.gaoshiqi.image.viewer.ImageViewerActivity
+import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.BangumiCharacter
 import com.gaoshiqi.otakumap.utils.BangumiUtils
 
@@ -77,11 +77,7 @@ class BangumiCharacterAdapter(
             characterImage.requestLayout()
             val imageUrl = character.images?.medium
             if (!imageUrl.isNullOrEmpty()) {
-                Glide.with(itemView)
-                    .load(imageUrl)
-                    .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
-                    .override(columnWidth, Target.SIZE_ORIGINAL)
-                    .into(characterImage)
+                characterImage.loadWithOriginalRatio(imageUrl, R.drawable.ic_cover_placeholder_36, columnWidth)
 
                 // 点击图片打开图片查看器（使用大图）
                 val largeImageUrl = character.images.large ?: imageUrl

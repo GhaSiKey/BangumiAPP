@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -22,11 +21,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import com.gaoshiqi.image.ImageLoader
 import com.gaoshiqi.image.R
 import com.gaoshiqi.image.databinding.ActivityImageViewerBinding
 import com.gaoshiqi.image.util.ImageSaver
@@ -205,36 +200,21 @@ class ImageViewerActivity : AppCompatActivity() {
 
         binding.progressBar.visibility = View.VISIBLE
 
-        Glide.with(this)
-            .load(imageUrl)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    binding.progressBar.visibility = View.GONE
-                    showError()
-                    // 加载失败也要启动转场，否则界面会卡住
-                    supportStartPostponedEnterTransition()
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    binding.progressBar.visibility = View.GONE
-                    // 图片加载完成，启动转场动画
-                    supportStartPostponedEnterTransition()
-                    return false
-                }
-            })
-            .into(binding.zoomableImageView)
+        ImageLoader.loadFullScreen(
+            imageView = binding.zoomableImageView,
+            url = imageUrl,
+            onSuccess = {
+                binding.progressBar.visibility = View.GONE
+                // 图片加载完成，启动转场动画
+                supportStartPostponedEnterTransition()
+            },
+            onError = {
+                binding.progressBar.visibility = View.GONE
+                showError()
+                // 加载失败也要启动转场，否则界面会卡住
+                supportStartPostponedEnterTransition()
+            }
+        )
     }
 
     private fun showError() {

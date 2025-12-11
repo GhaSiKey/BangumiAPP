@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -60,6 +61,7 @@ dependencies {
 
     // glide
     implementation(libs.glide)
+    ksp(libs.glide.ksp)
 
     // map
     implementation(project(":map"))

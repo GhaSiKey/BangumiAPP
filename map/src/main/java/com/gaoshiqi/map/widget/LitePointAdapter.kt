@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.map.R
 import com.gaoshiqi.map.data.LitePoint
 
@@ -25,10 +25,7 @@ class LitePointAdapter(
         private val description: TextView = itemView.findViewById(R.id.item_description)
 
         fun bind(litePoint: LitePoint) {
-            Glide.with(itemView.context)
-                .load(litePoint.image)
-                .placeholder(R.drawable.ic_cover_placeholder_36)
-                .into(cover)
+            cover.loadCover(litePoint.image, R.drawable.ic_cover_placeholder_36)
 
             title.text = litePoint.name
             description.text = "坐标: ${litePoint.geo[0]}, ${litePoint.geo[1]}"

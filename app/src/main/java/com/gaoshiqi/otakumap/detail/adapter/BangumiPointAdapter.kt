@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.image.viewer.ImageViewerActivity
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.map.data.LitePoint
@@ -103,10 +103,7 @@ class BangumiPointAdapter(
         private val pointEp: TextView = itemView.findViewById(R.id.pointEpisode)
 
         fun bind(point: LitePoint) {
-            Glide.with(itemView.context)
-                .load(point.image)
-                .placeholder(R.drawable.ic_cover_placeholder_36)
-                .into(pointImage)
+            pointImage.loadCover(point.image, R.drawable.ic_cover_placeholder_36)
             pointName.text = point.name
             pointId.text = "ID: " + point.id
             setEpAndTimeText(pointEp, point.ep, point.s)
