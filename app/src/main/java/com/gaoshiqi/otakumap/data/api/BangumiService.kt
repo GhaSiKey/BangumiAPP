@@ -3,8 +3,12 @@ package com.gaoshiqi.otakumap.data.api
 import com.gaoshiqi.otakumap.data.bean.BangumiDetail
 import com.gaoshiqi.otakumap.data.bean.CalendarResponse
 import com.gaoshiqi.otakumap.data.bean.BangumiCharacter
+import com.gaoshiqi.otakumap.data.bean.SearchRequest
 import com.gaoshiqi.otakumap.data.bean.SearchResponse
+import com.gaoshiqi.otakumap.data.bean.SearchSubjectsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -36,4 +40,14 @@ interface BangumiService {
         @Query("start") start: Int = 1,
         @Query("max_results") limit: Int = 10,
     ): SearchResponse
+
+    /**
+     * 新版搜索接口 v0
+     */
+    @POST("/v0/search/subjects")
+    suspend fun searchSubjectsV2(
+        @Query("limit") limit: Int = 10,
+        @Query("offset") offset: Int = 0,
+        @Body request: SearchRequest
+    ): SearchSubjectsResponse
 }
