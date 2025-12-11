@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.databinding.ActivitySearchBinding
 import com.gaoshiqi.otakumap.databinding.LayoutSearchHistoryBinding
-import com.gaoshiqi.otakumap.schedule.adapter.BangumiAdapter
+import com.gaoshiqi.otakumap.search.adapter.SearchResultAdapter
 import com.gaoshiqi.otakumap.utils.KeyboardUtils
 import com.gaoshiqi.otakumap.widget.SearchHistoryTagGroupView
 import com.gaoshiqi.otakumap.widget.TagGroupView
@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivitySearchBinding
     private lateinit var mHistoryBinding: LayoutSearchHistoryBinding
     private val mViewModel: SearchViewModel by viewModels()
-    private val mAdapter = BangumiAdapter()
+    private val mAdapter = SearchResultAdapter()
     private var isLoadingMore = false
     private var hasSearchResult = false
     private var isEditMode = false
