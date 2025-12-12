@@ -106,7 +106,8 @@ class MapsDemoActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
             override fun getInfoContents(p0: Marker): View? {
                 val view = CustomInfoView(this@MapsDemoActivity)
-                view.setMarker(p0)
+                // Demo: 使用测试图片 URL
+                view.setMarker(p0, "https://anitabi.cn/images/points/276/50cjwj3ie_1741166630984.jpg?plan=h360")
                 return view
             }
 

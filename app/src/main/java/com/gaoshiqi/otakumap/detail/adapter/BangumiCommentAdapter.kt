@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadAvatar
+import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.CommentData
 import com.gaoshiqi.otakumap.databinding.ItemCommentBinding
 import com.gaoshiqi.otakumap.utils.BangumiUtils
@@ -47,10 +48,7 @@ class BangumiCommentAdapter: ListAdapter<CommentData, BangumiCommentAdapter.Comm
             mBinding.subInfo.text = BangumiUtils.getCollectionStatus(item.type) + " "+ BangumiUtils.formatTimeByInterval(item.updatedAt)
             mBinding.comment.text = item.comment
 
-            Glide.with(mBinding.userAvatar.context)
-                .load(item.user.avatar.large)
-                .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
-                .into(mBinding.userAvatar)
+            mBinding.userAvatar.loadAvatar(item.user.avatar.large, R.drawable.ic_cover_placeholder_36)
         }
     }
 }

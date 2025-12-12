@@ -5,7 +5,7 @@
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
-[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
+[![Version](https://img.shields.io/badge/Version-1.3.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
 
 ## 📱 应用简介
 
@@ -83,7 +83,11 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 
 ## 🔄 更新日志
 
-### v1.2.0 (当前版本)
+### v1.3.0 (当前版本)
+- ✨ 新增图片加载器ImageLoader
+- 🔄 搜索页接口替换，采用新搜索API
+
+### v1.2.0
 - ✨ 优化番剧详情页简介布局，采用卡片式设计
 - ✨ 评分可视化展示（进度条 + 大字号评分）
 - ✨ 收藏统计网格化展示

@@ -51,6 +51,9 @@ dependencies {
     // room module
     implementation(project(":room"))
 
+    // image module (for ImageLoader)
+    implementation(project(":image"))
+
     // glide
     implementation(libs.glide)
 }

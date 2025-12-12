@@ -7,7 +7,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
+import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.TrendingSubjectItem
 import com.gaoshiqi.otakumap.databinding.ItemTrendingCardBinding
 import com.gaoshiqi.otakumap.detail.BangumiDetailActivity
@@ -41,11 +42,7 @@ class TrendingViewHolder(
 ): RecyclerView.ViewHolder(mBinding.root) {
     @SuppressLint("SetTextI18n")
     fun bind(position: Int, item: TrendingSubjectItem) {
-        Glide.with(mBinding.ivCover.context)
-            .load(item.subject.images.large)
-            .centerCrop()
-            .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
-            .into(mBinding.ivCover)
+        mBinding.ivCover.loadCover(item.subject.images.large, R.drawable.ic_cover_placeholder_36)
         mBinding.tvRank.visibility = if ((position + 1) < 100) android.view.View.VISIBLE else android.view.View.GONE
         mBinding.tvRank.text = (position + 1).toString()
         mBinding.tvTitle.text = item.subject.name

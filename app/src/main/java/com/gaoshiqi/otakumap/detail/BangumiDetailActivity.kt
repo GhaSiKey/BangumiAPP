@@ -11,8 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
 import androidx.annotation.StringRes
+import com.gaoshiqi.image.loadDetail
 import com.gaoshiqi.otakumap.BangumiApplication
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.data.bean.BangumiDetail
@@ -169,11 +169,7 @@ class BangumiDetailActivity : AppCompatActivity() {
         // 标题
         mBinding.bangumiTitle.text = data.displayTitle()
         // 封面
-        Glide.with(this)
-            .load(data.images.large)
-            .centerCrop()
-            .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
-            .into(mBinding.ivCover)
+        mBinding.ivCover.loadDetail(data.images.large, R.drawable.ic_cover_placeholder_36)
         // 点击封面查看大图（带共享元素转场动画）
         mBinding.ivCover.setOnClickListener {
             ImageViewerActivity.startWithSharedElement(this, data.images.large, mBinding.ivCover)

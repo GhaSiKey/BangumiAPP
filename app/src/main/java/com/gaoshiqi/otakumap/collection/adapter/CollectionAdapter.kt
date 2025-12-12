@@ -7,7 +7,8 @@ import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.gaoshiqi.image.loadCover
+import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.otakumap.databinding.ItemMyCollectionBinding
 import com.gaoshiqi.otakumap.detail.BangumiDetailActivity
 import com.gaoshiqi.room.AnimeEntity
@@ -53,10 +54,7 @@ class CollectionAdapter(
                 }
             })
 
-            Glide.with(mBinding.cover.context)
-                .load(item.imageUrl)
-                .placeholder(com.gaoshiqi.otakumap.R.drawable.ic_cover_placeholder_36)
-                .into(mBinding.cover)
+            mBinding.cover.loadCover(item.imageUrl, R.drawable.ic_cover_placeholder_36)
 
             mBinding.root.setOnClickListener {
                 BangumiDetailActivity.start(context, item.id)
