@@ -5,4 +5,6 @@
     <string name="point_saved">已收藏</string>
     <string name="point_unsaved">已取消收藏</string>
     <string name="point_save_failed">操作失败</string>
+    <string name="open_in_maps">在地图中打开</string>
+    <string name="open_maps_failed">无法打开地图</string>
 </resources>

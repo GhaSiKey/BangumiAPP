@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.gaoshiqi.map.data.LitePoint
 import com.gaoshiqi.map.databinding.FragmentMapBottomSheetBinding
+import com.gaoshiqi.map.utils.GoogleMapUtils
 import com.gaoshiqi.map.utils.LitePointHolder
 import com.gaoshiqi.room.SavedPointEntity
 import com.gaoshiqi.room.SavedPointRepository
@@ -40,6 +41,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var isSaved: Boolean = false
     private var isSaveOperating: Boolean = false
 
+    // MapView 是否已初始化
+    private var isMapInitialized = false
+
     private val repository: SavedPointRepository by lazy {
         SavedPointRepository(requireContext())
     }
@@ -68,6 +72,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
         binding.tvTitle.text = name ?: ""
 
+        setupOpenMapsButton()
         setupSaveButton()
 
         (dialog as? BottomSheetDialog)?.findViewById<View>(
@@ -75,9 +80,20 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         )?.setBackgroundResource(android.R.color.transparent)
 
         // 延迟初始化地图，让弹窗先显示出来
-        view.post {
-            binding.map.onCreate(null)
-            binding.map.getMapAsync(this)
+        view.post { initMapView() }
+    }
+
+    private fun initMapView() {
+        binding.map.onCreate(null)
+        binding.map.onResume()
+        binding.map.getMapAsync(this)
+        isMapInitialized = true
+    }
+
+    private fun setupOpenMapsButton() {
+        binding.btnOpenMaps.setOnClickListener {
+            val loc = location ?: return@setOnClickListener
+            GoogleMapUtils.openInGoogleMaps(requireContext(), loc.latitude, loc.longitude, name)
         }
     }
 
@@ -167,7 +183,10 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        _binding?.map?.onResume()
+        // 仅在 MapView 初始化后才调用，避免 post 延迟导致的崩溃
+        if (isMapInitialized) {
+            _binding?.map?.onResume()
+        }
     }
 
     override fun onPause() {
