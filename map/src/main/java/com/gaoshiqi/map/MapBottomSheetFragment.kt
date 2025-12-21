@@ -41,6 +41,9 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     private var isSaved: Boolean = false
     private var isSaveOperating: Boolean = false
 
+    // MapView 是否已初始化
+    private var isMapInitialized = false
+
     private val repository: SavedPointRepository by lazy {
         SavedPointRepository(requireContext())
     }
@@ -84,6 +87,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         binding.map.onCreate(null)
         binding.map.onResume()
         binding.map.getMapAsync(this)
+        isMapInitialized = true
     }
 
     private fun setupOpenMapsButton() {
@@ -174,6 +178,14 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     .title(name)
             )?.showInfoWindow()
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 仅在 MapView 初始化后才调用，避免 post 延迟导致的崩溃
+        if (isMapInitialized) {
+            _binding?.map?.onResume()
         }
     }
 
