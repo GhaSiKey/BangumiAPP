@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.gaoshiqi.map.data.LitePoint
 import com.gaoshiqi.map.databinding.FragmentMapBottomSheetBinding
+import com.gaoshiqi.map.utils.GoogleMapUtils
 import com.gaoshiqi.map.utils.LitePointHolder
 import com.gaoshiqi.room.SavedPointEntity
 import com.gaoshiqi.room.SavedPointRepository
@@ -68,6 +69,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
         binding.tvTitle.text = name ?: ""
 
+        setupOpenMapsButton()
         setupSaveButton()
 
         (dialog as? BottomSheetDialog)?.findViewById<View>(
@@ -75,9 +77,19 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         )?.setBackgroundResource(android.R.color.transparent)
 
         // 延迟初始化地图，让弹窗先显示出来
-        view.post {
-            binding.map.onCreate(null)
-            binding.map.getMapAsync(this)
+        view.post { initMapView() }
+    }
+
+    private fun initMapView() {
+        binding.map.onCreate(null)
+        binding.map.onResume()
+        binding.map.getMapAsync(this)
+    }
+
+    private fun setupOpenMapsButton() {
+        binding.btnOpenMaps.setOnClickListener {
+            val loc = location ?: return@setOnClickListener
+            GoogleMapUtils.openInGoogleMaps(requireContext(), loc.latitude, loc.longitude, name)
         }
     }
 
@@ -163,11 +175,6 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
             )?.showInfoWindow()
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        _binding?.map?.onResume()
     }
 
     override fun onPause() {
