@@ -1,20 +1,41 @@
 package com.gaoshiqi.player.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,13 +49,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gaoshiqi.player.ui.theme.PlayerTheme
 import com.gaoshiqi.player.viewmodel.PlayerIntent
+import com.gaoshiqi.player.viewmodel.PlayerLog
 import com.gaoshiqi.player.viewmodel.PlayerState
 import com.gaoshiqi.player.viewmodel.PlayerUiState
 import com.gaoshiqi.player.viewmodel.PlayerViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+/**
+ * 测试视频源
+ */
+private data class TestVideoSource(
+    val name: String,
+    val url: String
+)
+
+private val testVideoSources = listOf(
+    TestVideoSource("芙莉莲", "https://fe-video-qc.xhscdn.com/athena-creator/1040g0pg3104o5f8u5q5g5pebdah3cnu7o5c94v8?filename=1.mp4"),
+    TestVideoSource("间谍过家家", "https://sns-video-hw.xhscdn.com/spectrum/1040g0jg31n7jtmot4u005p2qf72k4m7r92mijqo"),
+    TestVideoSource("鬼灭之刃", "https://hn.bfvvs.com/play/b688Ynle/index.m3u8"),
+    TestVideoSource("Big Buck Bunny", "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+)
 
 /**
  * 播放器主界面
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PlayerScreen(
     viewModel: PlayerViewModel,
@@ -43,6 +84,7 @@ fun PlayerScreen(
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scrollState = rememberScrollState()
 
     // 错误提示
     LaunchedEffect(uiState.playerState) {
@@ -61,6 +103,7 @@ fun PlayerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
         ) {
             // 视频播放器区域
             VideoPlayer(
@@ -104,7 +147,193 @@ fun PlayerScreen(
                 playerState = uiState.playerState,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+
+            // 测试视频快捷按钮
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "快捷测试",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                testVideoSources.forEach { source ->
+                    FilledTonalButton(
+                        onClick = {
+                            keyboardController?.hide()
+                            viewModel.handleIntent(PlayerIntent.SetUrl(source.url))
+                            viewModel.handleIntent(PlayerIntent.Play)
+                        }
+                    ) {
+                        Text(source.name)
+                    }
+                }
+            }
+
+            // 日志展示区域
+            Spacer(modifier = Modifier.height(24.dp))
+            PlayerLogSection(
+                logs = uiState.logs,
+                onClearLogs = { viewModel.clearLogs() },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
+    }
+}
+
+/**
+ * 日志展示区域
+ */
+@Composable
+private fun PlayerLogSection(
+    logs: List<PlayerLog>,
+    onClearLogs: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val listState = rememberLazyListState()
+    val timeFormat = remember { SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault()) }
+
+    // 新日志时自动滚动到顶部
+    LaunchedEffect(logs.size) {
+        if (logs.isNotEmpty()) {
+            listState.animateScrollToItem(0)
+        }
+    }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ) {
+            Text(
+                text = "ExoPlayer 日志 (${logs.size})",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            TextButton(onClick = onClearLogs) {
+                Text("清除")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            if (logs.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
+                    Text(
+                        text = "暂无日志\n点击播放按钮开始",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    items(logs) { log ->
+                        LogItem(log = log, timeFormat = timeFormat)
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                            thickness = 0.5.dp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LogItem(
+    log: PlayerLog,
+    timeFormat: SimpleDateFormat,
+    modifier: Modifier = Modifier
+) {
+    val tagColor = when (log.tag) {
+        PlayerLog.LogTag.LIFECYCLE -> MaterialTheme.colorScheme.primary
+        PlayerLog.LogTag.PLAYBACK -> MaterialTheme.colorScheme.secondary
+        PlayerLog.LogTag.MEDIA -> MaterialTheme.colorScheme.tertiary
+        PlayerLog.LogTag.NETWORK -> androidx.compose.ui.graphics.Color(0xFF2196F3)
+        PlayerLog.LogTag.ERROR -> MaterialTheme.colorScheme.error
+        PlayerLog.LogTag.USER_ACTION -> androidx.compose.ui.graphics.Color(0xFF4CAF50)
+    }
+
+    val tagName = when (log.tag) {
+        PlayerLog.LogTag.LIFECYCLE -> "生命周期"
+        PlayerLog.LogTag.PLAYBACK -> "播放"
+        PlayerLog.LogTag.MEDIA -> "媒体"
+        PlayerLog.LogTag.NETWORK -> "网络"
+        PlayerLog.LogTag.ERROR -> "错误"
+        PlayerLog.LogTag.USER_ACTION -> "用户"
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.Top
+    ) {
+        // 时间戳
+        Text(
+            text = timeFormat.format(Date(log.timestamp)),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            modifier = Modifier.width(85.dp)
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // Tag标签
+        Box(
+            modifier = Modifier
+                .background(tagColor.copy(alpha = 0.2f), RoundedCornerShape(4.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        ) {
+            Text(
+                text = tagName,
+                style = MaterialTheme.typography.labelSmall,
+                color = tagColor
+            )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // 消息内容
+        Text(
+            text = log.message,
+            style = MaterialTheme.typography.bodySmall,
+            color = if (log.tag == PlayerLog.LogTag.ERROR) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -169,6 +398,7 @@ private fun PlayerStateInfo(
 /**
  * 播放器内容（用于Preview，不依赖ViewModel）
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PlayerScreenContent(
     uiState: PlayerUiState,
@@ -176,9 +406,11 @@ fun PlayerScreenContent(
     onPlayClick: () -> Unit,
     onPlayPauseClick: () -> Unit,
     onSeek: (Long) -> Unit,
+    onTestVideoClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(uiState.playerState) {
         if (uiState.playerState is PlayerState.Error) {
@@ -196,6 +428,7 @@ fun PlayerScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
         ) {
             // 视频播放器占位区域（Preview用）
             VideoPlayerPlaceholder(
@@ -229,6 +462,32 @@ fun PlayerScreenContent(
                 playerState = uiState.playerState,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+
+            // 测试视频快捷按钮
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "快捷测试",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                testVideoSources.forEach { source ->
+                    FilledTonalButton(
+                        onClick = { onTestVideoClick(source.url) }
+                    ) {
+                        Text(source.name)
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

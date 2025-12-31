@@ -54,6 +54,20 @@ player/
 4. **集成入口**
    - 在 TestActivity（开发者选项）添加"视频播放器测试"按钮
 
+5. **ExoPlayer 日志系统**
+   - 添加 `PlayerLog` 数据类，支持分类日志（LIFECYCLE, PLAYBACK, MEDIA, ERROR, USER_ACTION）
+   - 监听 ExoPlayer 完整生命周期回调：
+     - `onPlaybackStateChanged` - 播放状态变化（IDLE/BUFFERING/READY/ENDED）
+     - `onIsPlayingChanged` - 播放/暂停切换
+     - `onPlayerError` - 错误处理（含详细错误码解析）
+     - `onVideoSizeChanged` - 视频尺寸
+     - `onTracksChanged` - 音视频轨道信息
+     - `onTimelineChanged` - 时间线变化
+     - `onMediaItemTransition` - 媒体切换
+     - `onRenderedFirstFrame` - 首帧渲染
+     - `onPositionDiscontinuity` - 播放位置跳变
+   - UI 展示带颜色标签的实时日志列表
+
 #### 当前功能
 
 - [x] 输入视频URL
@@ -61,6 +75,8 @@ player/
 - [x] 进度条拖动
 - [x] 播放状态显示
 - [x] 错误处理
+- [x] 快捷测试按钮（芙莉莲、间谍过家家、鬼灭之刃等）
+- [x] ExoPlayer 生命周期日志展示
 
 #### 待开发功能
 
@@ -96,6 +112,12 @@ https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
 
 # 芙莉莲
 https://fe-video-qc.xhscdn.com/athena-creator/1040g0pg3104o5f8u5q5g5pebdah3cnu7o5c94v8?filename=1.mp4
+
+#间谍过家家
+https://sns-video-hw.xhscdn.com/spectrum/1040g0jg31n7jtmot4u005p2qf72k4m7r92mijqo
+
+# 鬼灭之刃剧场版
+https://hn.bfvvs.com/play/b688Ynle/index.m3u8
 ```
 
 ## 依赖版本
