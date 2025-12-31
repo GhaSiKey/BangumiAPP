@@ -12,6 +12,7 @@ import com.gaoshiqi.otakumap.search.SearchOldTestActivity
 import com.gaoshiqi.otakumap.search.SearchTestActivity
 import com.gaoshiqi.otakumap.trending.AnimeTrendingActivity
 import com.gaoshiqi.map.MapsDemoActivity
+import com.gaoshiqi.player.PlayerTestActivity
 
 class TestActivity : AppCompatActivity() {
 
@@ -66,6 +67,10 @@ class TestActivity : AppCompatActivity() {
 
         mBinding.button7.setOnClickListener {
             SearchOldTestActivity.start(this)
+        }
+
+        mBinding.buttonPlayer.setOnClickListener {
+            PlayerTestActivity.start(this)
         }
     }
 }
