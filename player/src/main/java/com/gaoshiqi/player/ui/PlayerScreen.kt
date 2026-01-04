@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gaoshiqi.player.ui.theme.PlayerTheme
+import com.gaoshiqi.player.viewmodel.NetworkStats
 import com.gaoshiqi.player.viewmodel.PlayerIntent
 import com.gaoshiqi.player.viewmodel.PlayerLog
 import com.gaoshiqi.player.viewmodel.PlayerState
@@ -125,7 +126,16 @@ fun PlayerScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // 网络统计信息
+            NetworkStatsSection(
+                networkStats = uiState.networkStats,
+                isVisible = uiState.playerState is PlayerState.Playing ||
+                        uiState.playerState is PlayerState.Paused ||
+                        uiState.playerState is PlayerState.Loading,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             // URL输入区域
             UrlInputSection(
@@ -393,6 +403,94 @@ private fun PlayerStateInfo(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
     )
+}
+
+/**
+ * 网络统计信息区域
+ */
+@Composable
+private fun NetworkStatsSection(
+    networkStats: NetworkStats,
+    isVisible: Boolean,
+    modifier: Modifier = Modifier
+) {
+    if (!isVisible) return
+
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Text(
+                text = "网络统计",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // 左列
+                Column(modifier = Modifier.weight(1f)) {
+                    StatItem(
+                        label = "网速",
+                        value = networkStats.formatBandwidth()
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    StatItem(
+                        label = "已下载",
+                        value = networkStats.formatBytesLoaded()
+                    )
+                }
+
+                // 右列
+                Column(modifier = Modifier.weight(1f)) {
+                    StatItem(
+                        label = "分辨率",
+                        value = networkStats.videoSize.format()
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    StatItem(
+                        label = "视频码率",
+                        value = networkStats.formatBitrate(networkStats.videoBitrate)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StatItem(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+        Text(
+            text = "$label: ",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
 
 /**

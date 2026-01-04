@@ -2,16 +2,23 @@ package com.gaoshiqi.player.viewmodel
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.C
+import androidx.media3.common.Format
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.analytics.AnalyticsListener
+import androidx.media3.exoplayer.source.LoadEventInfo
+import androidx.media3.exoplayer.source.MediaLoadData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +28,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+@OptIn(UnstableApi::class)
 class PlayerViewModel(
     private val context: Context
 ) : ViewModel() {
@@ -35,6 +43,10 @@ class PlayerViewModel(
 
     private var exoPlayer: ExoPlayer? = null
     private var progressJob: Job? = null
+
+    // 网络统计相关
+    private var totalBytesLoaded: Long = 0L
+    private var lastBandwidthEstimate: Long = 0L
 
     private fun log(tag: PlayerLog.LogTag, message: String) {
         Log.d(TAG, "[${tag.name}] $message")
@@ -228,6 +240,97 @@ class PlayerViewModel(
         }
     }
 
+    /**
+     * AnalyticsListener 用于获取网络统计信息
+     */
+    private val analyticsListener = object : AnalyticsListener {
+        override fun onBandwidthEstimate(
+            eventTime: AnalyticsListener.EventTime,
+            totalLoadTimeMs: Int,
+            totalBytesLoaded: Long,
+            bitrateEstimate: Long
+        ) {
+            this@PlayerViewModel.totalBytesLoaded = totalBytesLoaded
+            lastBandwidthEstimate = bitrateEstimate
+            log(
+                PlayerLog.LogTag.NETWORK,
+                "带宽估算: ${formatBitrate(bitrateEstimate)}, 已下载: ${formatBytes(totalBytesLoaded)}"
+            )
+        }
+
+        override fun onLoadCompleted(
+            eventTime: AnalyticsListener.EventTime,
+            loadEventInfo: LoadEventInfo,
+            mediaLoadData: MediaLoadData
+        ) {
+            val dataType = when (mediaLoadData.dataType) {
+                C.DATA_TYPE_MEDIA -> "媒体"
+                C.DATA_TYPE_MANIFEST -> "清单"
+                C.DATA_TYPE_DRM -> "DRM"
+                C.DATA_TYPE_AD -> "广告"
+                else -> "其他"
+            }
+            val bytesLoaded = loadEventInfo.bytesLoaded
+            val loadDurationMs = loadEventInfo.loadDurationMs
+            val speed = if (loadDurationMs > 0) {
+                (bytesLoaded * 8 * 1000 / loadDurationMs) // bps
+            } else 0L
+
+            log(
+                PlayerLog.LogTag.NETWORK,
+                "加载完成[$dataType]: ${formatBytes(bytesLoaded)}, 耗时${loadDurationMs}ms, 速度${formatBitrate(speed)}"
+            )
+        }
+
+        override fun onVideoSizeChanged(
+            eventTime: AnalyticsListener.EventTime,
+            videoSize: VideoSize
+        ) {
+            _uiState.update { state ->
+                state.copy(
+                    networkStats = state.networkStats.copy(
+                        videoSize = VideoSizeInfo(videoSize.width, videoSize.height)
+                    )
+                )
+            }
+        }
+
+        override fun onTracksChanged(
+            eventTime: AnalyticsListener.EventTime,
+            tracks: Tracks
+        ) {
+            var videoBitrate = 0L
+            var audioBitrate = 0L
+
+            tracks.groups.forEach { group ->
+                if (group.isSelected) {
+                    for (i in 0 until group.length) {
+                        if (group.isTrackSelected(i)) {
+                            val format = group.getTrackFormat(i)
+                            when (group.type) {
+                                C.TRACK_TYPE_VIDEO -> {
+                                    videoBitrate = format.bitrate.toLong().coerceAtLeast(0L)
+                                }
+                                C.TRACK_TYPE_AUDIO -> {
+                                    audioBitrate = format.bitrate.toLong().coerceAtLeast(0L)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            _uiState.update { state ->
+                state.copy(
+                    networkStats = state.networkStats.copy(
+                        videoBitrate = videoBitrate,
+                        audioBitrate = audioBitrate
+                    )
+                )
+            }
+        }
+    }
+
     fun handleIntent(intent: PlayerIntent) {
         when (intent) {
             is PlayerIntent.SetUrl -> setVideoUrl(intent.url)
@@ -260,9 +363,15 @@ class PlayerViewModel(
 
         if (exoPlayer == null) {
             log(PlayerLog.LogTag.LIFECYCLE, "创建ExoPlayer实例")
+            // 重置网络统计
+            totalBytesLoaded = 0L
+            lastBandwidthEstimate = 0L
+            _uiState.update { it.copy(networkStats = NetworkStats()) }
+
             exoPlayer = ExoPlayer.Builder(context).build().apply {
                 addListener(playerListener)
-                log(PlayerLog.LogTag.LIFECYCLE, "添加Player.Listener")
+                addAnalyticsListener(analyticsListener)
+                log(PlayerLog.LogTag.LIFECYCLE, "添加Player.Listener和AnalyticsListener")
             }
         }
 
@@ -317,8 +426,9 @@ class PlayerViewModel(
         log(PlayerLog.LogTag.LIFECYCLE, "释放播放器资源")
         stopProgressUpdate()
         exoPlayer?.apply {
-            log(PlayerLog.LogTag.LIFECYCLE, "移除Listener")
+            log(PlayerLog.LogTag.LIFECYCLE, "移除Listeners")
             removeListener(playerListener)
+            removeAnalyticsListener(analyticsListener)
             log(PlayerLog.LogTag.LIFECYCLE, "release()")
             release()
         }
@@ -328,7 +438,8 @@ class PlayerViewModel(
                 playerState = PlayerState.Idle,
                 isPlaying = false,
                 currentPosition = 0L,
-                duration = 0L
+                duration = 0L,
+                networkStats = NetworkStats()
             )
         }
     }
@@ -342,10 +453,14 @@ class PlayerViewModel(
         progressJob = viewModelScope.launch {
             while (isActive) {
                 exoPlayer?.let { player ->
-                    _uiState.update {
-                        it.copy(
+                    _uiState.update { state ->
+                        state.copy(
                             currentPosition = player.currentPosition,
-                            bufferedPosition = player.bufferedPosition
+                            bufferedPosition = player.bufferedPosition,
+                            networkStats = state.networkStats.copy(
+                                bandwidthEstimate = lastBandwidthEstimate,
+                                totalBytesLoaded = totalBytesLoaded
+                            )
                         )
                     }
                 }
@@ -375,6 +490,28 @@ class PlayerViewModel(
             String.format("%d:%02d:%02d", hours, minutes, seconds)
         } else {
             String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
+    private fun formatBitrate(bps: Long): String {
+        if (bps <= 0) return "N/A"
+        val mbps = bps / 1_000_000.0
+        val kbps = bps / 1_000.0
+        return when {
+            mbps >= 1 -> String.format("%.2f Mbps", mbps)
+            kbps >= 1 -> String.format("%.0f Kbps", kbps)
+            else -> "$bps bps"
+        }
+    }
+
+    private fun formatBytes(bytes: Long): String {
+        if (bytes <= 0) return "0 B"
+        val mb = bytes / (1024.0 * 1024.0)
+        val kb = bytes / 1024.0
+        return when {
+            mb >= 1 -> String.format("%.2f MB", mb)
+            kb >= 1 -> String.format("%.1f KB", kb)
+            else -> "$bytes B"
         }
     }
 

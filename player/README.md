@@ -68,6 +68,14 @@ player/
      - `onPositionDiscontinuity` - 播放位置跳变
    - UI 展示带颜色标签的实时日志列表
 
+6. **网络统计系统**
+   - 使用 `AnalyticsListener` 监听网络事件：
+     - `onBandwidthEstimate` - 带宽估算（ExoPlayer 内部算法）
+     - `onLoadCompleted` - 每次加载完成的字节数和耗时
+     - `onVideoSizeChanged` - 视频尺寸变化
+     - `onTracksChanged` - 轨道信息（获取视频/音频码率）
+   - UI 实时显示：网速、已下载量、分辨率、视频码率
+
 #### 当前功能
 
 - [x] 输入视频URL
@@ -77,6 +85,7 @@ player/
 - [x] 错误处理
 - [x] 快捷测试按钮（芙莉莲、间谍过家家、鬼灭之刃等）
 - [x] ExoPlayer 生命周期日志展示
+- [x] 网络统计信息（带宽估算、下载量、分辨率、码率）
 
 #### 待开发功能
 
