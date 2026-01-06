@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:text="番剧收藏"
+        android:text="@string/collection_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/black_85"
@@ -28,7 +28,7 @@
         android:id="@+id/loading_state_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:emptyText="还没有收藏任何番剧"
+        app:emptyText="@string/collection_empty_hint"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintBottom_toBottomOf="parent" />
 

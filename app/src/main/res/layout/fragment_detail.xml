@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="简介"
+                    android:text="@string/detail_summary"
                     android:textColor="@color/black_85"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -68,7 +68,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="评分"
+                    android:text="@string/detail_rating"
                     android:textColor="@color/black_85"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -142,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="放送信息"
+                    android:text="@string/detail_broadcast_info"
                     android:textColor="@color/black_85"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -172,7 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="放送日期"
+                            android:text="@string/detail_air_date"
                             android:textColor="@color/black_40"
                             android:textSize="11sp" />
 
@@ -214,7 +214,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="话数"
+                            android:text="@string/detail_eps"
                             android:textColor="@color/black_40"
                             android:textSize="11sp" />
 
@@ -254,7 +254,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="收藏统计"
+                    android:text="@string/detail_collection_stats"
                     android:textColor="@color/black_85"
                     android:textSize="16sp"
                     android:textStyle="bold" />

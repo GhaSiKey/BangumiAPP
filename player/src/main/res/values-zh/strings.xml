@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Test Video Sources -->
+    <string name="test_video_frieren">芙莉莲</string>
+    <string name="test_video_spy_family">间谍过家家</string>
+    <string name="test_video_demon_slayer">鬼灭之刃</string>
+
+    <!-- PlayerScreen -->
+    <string name="player_quick_test">快捷测试</string>
+    <string name="player_clear">清除</string>
+    <string name="player_no_logs">暂无日志\n点击播放按钮开始</string>
+    <string name="player_log_title">ExoPlayer 日志 (%d)</string>
+    <string name="player_video_url">视频地址</string>
+    <string name="player_video_url_hint">输入视频URL...</string>
+    <string name="player_play">播放</string>
+    <string name="player_loading">加载中...</string>
+    <string name="player_status">状态: %s</string>
+    <string name="player_network_stats">网络统计</string>
+    <string name="player_speed">网速</string>
+    <string name="player_downloaded">已下载</string>
+    <string name="player_resolution">分辨率</string>
+    <string name="player_video_bitrate">视频码率</string>
+
+    <!-- Player States -->
+    <string name="player_state_idle">等待输入视频地址</string>
+    <string name="player_state_loading">加载中...</string>
+    <string name="player_state_playing">播放中</string>
+    <string name="player_state_paused">已暂停</string>
+    <string name="player_state_error">错误: %s</string>
+    <string name="player_error_network">无法加载视频，请检查网络连接</string>
+    <string name="player_error_input">请输入视频地址</string>
+
+    <!-- Player Controls -->
+    <string name="player_pause">暂停</string>
+    <string name="player_content_description_pause">暂停</string>
+    <string name="player_content_description_play">播放</string>
+
+    <!-- Log Tags -->
+    <string name="log_tag_lifecycle">生命周期</string>
+    <string name="log_tag_playback">播放</string>
+    <string name="log_tag_media">媒体</string>
+    <string name="log_tag_network">网络</string>
+    <string name="log_tag_error">错误</string>
+    <string name="log_tag_user">用户</string>
+
+    <!-- Player Error Messages -->
+    <string name="error_network_connection_failed">网络连接失败</string>
+    <string name="error_network_timeout">网络连接超时</string>
+    <string name="error_file_not_found">文件未找到</string>
+    <string name="error_manifest_parse_failed">清单解析失败</string>
+    <string name="error_container_unsupported">容器格式不支持</string>
+    <string name="error_decoder_init_failed">解码器初始化失败</string>
+    <string name="error_decoding_failed">解码失败</string>
+    <string name="error_code_format">错误码: %d</string>
+    <string name="error_playback">播放出错</string>
+
+    <!-- Track Types -->
+    <string name="track_type_video">视频</string>
+    <string name="track_type_audio">音频</string>
+    <string name="track_type_text">字幕</string>
+    <string name="track_type_other">其他</string>
+
+    <!-- Data Types -->
+    <string name="data_type_media">媒体</string>
+    <string name="data_type_manifest">清单</string>
+    <string name="data_type_ad">广告</string>
+    <string name="data_type_other">其他</string>
+</resources>

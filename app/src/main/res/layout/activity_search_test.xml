@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="新搜索接口测试"
+            android:text="@string/test_new_search"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black_85" />
@@ -88,7 +88,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
             android:gravity="center"
-            android:text="搜索"
+            android:text="@string/search"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/black_85" />

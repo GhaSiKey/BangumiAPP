@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Test Video Sources - these are test names, not user-facing -->
+    <string name="test_video_frieren">Frieren</string>
+    <string name="test_video_spy_family">SPY×FAMILY</string>
+    <string name="test_video_demon_slayer">Demon Slayer</string>
+
+    <!-- PlayerScreen -->
+    <string name="player_quick_test">Quick Test</string>
+    <string name="player_clear">Clear</string>
+    <string name="player_no_logs">No logs\nTap play button to start</string>
+    <string name="player_log_title">ExoPlayer Logs (%d)</string>
+    <string name="player_video_url">Video URL</string>
+    <string name="player_video_url_hint">Enter video URL...</string>
+    <string name="player_play">Play</string>
+    <string name="player_loading">Loading...</string>
+    <string name="player_status">Status: %s</string>
+    <string name="player_network_stats">Network Stats</string>
+    <string name="player_speed">Speed</string>
+    <string name="player_downloaded">Downloaded</string>
+    <string name="player_resolution">Resolution</string>
+    <string name="player_video_bitrate">Video Bitrate</string>
+
+    <!-- Player States -->
+    <string name="player_state_idle">Waiting for video URL</string>
+    <string name="player_state_loading">Loading...</string>
+    <string name="player_state_playing">Playing</string>
+    <string name="player_state_paused">Paused</string>
+    <string name="player_state_error">Error: %s</string>
+    <string name="player_error_network">Unable to load video, please check network connection</string>
+    <string name="player_error_input">Please enter video URL</string>
+
+    <!-- Player Controls -->
+    <string name="player_pause">Pause</string>
+    <string name="player_content_description_pause">Pause</string>
+    <string name="player_content_description_play">Play</string>
+
+    <!-- Log Tags -->
+    <string name="log_tag_lifecycle">Lifecycle</string>
+    <string name="log_tag_playback">Playback</string>
+    <string name="log_tag_media">Media</string>
+    <string name="log_tag_network">Network</string>
+    <string name="log_tag_error">Error</string>
+    <string name="log_tag_user">User</string>
+
+    <!-- Player Error Messages -->
+    <string name="error_network_connection_failed">Network connection failed</string>
+    <string name="error_network_timeout">Network connection timeout</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="error_manifest_parse_failed">Manifest parse failed</string>
+    <string name="error_container_unsupported">Container format not supported</string>
+    <string name="error_decoder_init_failed">Decoder initialization failed</string>
+    <string name="error_decoding_failed">Decoding failed</string>
+    <string name="error_code_format">Error code: %d</string>
+    <string name="error_playback">Playback error</string>
+
+    <!-- Track Types -->
+    <string name="track_type_video">Video</string>
+    <string name="track_type_audio">Audio</string>
+    <string name="track_type_text">Subtitle</string>
+    <string name="track_type_other">Other</string>
+
+    <!-- Data Types -->
+    <string name="data_type_media">Media</string>
+    <string name="data_type_manifest">Manifest</string>
+    <string name="data_type_ad">Ad</string>
+    <string name="data_type_other">Other</string>
+</resources>

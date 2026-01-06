@@ -45,7 +45,7 @@ class BangumiCommentAdapter: ListAdapter<CommentData, BangumiCommentAdapter.Comm
         @SuppressLint("SetTextI18n")
         fun bind(item: CommentData) {
             mBinding.userName.text = item.user.nickname
-            mBinding.subInfo.text = BangumiUtils.getCollectionStatus(item.type) + " "+ BangumiUtils.formatTimeByInterval(item.updatedAt)
+            mBinding.subInfo.text = BangumiUtils.getCollectionStatus(item.type, itemView.context) + " "+ BangumiUtils.formatTimeByInterval(item.updatedAt)
             mBinding.comment.text = item.comment
 
             mBinding.userAvatar.loadAvatar(item.user.avatar.large, R.drawable.ic_cover_placeholder_36)

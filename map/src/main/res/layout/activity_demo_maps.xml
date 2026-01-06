@@ -31,14 +31,14 @@
                 android:id="@+id/btn_to_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="搜饭店" />
+                android:text="@string/map_search_restaurant" />
 
             <Button
                 android:id="@+id/btn_to_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="定位geo"/>
+                android:text="@string/map_locate_geo"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,14 +51,14 @@
                 android:id="@+id/btn_navigation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="启动导航" />
+                android:text="@string/map_start_navigation" />
 
             <Button
                 android:id="@+id/btn_street_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="查看街景" />
+                android:text="@string/map_view_street" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

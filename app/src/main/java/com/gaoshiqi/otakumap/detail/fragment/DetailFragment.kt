@@ -11,6 +11,7 @@ import com.gaoshiqi.otakumap.databinding.FragmentDetailBinding
 import com.gaoshiqi.otakumap.databinding.ItemCollectionStatBinding
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailViewModel
 import com.gaoshiqi.otakumap.detail.viewmodel.BangumiDetailState
+import com.gaoshiqi.otakumap.R
 
 /**
  * Created by gaoshiqi
@@ -63,7 +64,8 @@ class DetailFragment: Fragment() {
 
     private fun showDetails(detail: BangumiDetail) {
         // 简介
-        mBinding.bangumiSummary.text = detail.summary?.ifEmpty { "暂无简介" } ?: "暂无简介"
+        val noSummary = getString(R.string.detail_no_summary)
+        mBinding.bangumiSummary.text = detail.summary?.ifEmpty { noSummary } ?: noSummary
 
         // 评分
         val score = detail.rating?.score
@@ -71,27 +73,27 @@ class DetailFragment: Fragment() {
             mBinding.tvScore.text = String.format("%.1f", score)
             mBinding.progressScore.progress = (score * 10).toInt()
         } else {
-            mBinding.tvScore.text = "暂无"
+            mBinding.tvScore.text = getString(R.string.detail_no_score)
             mBinding.progressScore.progress = 0
         }
 
         // 排名
         val rank = detail.rating?.rank
-        mBinding.tvRank.text = if (rank != null && rank > 0) "排名 #$rank" else "暂无排名"
+        mBinding.tvRank.text = if (rank != null && rank > 0) getString(R.string.detail_rank_format, rank) else getString(R.string.detail_no_rank)
 
         // 放送日期
-        mBinding.tvAirDate.text = detail.date ?: "未定"
+        mBinding.tvAirDate.text = detail.date ?: getString(R.string.detail_air_date_unknown)
 
         // 话数
         val eps = detail.eps
-        mBinding.tvEps.text = if (eps != null && eps > 0) "${eps}话" else "未知"
+        mBinding.tvEps.text = if (eps != null && eps > 0) getString(R.string.detail_eps_format, eps) else getString(R.string.detail_eps_unknown)
 
         // 收藏统计
-        bindStatItem(mBinding.statWish, "想看", detail.collection?.wish ?: 0)
-        bindStatItem(mBinding.statDoing, "在看", detail.collection?.doing ?: 0)
-        bindStatItem(mBinding.statCollect, "看过", detail.collection?.collect ?: 0)
-        bindStatItem(mBinding.statOnHold, "搁置", detail.collection?.onHold ?: 0)
-        bindStatItem(mBinding.statDropped, "抛弃", detail.collection?.dropped ?: 0)
+        bindStatItem(mBinding.statWish, getString(R.string.collection_wish), detail.collection?.wish ?: 0)
+        bindStatItem(mBinding.statDoing, getString(R.string.collection_doing), detail.collection?.doing ?: 0)
+        bindStatItem(mBinding.statCollect, getString(R.string.collection_collect), detail.collection?.collect ?: 0)
+        bindStatItem(mBinding.statOnHold, getString(R.string.collection_on_hold), detail.collection?.onHold ?: 0)
+        bindStatItem(mBinding.statDropped, getString(R.string.collection_dropped), detail.collection?.dropped ?: 0)
     }
 
     private fun bindStatItem(binding: ItemCollectionStatBinding, label: String, count: Int) {

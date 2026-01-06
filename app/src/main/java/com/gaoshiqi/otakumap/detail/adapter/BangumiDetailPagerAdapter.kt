@@ -7,6 +7,7 @@ import com.gaoshiqi.otakumap.detail.fragment.CharactersFragment
 import com.gaoshiqi.otakumap.detail.fragment.CommentsFragment
 import com.gaoshiqi.otakumap.detail.fragment.DetailFragment
 import com.gaoshiqi.otakumap.detail.fragment.PointsFragment
+import com.gaoshiqi.otakumap.R
 
 /**
  * Created by gaoshiqi
@@ -14,7 +15,7 @@ import com.gaoshiqi.otakumap.detail.fragment.PointsFragment
  * email: gaoshiqi@bilibili.com
  */
 class BangumiDetailPagerAdapter(
-    fragmentActivity: FragmentActivity,
+    private val fragmentActivity: FragmentActivity,
     private val mSubjectId: Int
 ): FragmentStateAdapter(fragmentActivity) {
     override fun createFragment(position: Int): Fragment {
@@ -31,10 +32,10 @@ class BangumiDetailPagerAdapter(
 
     fun getPageTitle(position: Int): String {
         return when (position) {
-            0 -> "简介"
-            1 -> "角色"
-            2 -> "吐槽箱"
-            3 -> "圣地巡礼"
+            0 -> fragmentActivity.getString(R.string.tab_detail)
+            1 -> fragmentActivity.getString(R.string.tab_characters)
+            2 -> fragmentActivity.getString(R.string.tab_comments)
+            3 -> fragmentActivity.getString(R.string.tab_points)
             else -> ""
         }
     }

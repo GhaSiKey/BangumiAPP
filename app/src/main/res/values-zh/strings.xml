@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">圣地巡礼</string>
+    <string name="loading">正在加载…</string>
+
+    <!-- LoadingStateView -->
+    <string name="loading_state_loading">加载中…</string>
+    <string name="loading_state_empty">暂无数据</string>
+    <string name="loading_state_error">加载失败</string>
+    <string name="loading_state_retry">点击重试</string>
+    <string name="loading_state_icon_desc">状态图标</string>
+
+    <!-- CollectionFragment -->
+    <string name="collection_empty_action">去找更多</string>
+    <string name="collection_title">番剧收藏</string>
+
+    <!-- ScheduleFragment -->
+    <string name="schedule_title">每日放送</string>
+
+    <!-- RankingFragment -->
+    <string name="search">搜索</string>
+    <string name="ranking_title">排行榜</string>
+
+    <!-- Collection/Mark -->
+    <string name="mark_added">已收藏</string>
+    <string name="mark_removed">已取消收藏</string>
+    <string name="mark_operation_failed">操作失败，请重试</string>
+    <string name="mark_button_marked">已收藏</string>
+    <string name="mark_button_unmarked">收藏</string>
+    <string name="mark_button_unmarked_detail">未关注</string>
+
+    <!-- MySavedPointsFragment -->
+    <string name="my_saved_points">圣地收藏</string>
+    <string name="saved_points_empty">还没有收藏的圣地</string>
+    <string name="saved_points_empty_action">去发现更多</string>
+    <string name="go_to_detail">查看详情</string>
+    <string name="point_count_format">%d个地点</string>
+    <string name="points_view_all">查看全部</string>
+
+    <!-- SearchActivity -->
+    <string name="search_history_title">History</string>
+    <string name="search_history_clear">清空</string>
+    <string name="search_history_clear_confirm_title">清空搜索历史</string>
+    <string name="search_history_clear_confirm_message">确定要清空所有搜索历史吗？</string>
+    <string name="search_history_expand">展开</string>
+    <string name="search_history_collapse">收起</string>
+    <string name="search_history_delete_all">Delete all</string>
+    <string name="search_history_finish">Finish</string>
+    <string name="search_please_input">请输入搜索内容</string>
+    <string name="search_hint">搜索你想看的番剧</string>
+    <string name="search_no_result">没有找到相关结果</string>
+    <string name="search_result_count">共找到 %d 条结果</string>
+    <string name="search_input_hint">输入关键词开始搜索</string>
+    <string name="search_failed">搜索失败</string>
+    <string name="load_failed">加载失败</string>
+    <string name="refresh_failed">刷新失败</string>
+    <string name="load_more_failed">加载更多失败</string>
+
+    <!-- TestActivity -->
+    <string name="test_developer_options">开发者选项</string>
+    <string name="test_old_search">旧搜索接口测试</string>
+    <string name="test_new_search">新搜索接口测试</string>
+    <string name="test_ranking">排行榜</string>
+    <string name="test_my_collection">我的收藏</string>
+    <string name="test_today_schedule">今日放送</string>
+    <string name="test_schedule">时间表</string>
+    <string name="test_player">视频播放器测试</string>
+
+    <!-- BangumiDetailActivity -->
+    <string name="invalid_bangumi_id">无效的番剧ID</string>
+
+    <!-- DetailFragment -->
+    <string name="detail_summary">简介</string>
+    <string name="detail_no_summary">暂无简介</string>
+    <string name="detail_no_score">暂无</string>
+    <string name="detail_rank_format">排名 #%d</string>
+    <string name="detail_no_rank">暂无排名</string>
+    <string name="detail_air_date_unknown">未定</string>
+    <string name="detail_eps_format">%d话</string>
+    <string name="detail_eps_unknown">未知</string>
+    <string name="detail_rating">评分</string>
+    <string name="detail_broadcast_info">放送信息</string>
+    <string name="detail_air_date">放送日期</string>
+    <string name="detail_eps">话数</string>
+    <string name="detail_collection_stats">收藏统计</string>
+
+    <!-- Collection Types -->
+    <string name="collection_wish">想看</string>
+    <string name="collection_doing">在看</string>
+    <string name="collection_collect">看过</string>
+    <string name="collection_on_hold">搁置</string>
+    <string name="collection_dropped">抛弃</string>
+
+    <!-- Week Days -->
+    <string name="weekday_monday">周一</string>
+    <string name="weekday_tuesday">周二</string>
+    <string name="weekday_wednesday">周三</string>
+    <string name="weekday_thursday">周四</string>
+    <string name="weekday_friday">周五</string>
+    <string name="weekday_saturday">周六</string>
+    <string name="weekday_sunday">周日</string>
+
+    <!-- Subject Types -->
+    <string name="subject_book">书籍</string>
+    <string name="subject_anime">动画</string>
+    <string name="subject_music">音乐</string>
+    <string name="subject_game">游戏</string>
+    <string name="subject_real">三次元</string>
+
+    <!-- Date Display -->
+    <string name="date_today">今天</string>
+    <string name="date_yesterday">昨天</string>
+
+    <!-- Points/Episodes -->
+    <string name="episode_other">其他</string>
+    <string name="episode_format">第%s集</string>
+
+    <!-- BangumiDetailPagerAdapter -->
+    <string name="tab_detail">简介</string>
+    <string name="tab_characters">角色</string>
+    <string name="tab_comments">吐槽箱</string>
+    <string name="tab_points">圣地巡礼</string>
+
+    <!-- Common -->
+    <string name="copied_to_clipboard">已复制到剪贴板</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="air_start_format">%s开播</string>
+    <string name="score_count_format">%s人打分</string>
+
+    <!-- SettingsFragment -->
+    <string name="settings_title">我的设置</string>
+    <string name="settings_app_info">应用信息</string>
+    <string name="settings_developer_options">开发者选项</string>
+    <string name="settings_enter_developer">进入开发者模式</string>
+    <string name="settings_other">其他</string>
+    <string name="settings_about">关于应用</string>
+    <string name="settings_feedback">意见反馈</string>
+    <string name="settings_version_format">版本: %s</string>
+    <string name="settings_version_unknown">版本: 未知</string>
+    <string name="settings_feedback_toast">感谢您的反馈！请通过应用商店或官方渠道联系我们</string>
+
+    <!-- BangumiTodayActivity -->
+    <string name="loading_text">正在加载...</string>
+    <string name="load_complete">加载完成</string>
+
+    <!-- LitePointAdapter -->
+    <string name="coordinate_format">坐标: %1$s, %2$s</string>
+
+    <!-- BangumiDetailActivity -->
+    <string name="detail_air_start">放送开始：</string>
+    <string name="detail_score_count_format">%s人评分：</string>
+    <string name="detail_style">风格：</string>
+
+    <!-- Collection Empty -->
+    <string name="collection_empty_hint">还没有收藏任何番剧</string>
+
+    <!-- Search Hint -->
+    <string name="search_bar_hint">搜索番剧｜动画｜人物｜小说</string>
+
+    <!-- Settings App Description -->
+    <string name="settings_app_description">一款专注于圣地巡礼的Bangumi应用</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_ranking">排行榜</string>
+    <string name="nav_schedule">每日更新</string>
+    <string name="nav_collection">番剧收藏</string>
+    <string name="nav_saved_points">圣地收藏</string>
+    <string name="nav_settings">设置</string>
+</resources>

@@ -67,7 +67,7 @@ class BangumiDetailActivity : AppCompatActivity() {
         // 获取传入的subjectID
         mSubjectId = intent.getIntExtra(ARG_SUBJECT_ID, 0)
         if (mSubjectId == 0) {
-            Toast.makeText(application, "无效的番剧ID", Toast.LENGTH_SHORT).show()
+            Toast.makeText(application, R.string.invalid_bangumi_id, Toast.LENGTH_SHORT).show()
             finish()
         }
 
@@ -176,7 +176,7 @@ class BangumiDetailActivity : AppCompatActivity() {
         }
         // 信息
         mBinding.bangumiAirDate.text = data.date
-        mBinding.bangumiScoreCount.text = BangumiUtils.convertCount(data.rating?.total ?: 0) + " 人打分："
+        mBinding.bangumiScoreCount.text = getString(R.string.detail_score_count_format, BangumiUtils.convertCount(data.rating?.total ?: 0))
         mBinding.bangumiScore.text = data.rating?.score?.toString()?: "0.0"
         // 设置标签
         val tagList = BangumiUtils.getTags(data)

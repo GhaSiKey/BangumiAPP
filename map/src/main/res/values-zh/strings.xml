@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="close">关闭</string>
+    <string name="save_point">收藏地点</string>
+    <string name="point_saved">已收藏</string>
+    <string name="point_unsaved">已取消收藏</string>
+    <string name="point_save_failed">操作失败</string>
+    <string name="open_in_maps">在地图中打开</string>
+    <string name="open_maps_failed">无法打开地图</string>
+    <string name="get_location_failed">获取地理位置失败</string>
+    <string name="map_search_restaurant">搜饭店</string>
+    <string name="map_start_navigation">启动导航</string>
+    <string name="map_view_street">查看街景</string>
+    <string name="map_locate_geo">定位geo</string>
+</resources>

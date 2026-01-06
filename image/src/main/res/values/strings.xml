@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">关闭</string>
-    <string name="image_load_failed">图片加载失败</string>
-    <string name="save_image">保存图片</string>
-    <string name="saving">保存中…</string>
-    <string name="save_success">图片已保存到相册</string>
-    <string name="save_failed">保存失败</string>
-    <string name="permission_denied">存储权限被拒绝</string>
+    <string name="close">Close</string>
+    <string name="image_load_failed">Failed to load image</string>
+    <string name="save_image">Save image</string>
+    <string name="saving">Saving…</string>
+    <string name="save_success">Image saved to gallery</string>
+    <string name="save_failed">Save failed</string>
+    <string name="permission_denied">Storage permission denied</string>
 </resources>

@@ -48,7 +48,7 @@ class ScheduleFragment : Fragment() {
         binding.viewPager.adapter = mPagerAdapter
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = BangumiUtils.getWeekdayName(position + 1)
+            tab.text = BangumiUtils.getWeekdayName(position + 1, requireContext())
         }.attach()
 
         val calendar = Calendar.getInstance()
