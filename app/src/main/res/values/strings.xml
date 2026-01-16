@@ -169,4 +169,18 @@
     <string name="nav_collection">Collection</string>
     <string name="nav_saved_points">Saved Places</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- Collection V2 -->
+    <string name="collection_v2_title">My Collection</string>
+    <string name="collection_status_label">Collection Status</string>
+    <string name="collection_progress_label">Watch Progress</string>
+    <string name="collection_remove">Remove from Collection</string>
+    <string name="collection_remove_confirm_title">Remove Confirmation</string>
+    <string name="collection_remove_confirm_message">Remove \"%1$s\" from your collection?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="sort_by_time">Sort by Time</string>
+    <string name="sort_by_name">Sort by Name</string>
+    <string name="collection_empty_tab">No anime in this category</string>
+    <string name="test_collection_v2">New Collection Page Test</string>
 </resources>
