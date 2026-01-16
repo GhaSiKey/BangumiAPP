@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:text="排行榜"
+        android:text="@string/ranking_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/black_85"

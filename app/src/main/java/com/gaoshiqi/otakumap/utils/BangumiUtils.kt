@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import com.gaoshiqi.otakumap.R
 
 /**
  * Created by gaoshiqi
@@ -51,15 +52,15 @@ object BangumiUtils {
         cm.setPrimaryClip(mClipData)
     }
 
-    fun getWeekdayName(weekdayId: Int): String {
+    fun getWeekdayName(weekdayId: Int, context: Context): String {
         return when (weekdayId) {
-            1 -> "周一"
-            2 -> "周二"
-            3 -> "周三"
-            4 -> "周四"
-            5 -> "周五"
-            6 -> "周六"
-            7 -> "周日"
+            1 -> context.getString(R.string.weekday_monday)
+            2 -> context.getString(R.string.weekday_tuesday)
+            3 -> context.getString(R.string.weekday_wednesday)
+            4 -> context.getString(R.string.weekday_thursday)
+            5 -> context.getString(R.string.weekday_friday)
+            6 -> context.getString(R.string.weekday_saturday)
+            7 -> context.getString(R.string.weekday_sunday)
             else -> ""
         }
     }
@@ -83,13 +84,13 @@ object BangumiUtils {
      * 4 = 搁置
      * 5 = 抛弃
      */
-    fun getCollectionStatus(type: Int): String {
+    fun getCollectionStatus(type: Int, context: Context): String {
         return when (type) {
-            1 -> "想看"
-            2 -> "看过"
-            3 -> "在看"
-            4 -> "搁置"
-            5 -> "抛弃"
+            1 -> context.getString(R.string.collection_wish)
+            2 -> context.getString(R.string.collection_collect)
+            3 -> context.getString(R.string.collection_doing)
+            4 -> context.getString(R.string.collection_on_hold)
+            5 -> context.getString(R.string.collection_dropped)
             else -> ""
         }
     }
@@ -102,13 +103,13 @@ object BangumiUtils {
      * 4 = 游戏
      * 6 = 三次元
      */
-    fun getSubjectTypeName(type: Int): String {
+    fun getSubjectTypeName(type: Int, context: Context): String {
         return when (type) {
-            1 -> "书籍"
-            2 -> "动画"
-            3 -> "音乐"
-            4 -> "游戏"
-            6 -> "三次元"
+            1 -> context.getString(R.string.subject_book)
+            2 -> context.getString(R.string.subject_anime)
+            3 -> context.getString(R.string.subject_music)
+            4 -> context.getString(R.string.subject_game)
+            6 -> context.getString(R.string.subject_real)
             else -> ""
         }
     }
@@ -128,10 +129,10 @@ object BangumiUtils {
         val diffInHours = diffInMinutes / 60
 
         return when {
-            diffInMinutes < 60 -> "${diffInMinutes}分钟前"
-            diffInHours < 6 -> "${diffInHours}小时前"
-            isSameDay(now, target) -> "今天"
-            isPreviousDay(now, target) -> "昨天"
+            diffInMinutes < 60 -> "${diffInMinutes}m ago"
+            diffInHours < 6 -> "${diffInHours}h ago"
+            isSameDay(now, target) -> "Today"
+            isPreviousDay(now, target) -> "Yesterday"
             else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(timestamp * 1000))
         }
     }

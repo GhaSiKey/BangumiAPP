@@ -42,7 +42,7 @@ class ScheduleActivity : AppCompatActivity() {
         mBinding.viewPager.adapter = mPagerAdapter
 
         TabLayoutMediator(mBinding.tabLayout, mBinding.viewPager) {tab, position ->
-            tab.text = BangumiUtils.getWeekdayName(position+1)
+            tab.text = BangumiUtils.getWeekdayName(position+1, this)
         }.attach()
 
         // 设置默认显示今天

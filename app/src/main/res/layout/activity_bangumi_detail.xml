@@ -65,7 +65,7 @@
                             android:textColor="@color/black_85"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="放送开始：" />
+                            android:text="@string/detail_air_start" />
 
                         <TextView
                             android:id="@+id/bangumi_air_date"
@@ -103,7 +103,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="风格：" />
+                            android:text="@string/detail_style" />
 
 
                         <com.gaoshiqi.otakumap.widget.TagGroupView
@@ -118,7 +118,7 @@
                             android:layout_gravity="end"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="未关注" />
+                            android:text="@string/mark_button_unmarked_detail" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

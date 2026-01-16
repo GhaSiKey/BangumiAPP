@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:text="我的收藏"
+        android:text="@string/test_my_collection"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/black_85"

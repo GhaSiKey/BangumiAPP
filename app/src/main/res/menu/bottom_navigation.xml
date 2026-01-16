@@ -4,26 +4,26 @@
     <item
         android:id="@+id/nav_ranking"
         android:icon="@drawable/ic_trending_up"
-        android:title="排行榜" />
+        android:title="@string/nav_ranking" />
 
     <item
         android:id="@+id/nav_schedule"
         android:icon="@drawable/ic_schedule"
-        android:title="每日更新" />
+        android:title="@string/nav_schedule" />
 
     <item
         android:id="@+id/nav_collection"
         android:icon="@drawable/ic_favorite"
-        android:title="番剧收藏" />
+        android:title="@string/nav_collection" />
 
     <item
         android:id="@+id/nav_saved_points"
         android:icon="@drawable/ic_location_on"
-        android:title="圣地收藏" />
+        android:title="@string/nav_saved_points" />
 
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
-        android:title="设置" />
+        android:title="@string/nav_settings" />
 
 </menu>
