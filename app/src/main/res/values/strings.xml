@@ -137,7 +137,10 @@
     <string name="settings_feedback">Feedback</string>
     <string name="settings_version_format">Version: %s</string>
     <string name="settings_version_unknown">Version: Unknown</string>
-    <string name="settings_feedback_toast">Thank you for your feedback! Please contact us through the app store or official channels</string>
+    <string name="settings_about_message">Bangumi Pilgrimage App\nDedicated to providing the best pilgrimage experience for anime fans</string>
+    <string name="settings_feedback_message">Thank you for your feedback! Please contact us through the app store or official channels</string>
+    <string name="developer_mode_enabled">Developer mode enabled</string>
+    <string name="developer_mode_remaining">Tap %d more times to enable developer mode</string>
 
     <!-- BangumiTodayActivity -->
     <string name="loading_text">Loading...</string>

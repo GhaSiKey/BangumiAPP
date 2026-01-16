@@ -137,7 +137,10 @@
     <string name="settings_feedback">意见反馈</string>
     <string name="settings_version_format">版本: %s</string>
     <string name="settings_version_unknown">版本: 未知</string>
-    <string name="settings_feedback_toast">感谢您的反馈！请通过应用商店或官方渠道联系我们</string>
+    <string name="settings_about_message">Bangumi圣地巡礼应用\n致力于为动漫爱好者提供最佳的圣地巡礼体验</string>
+    <string name="settings_feedback_message">感谢您的反馈！请通过应用商店或官方渠道联系我们</string>
+    <string name="developer_mode_enabled">开发者模式已开启</string>
+    <string name="developer_mode_remaining">再点击 %d 次进入开发者模式</string>
 
     <!-- BangumiTodayActivity -->
     <string name="loading_text">正在加载...</string>

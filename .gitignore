@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/CLAUDE.md
+/.idea/copilot.data.migration.ask2agent.xml
