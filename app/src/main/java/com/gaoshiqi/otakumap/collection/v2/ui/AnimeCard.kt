@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -109,6 +111,7 @@ fun AnimeCard(
     var cardCenterY by remember { mutableFloatStateOf(0f) }
     var touchX by remember { mutableFloatStateOf(0f) }
     var touchY by remember { mutableFloatStateOf(0f) }
+    var showRemoveDialog by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         Card(
@@ -162,8 +165,8 @@ fun AnimeCard(
                                         val selectedItem = radialMenuItems[selectedMenuIndex]
                                         view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                                         if (selectedItem.id == -1) {
-                                            // 取消收藏
-                                            onRemove()
+                                            // 取消收藏需要二次确认
+                                            showRemoveDialog = true
                                         } else {
                                             // 切换状态
                                             onStatusChange(selectedItem.id)
@@ -261,5 +264,31 @@ fun AnimeCard(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
+    }
+
+    if (showRemoveDialog) {
+        AlertDialog(
+            onDismissRequest = { showRemoveDialog = false },
+            title = { Text(stringResource(R.string.collection_remove_confirm_title)) },
+            text = { Text(stringResource(R.string.collection_remove_confirm_message, anime.displayName)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showRemoveDialog = false
+                        onRemove()
+                    }
+                ) {
+                    Text(
+                        stringResource(R.string.confirm),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRemoveDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 }
