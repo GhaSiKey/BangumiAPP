@@ -25,6 +25,18 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private fun observeAllTabs() {
+        // 订阅「全部」列表
+        viewModelScope.launch {
+            repository.getAllAnime().collect { list ->
+                _state.update { currentState ->
+                    val newMap = currentState.animeListByTab.toMutableMap()
+                    newMap[STATUS_ALL] = sortList(list, currentState.sortOrder)
+                    currentState.copy(animeListByTab = newMap)
+                }
+            }
+        }
+
+        // 订阅各状态列表
         val statuses = listOf(
             CollectionStatus.DOING,
             CollectionStatus.WISH,

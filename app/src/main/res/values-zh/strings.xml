@@ -172,6 +172,7 @@
 
     <!-- Collection V2 -->
     <string name="collection_v2_title">我的收藏</string>
+    <string name="collection_all">全部</string>
     <string name="collection_status_label">收藏状态</string>
     <string name="collection_progress_label">观看进度</string>
     <string name="collection_remove">取消收藏</string>

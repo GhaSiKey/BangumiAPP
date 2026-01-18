@@ -4,6 +4,11 @@ import com.gaoshiqi.room.AnimeEntity
 import com.gaoshiqi.room.CollectionStatus
 
 /**
+ * 特殊状态常量：全部（仅用于 UI，非数据库状态）
+ */
+const val STATUS_ALL = 0
+
+/**
  * Tab 定义
  */
 data class CollectionTab(
@@ -32,6 +37,7 @@ data class CollectionState(
 ) {
     companion object {
         val defaultTabs = listOf(
+            CollectionTab(STATUS_ALL, com.gaoshiqi.otakumap.R.string.collection_all),
             CollectionTab(CollectionStatus.DOING, com.gaoshiqi.otakumap.R.string.collection_doing),
             CollectionTab(CollectionStatus.WISH, com.gaoshiqi.otakumap.R.string.collection_wish),
             CollectionTab(CollectionStatus.COLLECT, com.gaoshiqi.otakumap.R.string.collection_collect),
@@ -44,4 +50,7 @@ data class CollectionState(
 
     val currentAnimeList: List<AnimeEntity>
         get() = animeListByTab[currentTab.status] ?: emptyList()
+
+    val isAllTab: Boolean
+        get() = currentTab.status == STATUS_ALL
 }

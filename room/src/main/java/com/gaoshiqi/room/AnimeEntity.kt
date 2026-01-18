@@ -11,7 +11,6 @@ object CollectionStatus {
     const val COLLECT = 2   // 看过
     const val DOING = 3     // 在看
     const val ON_HOLD = 4   // 搁置
-    const val DROPPED = 5   // 抛弃
 }
 
 @Entity(tableName = "bookmarked_anime")
@@ -22,7 +21,7 @@ data class AnimeEntity(
     val nameCn: String,
     val imageUrl: String,
     val bookmarkTime: Long = System.currentTimeMillis(),
-    val collectionStatus: Int = CollectionStatus.DOING,  // 默认「在看」
+    val collectionStatus: Int = CollectionStatus.WISH,  // 默认「想看」
     val watchedEpisodes: Int = 0,   // 已看集数
     val totalEpisodes: Int = 0      // 总集数
 ) {

@@ -8,6 +8,8 @@ class AnimeMarkRepository(context: Context) {
 
     val allAnimeMarks: Flow<List<AnimeEntity>> = animeDao.getAll()
 
+    fun getAllAnime(): Flow<List<AnimeEntity>> = animeDao.getAll()
+
     suspend fun addAnimeMark(anime: AnimeEntity) {
         animeDao.insert(anime)
     }

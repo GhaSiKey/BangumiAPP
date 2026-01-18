@@ -172,6 +172,7 @@
 
     <!-- Collection V2 -->
     <string name="collection_v2_title">My Collection</string>
+    <string name="collection_all">All</string>
     <string name="collection_status_label">Collection Status</string>
     <string name="collection_progress_label">Watch Progress</string>
     <string name="collection_remove">Remove from Collection</string>
