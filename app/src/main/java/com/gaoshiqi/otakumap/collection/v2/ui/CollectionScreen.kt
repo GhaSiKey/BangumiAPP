@@ -23,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -47,6 +49,7 @@ import kotlinx.coroutines.launch
 fun CollectionScreen(
     state: CollectionState,
     onIntent: (CollectionIntent) -> Unit,
+    onClearError: () -> Unit,
     onBackClick: () -> Unit
 ) {
     val pagerState = rememberPagerState(
@@ -54,6 +57,7 @@ fun CollectionScreen(
         pageCount = { state.tabs.size }
     )
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // 同步 Tab 和 Pager
     LaunchedEffect(pagerState.currentPage) {
@@ -65,6 +69,14 @@ fun CollectionScreen(
     LaunchedEffect(state.currentTabIndex) {
         if (pagerState.currentPage != state.currentTabIndex) {
             pagerState.animateScrollToPage(state.currentTabIndex)
+        }
+    }
+
+    // 错误提示
+    LaunchedEffect(state.errorMessage) {
+        state.errorMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            onClearError()
         }
     }
 
@@ -113,6 +125,9 @@ fun CollectionScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Column(

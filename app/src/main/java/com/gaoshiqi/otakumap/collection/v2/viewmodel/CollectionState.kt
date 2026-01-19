@@ -33,7 +33,8 @@ data class CollectionState(
     val animeListByTab: Map<Int, List<AnimeEntity>> = emptyMap(),
     val sortOrder: SortOrder = SortOrder.BY_TIME,
     val isLoading: Boolean = false,
-    val navigateToDetail: AnimeEntity? = null
+    val navigateToDetail: AnimeEntity? = null,
+    val errorMessage: String? = null  // 错误提示消息
 ) {
     companion object {
         val defaultTabs = listOf(

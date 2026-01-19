@@ -40,6 +40,7 @@ class CollectionV2Activity : ComponentActivity() {
                 CollectionScreen(
                     state = state,
                     onIntent = viewModel::processIntent,
+                    onClearError = viewModel::clearError,
                     onBackClick = { finish() }
                 )
             }

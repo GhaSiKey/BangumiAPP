@@ -1,6 +1,7 @@
 package com.gaoshiqi.otakumap.collection.v2.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.gaoshiqi.room.AnimeEntity
@@ -64,8 +65,16 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             }
 
             is CollectionIntent.UpdateStatus -> {
+                // 乐观更新策略
                 viewModelScope.launch {
-                    repository.updateCollectionStatus(intent.animeId, intent.newStatus)
+                    try {
+                        // 立即在 Repository 层更新,由于使用 Flow,UI 会自动响应更新
+                        repository.updateCollectionStatus(intent.animeId, intent.newStatus)
+                    } catch (e: Exception) {
+                        // 错误处理:显示错误消息
+                        Log.e("CollectionViewModel", "更新收藏状态失败", e)
+                        _state.update { it.copy(errorMessage = "更新状态失败: ${e.message}") }
+                    }
                 }
             }
 
@@ -77,7 +86,12 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
             is CollectionIntent.RemoveAnime -> {
                 viewModelScope.launch {
-                    repository.removeAnimeMarkById(intent.animeId)
+                    try {
+                        repository.removeAnimeMarkById(intent.animeId)
+                    } catch (e: Exception) {
+                        Log.e("CollectionViewModel", "删除收藏失败", e)
+                        _state.update { it.copy(errorMessage = "删除失败: ${e.message}") }
+                    }
                 }
             }
 
@@ -100,6 +114,13 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     fun onNavigatedToDetail() {
         _state.update { it.copy(navigateToDetail = null) }
+    }
+
+    /**
+     * 清除错误消息
+     */
+    fun clearError() {
+        _state.update { it.copy(errorMessage = null) }
     }
 
     private fun sortList(list: List<AnimeEntity>, order: SortOrder): List<AnimeEntity> {

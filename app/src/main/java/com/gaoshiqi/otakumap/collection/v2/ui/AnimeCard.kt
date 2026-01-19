@@ -20,8 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,12 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -47,29 +41,19 @@ import com.gaoshiqi.room.AnimeEntity
 import com.gaoshiqi.room.CollectionStatus
 
 /**
- * 径向菜单配置
- */
-private val radialMenuItems = listOf(
-    RadialMenuItem(CollectionStatus.DOING, "在看", Color(0xFF4CAF50)),   // 绿色
-    RadialMenuItem(CollectionStatus.WISH, "想看", Color(0xFF2196F3)),    // 蓝色
-    RadialMenuItem(CollectionStatus.COLLECT, "看过", Color(0xFF9C27B0)), // 紫色
-    RadialMenuItem(CollectionStatus.ON_HOLD, "搁置", Color(0xFFFF9800)), // 橙色
-    RadialMenuItem(-1, "抛弃", Color(0xFFF44336))                         // 红色 - 取消收藏
-)
-
-/**
- * 状态角标颜色映射
+ * 状态角标颜色映射 - 使用马卡龙配色与轮盘按钮保持一致
  */
 private fun getStatusBadgeInfo(status: Int): Pair<String, Color>? = when (status) {
-    CollectionStatus.DOING -> "在看" to Color(0xFF4CAF50)
-    CollectionStatus.WISH -> "想看" to Color(0xFF2196F3)
-    CollectionStatus.COLLECT -> "看过" to Color(0xFF9C27B0)
-    CollectionStatus.ON_HOLD -> "搁置" to Color(0xFFFF9800)
+    CollectionStatus.DOING -> "在看" to MacaronColors.Watching
+    CollectionStatus.WISH -> "想看" to MacaronColors.Wish
+    CollectionStatus.COLLECT -> "看过" to MacaronColors.Completed
+    CollectionStatus.ON_HOLD -> "搁置" to MacaronColors.OnHold
     else -> null
 }
 
 /**
  * 状态角标组件
+ * 使用马卡龙配色，深色文字确保可读性
  */
 @Composable
 fun StatusBadge(
@@ -86,7 +70,7 @@ fun StatusBadge(
     ) {
         Text(
             text = badgeInfo.first,
-            color = Color.White,
+            color = Color(0xFF333333),  // 深灰色文字，在马卡龙浅色背景上更清晰
             fontSize = 10.sp
         )
     }
@@ -104,13 +88,8 @@ fun AnimeCard(
 ) {
     val view = LocalView.current
 
-    // 径向菜单状态
-    var showRadialMenu by remember { mutableStateOf(false) }
-    var selectedMenuIndex by remember { mutableIntStateOf(-1) }
-    var cardCenterX by remember { mutableFloatStateOf(0f) }
-    var cardCenterY by remember { mutableFloatStateOf(0f) }
-    var touchX by remember { mutableFloatStateOf(0f) }
-    var touchY by remember { mutableFloatStateOf(0f) }
+    // 底部弹窗状态
+    var showStatusDial by remember { mutableStateOf(false) }
     var showRemoveDialog by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
@@ -118,67 +97,15 @@ fun AnimeCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
-                .onGloballyPositioned { coordinates ->
-                    val position = coordinates.positionInRoot()
-                    cardCenterX = position.x + coordinates.size.width / 2f
-                    cardCenterY = position.y + coordinates.size.height / 2f
-                }
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = { onClick() },
-                        onLongPress = { offset ->
+                        onLongPress = {
                             // 触发震动反馈
                             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                            showRadialMenu = true
-                            touchX = offset.x
-                            touchY = offset.y
+                            showStatusDial = true
                         }
                     )
-                }
-                .pointerInput(showRadialMenu) {
-                    if (showRadialMenu) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                val event = awaitPointerEvent()
-                                val change = event.changes.firstOrNull() ?: continue
-
-                                if (change.pressed) {
-                                    // 更新触摸位置并计算选中项
-                                    touchX = change.position.x
-                                    touchY = change.position.y
-
-                                    // 计算相对于卡片中心的选中项
-                                    val cardWidth = size.width.toFloat()
-                                    val cardHeight = size.height.toFloat()
-                                    selectedMenuIndex = calculateSelectedIndex(
-                                        touchX = touchX,
-                                        touchY = touchY,
-                                        centerX = cardWidth / 2,
-                                        centerY = cardHeight / 2,
-                                        itemCount = radialMenuItems.size,
-                                        radius = 150f,
-                                        selectionRadius = 50f
-                                    )
-                                } else {
-                                    // 手指抬起，执行选中的操作
-                                    if (selectedMenuIndex >= 0) {
-                                        val selectedItem = radialMenuItems[selectedMenuIndex]
-                                        view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                                        if (selectedItem.id == -1) {
-                                            // 取消收藏需要二次确认
-                                            showRemoveDialog = true
-                                        } else {
-                                            // 切换状态
-                                            onStatusChange(selectedItem.id)
-                                        }
-                                    }
-                                    showRadialMenu = false
-                                    selectedMenuIndex = -1
-                                    break
-                                }
-                            }
-                        }
-                    }
                 },
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -251,19 +178,23 @@ fun AnimeCard(
                 )
             }
         }
+    }
 
-        // 径向菜单覆盖层
-        if (showRadialMenu) {
-            RadialMenu(
-                items = radialMenuItems,
-                isVisible = true,
-                selectedIndex = selectedMenuIndex,
-                centerX = 0f,  // 相对于 Box 的中心
-                centerY = 0f,
-                radius = 150f,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
+    // 底部弹窗
+    if (showStatusDial) {
+        StatusDialBottomSheet(
+            anime = anime,
+            onStatusSelected = { newStatus ->
+                if (newStatus == -1) {
+                    // 取消收藏需要二次确认
+                    showRemoveDialog = true
+                } else {
+                    onStatusChange(newStatus)
+                }
+                showStatusDial = false
+            },
+            onDismiss = { showStatusDial = false }
+        )
     }
 
     if (showRemoveDialog) {
