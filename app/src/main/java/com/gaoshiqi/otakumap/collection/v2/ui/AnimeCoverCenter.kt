@@ -1,5 +1,6 @@
 package com.gaoshiqi.otakumap.collection.v2.ui
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -8,13 +9,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -57,10 +61,36 @@ fun AnimeCoverCenter(
         label = "coverScale"
     )
 
+    // 旋转动画 - 从底部旋转出来的效果
+    val rotation = remember { Animatable(-180f) }
+
+    LaunchedEffect(isVisible) {
+        if (isVisible) {
+            // 展开：从 -180° 旋转到 0°
+            rotation.animateTo(
+                targetValue = 0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = 300f
+                )
+            )
+        } else {
+            // 收起：从 0° 旋转到 180°
+            rotation.animateTo(
+                targetValue = 180f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = 400f
+                )
+            )
+        }
+    }
+
     Box(
         modifier = modifier
             .size(size)
             .scale(scale)
+            .rotate(rotation.value)
             .shadow(
                 elevation = 12.dp,
                 shape = CircleShape
@@ -68,7 +98,7 @@ fun AnimeCoverCenter(
             .clip(CircleShape)
             .border(
                 width = 4.dp,
-                color = Color.White.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
                 shape = CircleShape
             )
             .semantics {

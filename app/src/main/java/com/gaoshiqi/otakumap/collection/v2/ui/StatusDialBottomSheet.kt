@@ -1,5 +1,6 @@
 package com.gaoshiqi.otakumap.collection.v2.ui
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -35,7 +36,8 @@ fun StatusDialBottomSheet(
         sheetState = sheetState,
         containerColor = Color.Transparent,  // 透明背景,由内容层提供背景色
         scrimColor = Color.Black.copy(alpha = 0.4f),  // 背景遮罩
-        dragHandle = null  // 隐藏默认拖拽把手
+        dragHandle = null,  // 隐藏默认拖拽把手
+        contentWindowInsets = { WindowInsets(0) }  // 禁用默认 insets，由内容层自行处理 Edge-to-Edge
     ) {
         SemiCircleDialContent(
             anime = anime,

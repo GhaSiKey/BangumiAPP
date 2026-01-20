@@ -2,6 +2,7 @@ package com.gaoshiqi.otakumap.collection.v2.ui
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,34 +43,48 @@ import com.gaoshiqi.room.CollectionStatus
 
 /**
  * 状态角标颜色映射 - 使用马卡龙配色与轮盘按钮保持一致
+ * 返回字符串资源 ID 和颜色的配对
  */
-private fun getStatusBadgeInfo(status: Int): Pair<String, Color>? = when (status) {
-    CollectionStatus.DOING -> "在看" to MacaronColors.Watching
-    CollectionStatus.WISH -> "想看" to MacaronColors.Wish
-    CollectionStatus.COLLECT -> "看过" to MacaronColors.Completed
-    CollectionStatus.ON_HOLD -> "搁置" to MacaronColors.OnHold
+private fun getStatusBadgeInfo(status: Int): Pair<Int, Color>? = when (status) {
+    CollectionStatus.DOING -> R.string.collection_doing to MacaronColors.Watching
+    CollectionStatus.WISH -> R.string.collection_wish to MacaronColors.Wish
+    CollectionStatus.COLLECT -> R.string.collection_collect to MacaronColors.Completed
+    CollectionStatus.ON_HOLD -> R.string.collection_on_hold to MacaronColors.OnHold
     else -> null
 }
 
 /**
  * 状态角标组件
  * 使用马卡龙配色，深色文字确保可读性
+ *
+ * @param status 收藏状态
+ * @param onClick 点击回调，用于唤起状态选择弹窗
  */
 @Composable
 fun StatusBadge(
     status: Int,
+    onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val badgeInfo = getStatusBadgeInfo(status) ?: return
+    val (labelResId, backgroundColor) = badgeInfo
 
     Box(
         modifier = modifier
             .padding(4.dp)
-            .background(badgeInfo.second, RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(4.dp))
+            .background(backgroundColor)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                }
+            )
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
         Text(
-            text = badgeInfo.first,
+            text = stringResource(labelResId),
             color = Color(0xFF333333),  // 深灰色文字，在马卡龙浅色背景上更清晰
             fontSize = 10.sp
         )
@@ -132,6 +147,11 @@ fun AnimeCard(
                     if (showStatusBadge) {
                         StatusBadge(
                             status = anime.collectionStatus,
+                            onClick = {
+                                // 点击角标唤起底部弹窗
+                                view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                                showStatusDial = true
+                            },
                             modifier = Modifier.align(Alignment.TopEnd)
                         )
                     }
