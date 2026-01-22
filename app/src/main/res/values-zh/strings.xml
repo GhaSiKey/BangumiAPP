@@ -169,4 +169,19 @@
     <string name="nav_collection">番剧收藏</string>
     <string name="nav_saved_points">圣地收藏</string>
     <string name="nav_settings">设置</string>
+
+    <!-- Collection V2 -->
+    <string name="collection_v2_title">我的收藏</string>
+    <string name="collection_all">全部</string>
+    <string name="collection_status_label">收藏状态</string>
+    <string name="collection_progress_label">观看进度</string>
+    <string name="collection_remove">取消收藏</string>
+    <string name="collection_remove_confirm_title">确认取消收藏</string>
+    <string name="collection_remove_confirm_message">确定要取消收藏「%1$s」吗？</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="sort_by_time">按时间排序</string>
+    <string name="sort_by_name">按名称排序</string>
+    <string name="collection_empty_tab">该分类下暂无番剧</string>
+    <string name="test_collection_v2">新版收藏页测试</string>
 </resources>

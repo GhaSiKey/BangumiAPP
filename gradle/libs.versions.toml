@@ -41,6 +41,7 @@ retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
 glide-ksp = { group = "com.github.bumptech.glide", name = "ksp", version = "4.16.0" }
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version = "1.0.0-beta01" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }

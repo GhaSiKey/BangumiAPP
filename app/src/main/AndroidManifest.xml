@@ -32,6 +32,9 @@
             android:name="com.gaoshiqi.otakumap.collection.MyCollectionActivity"
             android:exported="false" />
         <activity
+            android:name="com.gaoshiqi.otakumap.collection.v2.CollectionV2Activity"
+            android:exported="false" />
+        <activity
             android:name="com.gaoshiqi.otakumap.detail.BangumiDetailActivity"
             android:exported="false" />
         <activity
