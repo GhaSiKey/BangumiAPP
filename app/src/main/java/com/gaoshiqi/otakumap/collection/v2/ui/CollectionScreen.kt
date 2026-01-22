@@ -44,20 +44,24 @@ import com.gaoshiqi.otakumap.collection.v2.viewmodel.CollectionState
 import com.gaoshiqi.otakumap.collection.v2.viewmodel.STATUS_ALL
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+/**
+ * 收藏页内容组件（不含 Scaffold 和 TopAppBar）
+ * 供 Fragment 使用，保持底部导航栏可见
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CollectionScreen(
+fun CollectionScreenContent(
     state: CollectionState,
     onIntent: (CollectionIntent) -> Unit,
     onClearError: () -> Unit,
-    onBackClick: () -> Unit
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
         initialPage = state.currentTabIndex,
         pageCount = { state.tabs.size }
     )
     val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     // 同步 Tab 和 Pager
     LaunchedEffect(pagerState.currentPage) {
@@ -79,6 +83,87 @@ fun CollectionScreen(
             onClearError()
         }
     }
+
+    Column(modifier = modifier.fillMaxSize()) {
+        // Tab 栏
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            state.tabs.forEachIndexed { index, tab ->
+                Tab(
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = { Text(stringResource(tab.titleResId)) }
+                )
+            }
+        }
+
+        // 内容区域（ViewPager）
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            val tabStatus = state.tabs[page].status
+            val isAllTab = tabStatus == STATUS_ALL
+            val animeList = state.animeListByTab[tabStatus] ?: emptyList()
+
+            if (animeList.isEmpty()) {
+                // 使用通用空态组件
+                EmptyStateView(
+                    message = stringResource(R.string.collection_empty_tab),
+                    iconRes = R.mipmap.ic_loading_empty
+                )
+            } else {
+                // 网格列表
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(
+                        items = animeList,
+                        key = { it.id }
+                    ) { anime ->
+                        AnimeCard(
+                            anime = anime,
+                            onClick = {
+                                onIntent(CollectionIntent.NavigateToDetail(anime))
+                            },
+                            onStatusChange = { newStatus ->
+                                onIntent(CollectionIntent.UpdateStatus(anime.id, newStatus))
+                            },
+                            onRemove = {
+                                onIntent(CollectionIntent.RemoveAnime(anime.id))
+                            },
+                            showStatusBadge = isAllTab
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 收藏页完整界面（含 Scaffold 和 TopAppBar）
+ * 供 Activity 使用，包含返回按钮和排序菜单
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CollectionScreen(
+    state: CollectionState,
+    onIntent: (CollectionIntent) -> Unit,
+    onClearError: () -> Unit,
+    onBackClick: () -> Unit
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // 排序菜单状态
     var showSortMenu by remember { mutableStateOf(false) }
@@ -130,74 +215,12 @@ fun CollectionScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            // Tab 栏
-            TabRow(
-                selectedTabIndex = pagerState.currentPage,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                state.tabs.forEachIndexed { index, tab ->
-                    Tab(
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
-                        text = { Text(stringResource(tab.titleResId)) }
-                    )
-                }
-            }
-
-            // 内容区域（ViewPager）
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                val tabStatus = state.tabs[page].status
-                val isAllTab = tabStatus == STATUS_ALL
-                val animeList = state.animeListByTab[tabStatus] ?: emptyList()
-
-                if (animeList.isEmpty()) {
-                    // 使用通用空态组件
-                    EmptyStateView(
-                        message = stringResource(R.string.collection_empty_tab),
-                        iconRes = R.mipmap.ic_loading_empty
-                    )
-                } else {
-                    // 网格列表
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(
-                            items = animeList,
-                            key = { it.id }
-                        ) { anime ->
-                            AnimeCard(
-                                anime = anime,
-                                onClick = {
-                                    onIntent(CollectionIntent.NavigateToDetail(anime))
-                                },
-                                onStatusChange = { newStatus ->
-                                    onIntent(CollectionIntent.UpdateStatus(anime.id, newStatus))
-                                },
-                                onRemove = {
-                                    onIntent(CollectionIntent.RemoveAnime(anime.id))
-                                },
-                                showStatusBadge = isAllTab
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        CollectionScreenContent(
+            state = state,
+            onIntent = onIntent,
+            onClearError = onClearError,
+            snackbarHostState = snackbarHostState,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 }

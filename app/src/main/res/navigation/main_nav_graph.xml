@@ -16,8 +16,8 @@
 
     <fragment
         android:id="@+id/nav_collection"
-        android:name="com.gaoshiqi.otakumap.homepage.CollectionFragment"
-        android:label="番剧收藏" />
+        android:name="com.gaoshiqi.otakumap.collection.v2.CollectionV2Fragment"
+        android:label="@string/collection_v2_title" />
 
     <fragment
         android:id="@+id/nav_saved_points"
