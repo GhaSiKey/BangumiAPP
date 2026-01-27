@@ -156,31 +156,33 @@ class SearchHistoryTagGroupView @JvmOverloads constructor(
         val tagDelete = button.findViewById<ImageView>(R.id.tag_delete)
         val tagContainer = button.findViewById<View>(R.id.tag_container)
 
-        // 隐藏文字，使用图标代替
-        tagText.visibility = View.GONE
+        // 隐藏删除按钮
         tagDelete.visibility = View.GONE
 
-        // 创建一个 ImageView 来显示图标
-        val iconView = ImageView(context).apply {
-            setImageResource(iconRes)
-            layoutParams = LayoutParams(dpToPx(16f), dpToPx(16f))
+        // 使用 TextView 的 drawable 显示图标，保持高度一致
+        // 用空格占位来确保与文字标签高度一致
+        tagText.text = " "
+        tagText.setTextColor(android.graphics.Color.TRANSPARENT)
+        if (tagTextSize > 0) {
+            tagText.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, tagTextSize)
+        }
+        // 设置图标
+        val drawable = ContextCompat.getDrawable(context, iconRes)?.mutate()
+        drawable?.let {
+            val size = dpToPx(16f)
+            it.setBounds(0, 0, size, size)
+            it.setTint(defaultTextColor)
+            tagText.setCompoundDrawables(it, null, null, null)
+            tagText.compoundDrawablePadding = 0
         }
 
-        // 替换内容
-        (tagContainer as? android.view.ViewGroup)?.apply {
-            removeAllViews()
-            addView(iconView)
-        }
+        // 设置背景 - 使用 defaultBgColor 保持一致
+        tagContainer.background = createRoundRectDrawable(defaultBgColor, tagRadius)
 
-        // 设置背景
-        tagContainer.background = createRoundRectDrawable(
-            ContextCompat.getColor(context, R.color.gray_f5),
-            tagRadius
-        )
-
-        // 设置边距
-        val padding = dpToPx(8f)
-        tagContainer.setPadding(padding, padding, padding, padding)
+        // 设置边距 - 与历史标签保持一致
+        val paddingH = if (tagPaddingHorizontal >= 0) tagPaddingHorizontal else tagContainer.paddingLeft
+        val paddingV = if (tagPaddingVertical >= 0) tagPaddingVertical else tagContainer.paddingTop
+        tagContainer.setPadding(paddingH, paddingV, paddingH, paddingV)
 
         return button
     }

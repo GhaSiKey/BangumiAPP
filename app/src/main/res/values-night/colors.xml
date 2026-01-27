@@ -11,6 +11,7 @@
     <color name="black_10">#1AFFFFFF</color>
 
     <color name="gray_100">#1A1A1A</color>
+    <color name="gray_f5">#2A2A2A</color>
 
     <color name="score">#FF6D00</color>
     <color name="black_20_only">#33000000</color>
@@ -18,4 +19,7 @@
 
     <color name="detail_bg">#1A1A1A</color>
     <color name="gray_50">#121212</color>
+
+    <!-- 搜索历史标签专用颜色 - 暗黑模式下使用浅色文字 -->
+    <color name="history_tag_text">#99FFFFFF</color>
 </resources>
