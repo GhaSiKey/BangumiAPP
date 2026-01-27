@@ -1,6 +1,7 @@
 package com.gaoshiqi.otakumap.homepage
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gaoshiqi.otakumap.databinding.FragmentScheduleBinding
 import com.gaoshiqi.otakumap.schedule.CalendarViewModel
 import com.gaoshiqi.otakumap.schedule.adapter.SchedulePagerAdapter
+import com.gaoshiqi.otakumap.search.SearchActivity
 import com.gaoshiqi.otakumap.utils.BangumiUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Calendar
@@ -55,6 +57,10 @@ class ScheduleFragment : Fragment() {
         var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         dayOfWeek = if (dayOfWeek == Calendar.SUNDAY) 7 else dayOfWeek - 1
         binding.viewPager.setCurrentItem(dayOfWeek - 1, false)
+
+        binding.btnSearch.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
+        }
     }
 
     private fun initObserver() {
