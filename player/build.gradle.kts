@@ -61,6 +61,14 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.exoplayer.hls)
     implementation(libs.media3.ui)
+    implementation(libs.media3.datasource.okhttp)
+
+    // Omofun 爬取相关
+    implementation(libs.jsoup)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.navigation.compose)
+    implementation(libs.glide.compose)
 
     // Test
     testImplementation(libs.junit)

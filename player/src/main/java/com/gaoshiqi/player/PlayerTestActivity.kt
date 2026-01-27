@@ -33,6 +33,12 @@ class PlayerTestActivity : ComponentActivity() {
             PlayerViewModel.Factory(this)
         )[PlayerViewModel::class.java]
 
+        // 处理外部传入的视频 URL
+        intent.getStringExtra(EXTRA_VIDEO_URL)?.let { url ->
+            viewModel.handleIntent(PlayerIntent.SetUrl(url))
+            viewModel.handleIntent(PlayerIntent.Play)
+        }
+
         setContent {
             PlayerTheme {
                 Surface(
@@ -58,8 +64,25 @@ class PlayerTestActivity : ComponentActivity() {
     }
 
     companion object {
+        private const val EXTRA_VIDEO_URL = "video_url"
+
+        /**
+         * 启动播放器页面
+         */
         fun start(context: Context) {
             val intent = Intent(context, PlayerTestActivity::class.java)
+            context.startActivity(intent)
+        }
+
+        /**
+         * 启动播放器并播放指定视频
+         * @param videoUrl 视频 URL
+         * @param title 视频标题（预留参数，暂未使用）
+         */
+        fun start(context: Context, videoUrl: String, @Suppress("UNUSED_PARAMETER") title: String? = null) {
+            val intent = Intent(context, PlayerTestActivity::class.java).apply {
+                putExtra(EXTRA_VIDEO_URL, videoUrl)
+            }
             context.startActivity(intent)
         }
     }
