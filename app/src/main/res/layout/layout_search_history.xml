@@ -78,6 +78,6 @@
         app:tagRadius="8dp"
         app:maxLines="1"
         app:defaultBgColor="@color/gray_f5"
-        app:defaultTextColor="@color/black_60" />
+        app:defaultTextColor="@color/history_tag_text" />
 
 </LinearLayout>
