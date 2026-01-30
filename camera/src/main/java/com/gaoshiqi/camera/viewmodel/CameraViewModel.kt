@@ -64,6 +64,7 @@ class CameraViewModel(
             is CameraIntent.OpenGallery -> openGallery()
             is CameraIntent.CloseGallery -> closeGallery()
             is CameraIntent.SelectPhoto -> selectPhoto(intent.uri)
+            is CameraIntent.ViewPhoto -> viewPhoto(intent.photo)
             is CameraIntent.DeletePhoto -> requestDeletePhoto(intent.uri)
             is CameraIntent.ConfirmDeletePhoto -> confirmDeletePhoto()
             is CameraIntent.CancelDeletePhoto -> cancelDeletePhoto()
@@ -246,12 +247,20 @@ class CameraViewModel(
     private fun switchCamera() {
         _uiState.update {
             it.copy(
+                isSwitchingCamera = true,
                 lensFacing = when (it.lensFacing) {
                     LensFacing.BACK -> LensFacing.FRONT
                     LensFacing.FRONT -> LensFacing.BACK
                 }
             )
         }
+    }
+
+    /**
+     * 摄像头切换完成，清除定格状态
+     */
+    fun onCameraSwitchComplete() {
+        _uiState.update { it.copy(isSwitchingCamera = false) }
     }
 
     private fun confirmPhoto() {
@@ -282,9 +291,24 @@ class CameraViewModel(
     }
 
     private fun selectPhoto(uri: String) {
-        val photo = _uiState.value.galleryPhotos.find { it.uri == uri }
-        if (photo != null) {
-            _uiState.update { it.copy(screenState = ScreenState.PhotoViewer(photo)) }
+        val photos = _uiState.value.galleryPhotos
+        val index = photos.indexOfFirst { it.uri == uri }
+        if (index >= 0) {
+            _uiState.update {
+                it.copy(screenState = ScreenState.PhotoViewer(photos[index], index))
+            }
+        }
+    }
+
+    private fun viewPhoto(photo: PhotoItem) {
+        val photos = _uiState.value.galleryPhotos
+        val index = photos.indexOfFirst { it.uri == photo.uri }
+        val currentScreen = _uiState.value.screenState
+        // 只在 PhotoViewer 状态下更新当前照片（用于滑动切换时更新标题栏等）
+        if (currentScreen is ScreenState.PhotoViewer && index >= 0) {
+            _uiState.update {
+                it.copy(screenState = ScreenState.PhotoViewer(photo, index))
+            }
         }
     }
 

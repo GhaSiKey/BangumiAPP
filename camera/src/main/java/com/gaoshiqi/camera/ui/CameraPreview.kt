@@ -1,22 +1,25 @@
 package com.gaoshiqi.camera.ui
 
+import android.graphics.Bitmap
 import android.view.ViewGroup
 import androidx.camera.view.PreviewView
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
@@ -45,7 +50,9 @@ fun CameraPreview(
     modifier: Modifier = Modifier,
     viewModel: CameraViewModel,
     lensFacing: LensFacing,
-    focusPoint: FocusPoint?
+    focusPoint: FocusPoint?,
+    isCapturing: Boolean = false,
+    isSwitchingCamera: Boolean = false
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -64,12 +71,55 @@ fun CameraPreview(
     var currentZoom by remember { mutableFloatStateOf(1f) }
     var isCameraBound by remember { mutableStateOf(false) }
 
+    // 拍照时的画面定格
+    var frozenBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var showFrozenFrame by remember { mutableStateOf(false) }
+
+    // 闪白动画
+    val flashAlpha = remember { Animatable(0f) }
+    var showFlash by remember { mutableStateOf(false) }
+
+    // 当开始拍照时，截取当前画面并显示闪白效果
+    LaunchedEffect(isCapturing) {
+        if (isCapturing) {
+            // 截取当前预览画面
+            frozenBitmap = previewView.bitmap
+            showFrozenFrame = true
+
+            // 闪白效果
+            showFlash = true
+            flashAlpha.snapTo(0.9f)
+            flashAlpha.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(durationMillis = 150)
+            )
+            showFlash = false
+        } else {
+            // 拍照完成，清除定格画面
+            showFrozenFrame = false
+            frozenBitmap = null
+        }
+    }
+
+    // 切换摄像头时，定格当前画面
+    LaunchedEffect(isSwitchingCamera) {
+        if (isSwitchingCamera) {
+            frozenBitmap = previewView.bitmap
+            showFrozenFrame = true
+        } else {
+            showFrozenFrame = false
+            frozenBitmap = null
+        }
+    }
+
     // 合并相机绑定逻辑，避免重复初始化
     DisposableEffect(lensFacing) {
         if (isCameraBound) {
             // 切换镜头时重新绑定
             viewModel.rebindCamera(lifecycleOwner, previewView)
             currentZoom = 1f
+            // 绑定完成后清除定格状态
+            viewModel.onCameraSwitchComplete()
         } else {
             // 首次绑定
             viewModel.bindCamera(lifecycleOwner, previewView)
@@ -135,6 +185,29 @@ fun CameraPreview(
                         }
                     }
             )
+
+            // 拍照时的定格画面（覆盖在预览上方）
+            if (showFrozenFrame && frozenBitmap != null) {
+                Image(
+                    bitmap = frozenBitmap!!.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            // 闪白效果（仅在预览区域内）
+            if (showFlash) {
+                Box(
+                    modifier = Modifier
+                        .let { mod ->
+                            with(LocalDensity.current) {
+                                mod.size(previewWidth.toDp(), previewHeight.toDp())
+                            }
+                        }
+                        .background(Color.Black.copy(alpha = flashAlpha.value))
+                )
+            }
 
             // 顶部遮罩
             if (previewOffsetY > 0) {

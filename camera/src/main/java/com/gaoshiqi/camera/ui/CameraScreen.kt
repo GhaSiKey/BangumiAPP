@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -70,6 +71,7 @@ fun CameraScreen(
                     focusPoint = uiState.focusPoint,
                     latestPhotoUri = uiState.latestPhotoUri,
                     isCapturing = uiState.isCapturing,
+                    isSwitchingCamera = uiState.isSwitchingCamera,
                     onTakePhoto = { viewModel.handleIntent(CameraIntent.TakePhoto) },
                     onSwitchCamera = { viewModel.handleIntent(CameraIntent.SwitchCamera) },
                     onOpenGallery = { viewModel.handleIntent(CameraIntent.OpenGallery) },
@@ -104,10 +106,12 @@ fun CameraScreen(
             }
             is ScreenState.PhotoViewer -> {
                 PhotoViewerScreen(
-                    photo = screenState.photo,
+                    photos = uiState.galleryPhotos,
+                    initialIndex = screenState.initialIndex,
                     showDeleteDialog = uiState.pendingDeletePhoto != null,
+                    onPhotoChanged = { photo -> viewModel.handleIntent(CameraIntent.ViewPhoto(photo)) },
                     onBack = { viewModel.handleIntent(CameraIntent.NavigateBack) },
-                    onDelete = { viewModel.handleIntent(CameraIntent.DeletePhoto(screenState.photo.uri)) },
+                    onDelete = { photo -> viewModel.handleIntent(CameraIntent.DeletePhoto(photo.uri)) },
                     onConfirmDelete = { viewModel.handleIntent(CameraIntent.ConfirmDeletePhoto) },
                     onCancelDelete = { viewModel.handleIntent(CameraIntent.CancelDeletePhoto) }
                 )
@@ -128,6 +132,7 @@ private fun CameraContent(
     focusPoint: FocusPoint?,
     latestPhotoUri: android.net.Uri?,
     isCapturing: Boolean,
+    isSwitchingCamera: Boolean,
     onTakePhoto: () -> Unit,
     onSwitchCamera: () -> Unit,
     onOpenGallery: () -> Unit,
@@ -138,11 +143,14 @@ private fun CameraContent(
             .fillMaxSize()
             .background(Color.Black)
     ) {
+        // 相机预览
         CameraPreview(
             modifier = Modifier.fillMaxSize(),
             viewModel = viewModel,
             lensFacing = lensFacing,
-            focusPoint = focusPoint
+            focusPoint = focusPoint,
+            isCapturing = isCapturing,
+            isSwitchingCamera = isSwitchingCamera
         )
 
         // 顶部返回按钮（考虑状态栏 insets）

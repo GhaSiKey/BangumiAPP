@@ -16,6 +16,7 @@ sealed class CameraIntent {
     data object OpenGallery : CameraIntent()
     data object CloseGallery : CameraIntent()
     data class SelectPhoto(val uri: String) : CameraIntent()
+    data class ViewPhoto(val photo: PhotoItem) : CameraIntent()
     data class DeletePhoto(val uri: String) : CameraIntent()
     data object ConfirmDeletePhoto : CameraIntent()
     data object CancelDeletePhoto : CameraIntent()

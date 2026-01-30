@@ -1,6 +1,8 @@
 package com.gaoshiqi.camera.ui
 
 import android.net.Uri
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,9 +20,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -28,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.gaoshiqi.camera.R
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -39,6 +48,28 @@ fun CameraControls(
     onSwitchCamera: () -> Unit,
     onOpenGallery: () -> Unit
 ) {
+    // 快门按钮按下动画状态
+    var isShutterPressed by remember { mutableStateOf(false) }
+
+    // 快门缩放动画
+    val shutterScale by animateFloatAsState(
+        targetValue = if (isShutterPressed) 0.85f else 1f,
+        animationSpec = spring(
+            dampingRatio = 0.4f,
+            stiffness = 400f
+        ),
+        label = "shutter_scale"
+    )
+
+    // 当开始拍照时触发按下动画
+    LaunchedEffect(isCapturing) {
+        if (isCapturing) {
+            isShutterPressed = true
+            delay(150)
+            isShutterPressed = false
+        }
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -76,10 +107,11 @@ fun CameraControls(
             }
         }
 
-        // 拍照按钮
+        // 拍照按钮（带缩放动画）
         Box(
             modifier = Modifier
                 .size(72.dp)
+                .scale(shutterScale)
                 .clip(CircleShape)
                 .background(Color.White)
                 .border(4.dp, Color.White.copy(alpha = 0.5f), CircleShape)

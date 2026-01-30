@@ -16,7 +16,7 @@ sealed class ScreenState {
     data object Gallery : ScreenState()
 
     /** 单张照片查看 */
-    data class PhotoViewer(val photo: PhotoItem) : ScreenState()
+    data class PhotoViewer(val photo: PhotoItem, val initialIndex: Int) : ScreenState()
 }
 
 /**
@@ -51,6 +51,7 @@ data class CameraUiState(
     val screenState: ScreenState = ScreenState.Camera,
     val lensFacing: LensFacing = LensFacing.BACK,
     val isCapturing: Boolean = false,
+    val isSwitchingCamera: Boolean = false,
     val latestPhotoUri: Uri? = null,
     val galleryPhotos: List<PhotoItem> = emptyList(),
     val pendingDeletePhoto: PhotoItem? = null,
