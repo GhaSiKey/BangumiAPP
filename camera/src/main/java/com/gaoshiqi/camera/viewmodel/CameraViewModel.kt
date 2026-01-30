@@ -18,11 +18,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.gaoshiqi.camera.util.PhotoManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -47,7 +49,10 @@ class CameraViewModel(
     private val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
     init {
-        loadGalleryPhotos()
+        // 异步加载相册，避免阻塞 ViewModel 初始化
+        viewModelScope.launch {
+            loadGalleryPhotosAsync()
+        }
     }
 
     fun handleIntent(intent: CameraIntent) {
@@ -391,8 +396,23 @@ class CameraViewModel(
     }
 
     private fun loadGalleryPhotos() {
-        val photos = photoManager.getAllPhotos()
-        _uiState.update { it.copy(galleryPhotos = photos) }
+        viewModelScope.launch {
+            loadGalleryPhotosAsync()
+        }
+    }
+
+    private suspend fun loadGalleryPhotosAsync() {
+        val photos = withContext(Dispatchers.IO) {
+            photoManager.getAllPhotos()
+        }
+        _uiState.update {
+            it.copy(
+                galleryPhotos = photos,
+                latestPhotoUri = photos.firstOrNull()?.let { photo ->
+                    Uri.fromFile(java.io.File(photo.uri))
+                } ?: it.latestPhotoUri
+            )
+        }
     }
 
     fun rebindCamera(lifecycleOwner: LifecycleOwner, previewView: PreviewView) {

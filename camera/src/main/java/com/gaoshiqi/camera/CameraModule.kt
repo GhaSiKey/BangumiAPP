@@ -20,6 +20,14 @@ import com.gaoshiqi.camera.viewmodel.CameraViewModel
 object CameraModule {
 
     /**
+     * 预热相机模块
+     * 建议在应用启动时或进入相机前的页面时调用，以加速相机打开
+     */
+    fun warmUp(context: Context) {
+        CameraActivity.warmUp(context)
+    }
+
+    /**
      * 方式1：直接启动相机 Activity
      */
     fun startCamera(context: Context) {

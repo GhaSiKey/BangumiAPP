@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,9 +22,19 @@ class CameraActivity : ComponentActivity() {
             val intent = Intent(context, CameraActivity::class.java)
             context.startActivity(intent)
         }
+
+        /**
+         * 预热相机 Provider，可在应用启动时调用以加速相机打开
+         */
+        fun warmUp(context: Context) {
+            ProcessCameraProvider.getInstance(context.applicationContext)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 尽早开始初始化 CameraProvider（异步）
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(applicationContext)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 

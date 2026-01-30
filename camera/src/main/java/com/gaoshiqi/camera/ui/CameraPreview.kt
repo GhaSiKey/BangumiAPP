@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -61,15 +62,19 @@ fun CameraPreview(
     }
 
     var currentZoom by remember { mutableFloatStateOf(1f) }
+    var isCameraBound by remember { mutableStateOf(false) }
 
+    // 合并相机绑定逻辑，避免重复初始化
     DisposableEffect(lensFacing) {
-        viewModel.rebindCamera(lifecycleOwner, previewView)
-        currentZoom = 1f
-        onDispose { }
-    }
-
-    DisposableEffect(Unit) {
-        viewModel.bindCamera(lifecycleOwner, previewView)
+        if (isCameraBound) {
+            // 切换镜头时重新绑定
+            viewModel.rebindCamera(lifecycleOwner, previewView)
+            currentZoom = 1f
+        } else {
+            // 首次绑定
+            viewModel.bindCamera(lifecycleOwner, previewView)
+            isCameraBound = true
+        }
         onDispose { }
     }
 
