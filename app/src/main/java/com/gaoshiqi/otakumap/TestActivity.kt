@@ -14,6 +14,7 @@ import com.gaoshiqi.otakumap.trending.AnimeTrendingActivity
 import com.gaoshiqi.map.MapsDemoActivity
 import com.gaoshiqi.otakumap.collection.v2.CollectionV2Activity
 import com.gaoshiqi.player.PlayerTestActivity
+import com.gaoshiqi.camera.CameraActivity
 
 class TestActivity : AppCompatActivity() {
 
@@ -76,6 +77,10 @@ class TestActivity : AppCompatActivity() {
 
         mBinding.buttonCollectionV2.setOnClickListener {
             CollectionV2Activity.start(this)
+        }
+
+        mBinding.buttonCamera.setOnClickListener {
+            CameraActivity.start(this)
         }
     }
 }

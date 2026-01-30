@@ -74,6 +74,8 @@ dependencies {
     implementation(project(":image"))
     // player
     implementation(project(":player"))
+    // camera
+    implementation(project(":camera"))
 
     // play services
     implementation(libs.play.services.maps)
