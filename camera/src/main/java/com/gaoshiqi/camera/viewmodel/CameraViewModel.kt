@@ -3,6 +3,7 @@ package com.gaoshiqi.camera.viewmodel
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.FocusMeteringAction
@@ -61,6 +62,11 @@ class CameraViewModel(
             is CameraIntent.DeletePhoto -> requestDeletePhoto(intent.uri)
             is CameraIntent.ConfirmDeletePhoto -> confirmDeletePhoto()
             is CameraIntent.CancelDeletePhoto -> cancelDeletePhoto()
+            is CameraIntent.EnterSelectionMode -> enterSelectionMode()
+            is CameraIntent.ExitSelectionMode -> exitSelectionMode()
+            is CameraIntent.TogglePhotoSelection -> togglePhotoSelection(intent.uri)
+            is CameraIntent.DeleteSelectedPhotos -> requestDeleteSelectedPhotos()
+            is CameraIntent.ConfirmDeleteSelected -> confirmDeleteSelectedPhotos()
             is CameraIntent.NavigateBack -> navigateBack()
             is CameraIntent.CameraReady -> onCameraReady()
             is CameraIntent.CameraError -> onCameraError(intent.message)
@@ -100,7 +106,9 @@ class CameraViewModel(
             .requireLensFacing(lensFacing)
             .build()
 
+        // 使用 4:3 比例，确保预览和拍照一致
         preview = Preview.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
             .build()
             .also {
                 it.surfaceProvider = previewView.surfaceProvider
@@ -108,6 +116,7 @@ class CameraViewModel(
 
         imageCapture = ImageCapture.Builder()
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
             .build()
 
         try {
@@ -303,6 +312,57 @@ class CameraViewModel(
 
     private fun cancelDeletePhoto() {
         _uiState.update { it.copy(pendingDeletePhoto = null) }
+    }
+
+    private fun enterSelectionMode() {
+        _uiState.update { it.copy(isSelectionMode = true, selectedPhotos = emptySet()) }
+    }
+
+    private fun exitSelectionMode() {
+        _uiState.update {
+            it.copy(
+                isSelectionMode = false,
+                selectedPhotos = emptySet(),
+                showDeleteSelectedDialog = false
+            )
+        }
+    }
+
+    private fun togglePhotoSelection(uri: String) {
+        _uiState.update { state ->
+            val newSelection = if (uri in state.selectedPhotos) {
+                state.selectedPhotos - uri
+            } else {
+                state.selectedPhotos + uri
+            }
+            // 如果取消选择后没有选中项，自动退出多选模式
+            if (newSelection.isEmpty()) {
+                state.copy(isSelectionMode = false, selectedPhotos = emptySet())
+            } else {
+                state.copy(selectedPhotos = newSelection)
+            }
+        }
+    }
+
+    private fun requestDeleteSelectedPhotos() {
+        if (_uiState.value.selectedPhotos.isNotEmpty()) {
+            _uiState.update { it.copy(showDeleteSelectedDialog = true) }
+        }
+    }
+
+    private fun confirmDeleteSelectedPhotos() {
+        val selectedUris = _uiState.value.selectedPhotos
+        selectedUris.forEach { uri ->
+            photoManager.deletePhoto(uri)
+        }
+        loadGalleryPhotos()
+        _uiState.update {
+            it.copy(
+                isSelectionMode = false,
+                selectedPhotos = emptySet(),
+                showDeleteSelectedDialog = false
+            )
+        }
     }
 
     private fun navigateBack() {

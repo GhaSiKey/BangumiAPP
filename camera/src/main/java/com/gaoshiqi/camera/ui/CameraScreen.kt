@@ -6,12 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,7 +72,8 @@ fun CameraScreen(
                     isCapturing = uiState.isCapturing,
                     onTakePhoto = { viewModel.handleIntent(CameraIntent.TakePhoto) },
                     onSwitchCamera = { viewModel.handleIntent(CameraIntent.SwitchCamera) },
-                    onOpenGallery = { viewModel.handleIntent(CameraIntent.OpenGallery) }
+                    onOpenGallery = { viewModel.handleIntent(CameraIntent.OpenGallery) },
+                    onBack = { viewModel.handleIntent(CameraIntent.NavigateBack) }
                 )
             }
             is ScreenState.PhotoPreview -> {
@@ -79,7 +86,19 @@ fun CameraScreen(
             is ScreenState.Gallery -> {
                 GalleryScreen(
                     photos = uiState.galleryPhotos,
+                    isSelectionMode = uiState.isSelectionMode,
+                    selectedPhotos = uiState.selectedPhotos,
+                    showDeleteDialog = uiState.showDeleteSelectedDialog,
                     onPhotoClick = { uri -> viewModel.handleIntent(CameraIntent.SelectPhoto(uri)) },
+                    onPhotoLongClick = { uri ->
+                        viewModel.handleIntent(CameraIntent.EnterSelectionMode)
+                        viewModel.handleIntent(CameraIntent.TogglePhotoSelection(uri))
+                    },
+                    onToggleSelection = { uri -> viewModel.handleIntent(CameraIntent.TogglePhotoSelection(uri)) },
+                    onDeleteSelected = { viewModel.handleIntent(CameraIntent.DeleteSelectedPhotos) },
+                    onConfirmDelete = { viewModel.handleIntent(CameraIntent.ConfirmDeleteSelected) },
+                    onCancelDelete = { viewModel.handleIntent(CameraIntent.ExitSelectionMode) },
+                    onExitSelectionMode = { viewModel.handleIntent(CameraIntent.ExitSelectionMode) },
                     onBack = { viewModel.handleIntent(CameraIntent.CloseGallery) }
                 )
             }
@@ -111,7 +130,8 @@ private fun CameraContent(
     isCapturing: Boolean,
     onTakePhoto: () -> Unit,
     onSwitchCamera: () -> Unit,
-    onOpenGallery: () -> Unit
+    onOpenGallery: () -> Unit,
+    onBack: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -124,6 +144,24 @@ private fun CameraContent(
             lensFacing = lensFacing,
             focusPoint = focusPoint
         )
+
+        // 顶部返回按钮（考虑状态栏 insets）
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(16.dp)
+                .size(40.dp)
+                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = stringResource(R.string.camera_back),
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
+        }
 
         // 底部控制栏
         CameraControls(
@@ -146,6 +184,7 @@ private fun PermissionRequest(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
+            .safeDrawingPadding()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center

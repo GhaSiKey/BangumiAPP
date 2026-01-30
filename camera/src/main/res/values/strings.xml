@@ -17,4 +17,7 @@
     <string name="camera_photo_deleted">Photo deleted</string>
     <string name="camera_error">Camera error</string>
     <string name="camera_back">Back</string>
+    <string name="camera_cancel">Cancel</string>
+    <string name="camera_selected_count">%d selected</string>
+    <string name="camera_delete_selected_message">Are you sure you want to delete %d photos?</string>
 </resources>

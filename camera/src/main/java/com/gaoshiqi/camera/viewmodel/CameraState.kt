@@ -57,5 +57,9 @@ data class CameraUiState(
     val errorMessage: String? = null,
     val shouldClose: Boolean = false,
     val focusPoint: FocusPoint? = null,
-    val currentZoomRatio: Float = 1f
+    val currentZoomRatio: Float = 1f,
+    // 多选模式
+    val isSelectionMode: Boolean = false,
+    val selectedPhotos: Set<String> = emptySet(),
+    val showDeleteSelectedDialog: Boolean = false
 )

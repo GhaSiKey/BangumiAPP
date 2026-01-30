@@ -20,6 +20,13 @@ sealed class CameraIntent {
     data object ConfirmDeletePhoto : CameraIntent()
     data object CancelDeletePhoto : CameraIntent()
 
+    // 多选操作
+    data object EnterSelectionMode : CameraIntent()
+    data object ExitSelectionMode : CameraIntent()
+    data class TogglePhotoSelection(val uri: String) : CameraIntent()
+    data object DeleteSelectedPhotos : CameraIntent()
+    data object ConfirmDeleteSelected : CameraIntent()
+
     // 导航
     data object NavigateBack : CameraIntent()
 
