@@ -144,4 +144,26 @@ object BitmapComposer {
 
         return resultBitmap
     }
+
+    /**
+     * 镜像翻转图片（水平翻转）
+     * 用于前置摄像头拍摄的照片
+     *
+     * @param source 源图片（不会被回收）
+     * @return 镜像后的新图片，如果不需要翻转则返回源图片
+     */
+    fun mirrorBitmap(source: Bitmap): Bitmap {
+        val matrix = Matrix().apply {
+            preScale(-1f, 1f)
+        }
+        return Bitmap.createBitmap(
+            source,
+            0,
+            0,
+            source.width,
+            source.height,
+            matrix,
+            true
+        )
+    }
 }

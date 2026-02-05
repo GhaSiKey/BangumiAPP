@@ -66,6 +66,9 @@ class ComparisonCameraViewModel(
     /** 当前预览的合成图（用于保存） */
     private var currentComposedBitmap: Bitmap? = null
 
+    /** 当前拍摄的原始相机照片（用于保存） */
+    private var currentOriginalBitmap: Bitmap? = null
+
     init {
         loadReferenceImage()
     }
@@ -201,16 +204,24 @@ class ComparisonCameraViewModel(
                 _uiState.update { it.copy(captureState = CaptureState.Composing) }
 
                 val isFrontCamera = _uiState.value.lensFacing == ComparisonLensFacing.FRONT
+
+                // 先处理原图（前置摄像头需要镜像）
+                val originalBitmap = if (isFrontCamera) {
+                    BitmapComposer.mirrorBitmap(cameraBitmap)
+                } else {
+                    cameraBitmap
+                }
+
+                // 合成对比图
                 val composedBitmap = BitmapComposer.composeVertically(
                     cameraImage = cameraBitmap,
                     referenceImage = refBitmap,
                     mirrorCamera = isFrontCamera
                 )
 
-                // 回收相机截图
-                cameraBitmap.recycle()
-
-                // 缓存合成图用于保存
+                // 缓存原图和合成图用于保存
+                // 注意：不要 recycle cameraBitmap，因为 originalBitmap 可能就是它本身
+                currentOriginalBitmap = originalBitmap
                 currentComposedBitmap = composedBitmap
 
                 withContext(Dispatchers.Main) {
@@ -246,17 +257,29 @@ class ComparisonCameraViewModel(
 
     /**
      * 确认保存照片
+     * 同时保存原图和合成图
      */
     private fun confirmPhoto() {
         val composedBitmap = currentComposedBitmap ?: return
+        val originalBitmap = currentOriginalBitmap
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val file = photoManager.createPhotoFile()
-                file.outputStream().use { out ->
+                // 保存合成图
+                val composedFile = photoManager.createPhotoFile(suffix = "_comparison")
+                composedFile.outputStream().use { out ->
                     composedBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
                 }
-                Log.d(TAG, "Photo saved: ${file.absolutePath}")
+                Log.d(TAG, "Composed photo saved: ${composedFile.absolutePath}")
+
+                // 保存原图
+                if (originalBitmap != null) {
+                    val originalFile = photoManager.createPhotoFile(suffix = "_original")
+                    originalFile.outputStream().use { out ->
+                        originalBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+                    }
+                    Log.d(TAG, "Original photo saved: ${originalFile.absolutePath}")
+                }
 
                 withContext(Dispatchers.Main) {
                     _uiState.update {
@@ -267,6 +290,7 @@ class ComparisonCameraViewModel(
                     }
                     // 重置状态
                     currentComposedBitmap = null
+                    currentOriginalBitmap = null
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to save photo", e)
@@ -286,6 +310,7 @@ class ComparisonCameraViewModel(
         // 不要 recycle bitmap，因为 Compose 可能还在绘制
         // Bitmap 会在 GC 时自动回收
         currentComposedBitmap = null
+        currentOriginalBitmap = null
         _uiState.update {
             it.copy(
                 screenState = ComparisonScreenState.Camera,

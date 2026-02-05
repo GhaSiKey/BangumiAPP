@@ -30,10 +30,11 @@ class PhotoManager(private val context: Context) {
 
     /**
      * 创建新照片文件
+     * @param suffix 可选的文件名后缀，如 "_original" 或 "_comparison"
      */
-    fun createPhotoFile(): File {
+    fun createPhotoFile(suffix: String = ""): File {
         val timestamp = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
-        val fileName = "$PHOTO_PREFIX$timestamp$PHOTO_EXTENSION"
+        val fileName = "$PHOTO_PREFIX$timestamp$suffix$PHOTO_EXTENSION"
         return File(photoDir, fileName)
     }
 
