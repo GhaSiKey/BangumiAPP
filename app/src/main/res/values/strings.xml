@@ -192,6 +192,7 @@
     <string name="comparison_picker_empty">No saved locations</string>
     <string name="comparison_picker_empty_hint">Save some pilgrimage locations first to use comparison camera</string>
     <string name="camera_back">Back</string>
+    <string name="comparison_gallery">Gallery</string>
 
     <!-- UI Demo -->
     <string name="ui_demo_title">UI Demo</string>

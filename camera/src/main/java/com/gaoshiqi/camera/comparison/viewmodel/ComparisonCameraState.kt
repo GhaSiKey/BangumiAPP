@@ -79,6 +79,12 @@ data class ComparisonCameraUiState(
     val pointName: String = "",
     val subjectName: String = "",
 
+    /** 拍立得风格合成所需的额外信息 */
+    val subjectCover: String = "",
+    val episode: String? = null,
+    val lat: Double = 0.0,
+    val lng: Double = 0.0,
+
     /** 错误信息 */
     val errorMessage: String? = null,
 

@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.gaoshiqi.camera.gallery.GalleryActivity
 import com.gaoshiqi.camera.comparison.ComparisonCameraActivity
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.room.SavedPointEntity
@@ -92,8 +93,15 @@ class SavedPointPickerActivity : ComponentActivity() {
                                 context = this,
                                 referenceImageUrl = point.pointImage,
                                 pointName = point.pointNameCn.ifBlank { point.pointName },
-                                subjectName = point.subjectName
+                                subjectName = point.subjectName,
+                                subjectCover = point.subjectCover,
+                                episode = point.episode,
+                                lat = point.lat,
+                                lng = point.lng
                             )
+                        },
+                        onOpenGallery = {
+                            GalleryActivity.start(this)
                         },
                         onBack = { finish() }
                     )
@@ -107,6 +115,7 @@ class SavedPointPickerActivity : ComponentActivity() {
 @Composable
 private fun SavedPointPickerScreen(
     onPointSelected: (SavedPointEntity) -> Unit,
+    onOpenGallery: () -> Unit,
     onBack: () -> Unit
 ) {
     val viewModel: SavedPointPickerViewModel = viewModel(
@@ -128,6 +137,14 @@ private fun SavedPointPickerScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = stringResource(R.string.camera_back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onOpenGallery) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_gallery),
+                            contentDescription = stringResource(R.string.comparison_gallery)
                         )
                     }
                 },

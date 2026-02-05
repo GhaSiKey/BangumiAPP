@@ -33,7 +33,7 @@ class CameraActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // 尽早开始初始化 CameraProvider（异步）
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(applicationContext)
+        ProcessCameraProvider.getInstance(applicationContext)
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

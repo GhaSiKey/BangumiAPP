@@ -18,6 +18,7 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.gaoshiqi.camera.util.BitmapComposer
 import com.gaoshiqi.camera.util.PhotoManager
+import com.gaoshiqi.camera.util.PolaroidMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,11 @@ class ComparisonCameraViewModel(
     private val context: Context,
     private val referenceImageUrl: String,
     private val pointName: String,
-    private val subjectName: String
+    private val subjectName: String,
+    private val subjectCover: String,
+    private val episode: String?,
+    private val lat: Double,
+    private val lng: Double
 ) : ViewModel() {
 
     companion object {
@@ -47,7 +52,11 @@ class ComparisonCameraViewModel(
         ComparisonCameraUiState(
             referenceImageUrl = referenceImageUrl,
             pointName = pointName,
-            subjectName = subjectName
+            subjectName = subjectName,
+            subjectCover = subjectCover,
+            episode = episode,
+            lat = lat,
+            lng = lng
         )
     )
     val uiState: StateFlow<ComparisonCameraUiState> = _uiState.asStateFlow()
@@ -212,10 +221,37 @@ class ComparisonCameraViewModel(
                     cameraBitmap
                 }
 
-                // 合成对比图
-                val composedBitmap = BitmapComposer.composeVertically(
+                // 尝试加载番剧封面（用于拍立得风格）
+                val coverBitmap: Bitmap? = if (subjectCover.isNotBlank()) {
+                    try {
+                        withContext(Dispatchers.IO) {
+                            Glide.with(context)
+                                .asBitmap()
+                                .load(subjectCover)
+                                .submit()
+                                .get()
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to load cover image, will compose without it", e)
+                        null
+                    }
+                } else {
+                    null
+                }
+
+                // 合成拍立得风格图片
+                val metadata = PolaroidMetadata(
+                    pointName = pointName,
+                    subjectName = subjectName,
+                    episode = episode,
+                    lat = lat,
+                    lng = lng
+                )
+                val composedBitmap = BitmapComposer.composePolaroidStyle(
                     cameraImage = cameraBitmap,
                     referenceImage = refBitmap,
+                    coverImage = coverBitmap,
+                    metadata = metadata,
                     mirrorCamera = isFrontCamera
                 )
 
@@ -282,15 +318,16 @@ class ComparisonCameraViewModel(
                 }
 
                 withContext(Dispatchers.Main) {
-                    _uiState.update {
-                        it.copy(
-                            captureState = CaptureState.Saved,
-                            screenState = ComparisonScreenState.Camera
-                        )
-                    }
                     // 重置状态
                     currentComposedBitmap = null
                     currentOriginalBitmap = null
+                    // 保存成功后关闭页面
+                    _uiState.update {
+                        it.copy(
+                            captureState = CaptureState.Saved,
+                            shouldClose = true
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to save photo", e)
@@ -355,7 +392,11 @@ class ComparisonCameraViewModel(
         private val context: Context,
         private val referenceImageUrl: String,
         private val pointName: String,
-        private val subjectName: String
+        private val subjectName: String,
+        private val subjectCover: String,
+        private val episode: String?,
+        private val lat: Double,
+        private val lng: Double
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -364,7 +405,11 @@ class ComparisonCameraViewModel(
                     context.applicationContext,
                     referenceImageUrl,
                     pointName,
-                    subjectName
+                    subjectName,
+                    subjectCover,
+                    episode,
+                    lat,
+                    lng
                 ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
