@@ -3,6 +3,7 @@ package com.gaoshiqi.camera.gallery
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gaoshiqi.camera.R
 import com.gaoshiqi.camera.ui.GalleryScreen
 import com.gaoshiqi.camera.ui.PhotoViewerScreen
 
@@ -49,6 +51,29 @@ class GalleryActivity : ComponentActivity() {
                     LaunchedEffect(uiState.shouldClose) {
                         if (uiState.shouldClose) {
                             finish()
+                        }
+                    }
+
+                    // 处理保存到相册的结果
+                    LaunchedEffect(uiState.saveToGalleryResult) {
+                        when (uiState.saveToGalleryResult) {
+                            is SaveToGalleryResult.Success -> {
+                                Toast.makeText(
+                                    this@GalleryActivity,
+                                    R.string.camera_saved_to_gallery,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                viewModel.handleIntent(GalleryIntent.ClearSaveResult)
+                            }
+                            is SaveToGalleryResult.Error -> {
+                                Toast.makeText(
+                                    this@GalleryActivity,
+                                    R.string.camera_save_to_gallery_failed,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                viewModel.handleIntent(GalleryIntent.ClearSaveResult)
+                            }
+                            null -> { /* no-op */ }
                         }
                     }
 
@@ -99,6 +124,7 @@ class GalleryActivity : ComponentActivity() {
                                 photos = uiState.photos,
                                 initialIndex = screenState.index,
                                 showDeleteDialog = uiState.showDeletePhotoDialog,
+                                isSavingToGallery = uiState.isSavingToGallery,
                                 onPhotoChanged = { photo ->
                                     viewModel.handleIntent(GalleryIntent.ViewPhoto(photo))
                                 },
@@ -113,6 +139,9 @@ class GalleryActivity : ComponentActivity() {
                                 },
                                 onCancelDelete = {
                                     viewModel.handleIntent(GalleryIntent.CancelDeletePhoto)
+                                },
+                                onSaveToGallery = { photo ->
+                                    viewModel.handleIntent(GalleryIntent.SaveToGallery(photo))
                                 }
                             )
                         }

@@ -29,6 +29,8 @@ sealed class GalleryIntent {
     data class RequestDeletePhoto(val photo: PhotoItem) : GalleryIntent()
     data object ConfirmDeletePhoto : GalleryIntent()
     data object CancelDeletePhoto : GalleryIntent()
+    data class SaveToGallery(val photo: PhotoItem) : GalleryIntent()
+    data object ClearSaveResult : GalleryIntent()
     data object NavigateBack : GalleryIntent()
 }
 
@@ -38,6 +40,14 @@ sealed class GalleryIntent {
 sealed class GalleryScreenState {
     data object Gallery : GalleryScreenState()
     data class PhotoViewer(val photo: PhotoItem, val index: Int) : GalleryScreenState()
+}
+
+/**
+ * 保存到相册的结果
+ */
+sealed class SaveToGalleryResult {
+    data object Success : SaveToGalleryResult()
+    data class Error(val message: String) : SaveToGalleryResult()
 }
 
 /**
@@ -51,6 +61,8 @@ data class GalleryUiState(
     val showDeleteDialog: Boolean = false,
     val showDeletePhotoDialog: Boolean = false,
     val pendingDeletePhoto: PhotoItem? = null,
+    val isSavingToGallery: Boolean = false,
+    val saveToGalleryResult: SaveToGalleryResult? = null,
     val shouldClose: Boolean = false
 )
 
@@ -83,6 +95,8 @@ class GalleryViewModel(
             is GalleryIntent.RequestDeletePhoto -> requestDeletePhoto(intent.photo)
             is GalleryIntent.ConfirmDeletePhoto -> confirmDeletePhoto()
             is GalleryIntent.CancelDeletePhoto -> cancelDeletePhoto()
+            is GalleryIntent.SaveToGallery -> saveToGallery(intent.photo)
+            is GalleryIntent.ClearSaveResult -> clearSaveResult()
             is GalleryIntent.NavigateBack -> navigateBack()
         }
     }
@@ -214,6 +228,35 @@ class GalleryViewModel(
                 showDeletePhotoDialog = false
             )
         }
+    }
+
+    private fun saveToGallery(photo: PhotoItem) {
+        if (_uiState.value.isSavingToGallery) return
+
+        _uiState.update { it.copy(isSavingToGallery = true) }
+
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                photoManager.saveToSystemGallery(photo.uri)
+            }
+
+            _uiState.update {
+                it.copy(
+                    isSavingToGallery = false,
+                    saveToGalleryResult = if (result.isSuccess) {
+                        SaveToGalleryResult.Success
+                    } else {
+                        SaveToGalleryResult.Error(
+                            result.exceptionOrNull()?.message ?: "Unknown error"
+                        )
+                    }
+                )
+            }
+        }
+    }
+
+    private fun clearSaveResult() {
+        _uiState.update { it.copy(saveToGalleryResult = null) }
     }
 
     private fun navigateBack() {
