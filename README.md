@@ -5,7 +5,7 @@
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
-[![Version](https://img.shields.io/badge/Version-1.3.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
+[![Version](https://img.shields.io/badge/Version-1.4.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
 
 ## 📱 应用简介
 
@@ -44,9 +44,10 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 <img src="assets/point_img_3.webp" alt="圣地巡礼列表" width="45%"> <img src="assets/point_img_4.webp" alt="圣地巡礼列表" width="45%">
 
 #### 📍 半屏弹窗查看模式
-轻触地点标记，底部弹出详情卡片，支持拖拽调整高度
+轻触地点标记，底部弹出详情卡片，支持跳转地图导航，支持圣地巡礼合照功能✨
 
 <img src="assets/point_img_1.webp" alt="半屏弹窗模式" width="45%"> <img src="assets/point_img_5.webp" alt="半屏弹窗模式" width="45%">
+<img src="assets/point_img_6.webp" alt="半屏弹窗模式" width="45%"> <img src="assets/point_img_7.webp" alt="半屏弹窗模式" width="45%">
 
 #### 🌍 全屏地图浏览模式
 全屏展示所有巡礼地点，底部卡片支持左右滑动切换
@@ -57,7 +58,8 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 <img src="assets/point_collection_img.webp" alt="我的收藏" width="45%">
 
 ### 📚 我的收藏页面
-<img src="assets/collection_img.webp" alt="我的收藏" width="45%">
+支持番剧收藏状态管理，点击状态角标唤起选择弹窗
+<img src="assets/collection_img_1.webp" alt="我的收藏" width="45%"> <img src="assets/collection_img_2.webp" alt="我的收藏" width="45%">
 
 ### 🏆 排行榜页面
 <img src="assets/trending_img.webp" alt="排行榜" width="45%">
@@ -83,7 +85,17 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 
 ## 🔄 更新日志
 
-### v1.3.0 (当前版本)
+### v1.4.0 (当前版本)
+- 📷 **新增相机模块**: 支持拍照功能，包含快门按钮动画和拍照时画面定格效果
+- 🖼️ **相册多选功能**: 支持选择和删除多张照片，异步加载相册
+- 🌍 **多语言支持**: 新增国际化支持
+- 📚 **收藏页重构**: 全新 CollectionV2 使用 Compose 实现，新增追番状态管理
+- 🎯 **状态选择仪表盘**: 优化收藏状态管理，支持点击状态角标唤起选择弹窗
+- 🗺️ **地图功能增强**: 支持跳转 Google Map 导航
+- 🔍 **时间表搜索**: 时间表页面新增搜索按钮
+- 🐛 **修复问题**: 修复首次打开地图弹窗崩溃问题，优化搜索历史标签样式
+
+### v1.3.0
 - ✨ 新增图片加载器ImageLoader
 - 🔄 搜索页接口替换，采用新搜索API
 
