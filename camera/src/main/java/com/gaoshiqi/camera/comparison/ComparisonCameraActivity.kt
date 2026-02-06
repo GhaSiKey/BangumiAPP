@@ -1,5 +1,6 @@
 package com.gaoshiqi.camera.comparison
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gaoshiqi.camera.ComparisonCameraModule
 import com.gaoshiqi.camera.R
 import com.gaoshiqi.camera.comparison.ui.ComparisonCameraScreen
 import com.gaoshiqi.camera.comparison.viewmodel.CaptureState
@@ -107,20 +109,40 @@ class ComparisonCameraActivity : ComponentActivity() {
 
                     val uiState by viewModel.uiState.collectAsState()
 
-                    // 显示保存成功提示
+                    // 显示保存成功提示并返回结果
                     LaunchedEffect(uiState.captureState) {
-                        if (uiState.captureState is CaptureState.Saved) {
+                        val captureState = uiState.captureState
+                        if (captureState is CaptureState.Saved) {
                             Toast.makeText(
                                 this@ComparisonCameraActivity,
                                 R.string.comparison_photo_saved,
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            // 设置返回结果
+                            val resultIntent = Intent().apply {
+                                putExtra(
+                                    ComparisonCameraModule.EXTRA_COMPOSED_PHOTO_PATH,
+                                    captureState.composedPhotoPath
+                                )
+                                putExtra(
+                                    ComparisonCameraModule.EXTRA_ORIGINAL_PHOTO_PATH,
+                                    captureState.originalPhotoPath
+                                )
+                            }
+                            setResult(Activity.RESULT_OK, resultIntent)
                         }
                     }
 
                     ComparisonCameraScreen(
                         viewModel = viewModel,
-                        onClose = { finish() }
+                        onClose = {
+                            // 如果没有保存成功，返回取消结果
+                            if (uiState.captureState !is CaptureState.Saved) {
+                                setResult(Activity.RESULT_CANCELED)
+                            }
+                            finish()
+                        }
                     )
                 }
             }

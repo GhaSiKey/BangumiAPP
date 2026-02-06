@@ -306,15 +306,18 @@ class ComparisonCameraViewModel(
                 composedFile.outputStream().use { out ->
                     composedBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
                 }
-                Log.d(TAG, "Composed photo saved: ${composedFile.absolutePath}")
+                val composedPath = composedFile.absolutePath
+                Log.d(TAG, "Composed photo saved: $composedPath")
 
                 // 保存原图
+                var originalPath: String? = null
                 if (originalBitmap != null) {
                     val originalFile = photoManager.createPhotoFile(suffix = "_original")
                     originalFile.outputStream().use { out ->
                         originalBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
                     }
-                    Log.d(TAG, "Original photo saved: ${originalFile.absolutePath}")
+                    originalPath = originalFile.absolutePath
+                    Log.d(TAG, "Original photo saved: $originalPath")
                 }
 
                 withContext(Dispatchers.Main) {
@@ -324,7 +327,10 @@ class ComparisonCameraViewModel(
                     // 保存成功后关闭页面
                     _uiState.update {
                         it.copy(
-                            captureState = CaptureState.Saved,
+                            captureState = CaptureState.Saved(
+                                composedPhotoPath = composedPath,
+                                originalPhotoPath = originalPath
+                            ),
                             shouldClose = true
                         )
                     }

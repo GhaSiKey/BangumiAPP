@@ -56,13 +56,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.gaoshiqi.camera.gallery.GalleryActivity
-import com.gaoshiqi.camera.comparison.ComparisonCameraActivity
+import com.gaoshiqi.camera.ComparisonCameraModule
+import com.gaoshiqi.camera.ComparisonPhotoData
+import com.gaoshiqi.camera.GalleryModule
 import com.gaoshiqi.otakumap.R
 import com.gaoshiqi.room.SavedPointEntity
 
 /** 16:9 宽高比 */
 private const val ASPECT_RATIO_16_9 = 16f / 9f
+
+/**
+ * 将 SavedPointEntity 转换为 ComparisonPhotoData
+ */
+private fun SavedPointEntity.toComparisonPhotoData() = ComparisonPhotoData(
+    referenceImageUrl = pointImage,
+    pointName = pointNameCn.ifBlank { pointName },
+    subjectName = subjectName,
+    subjectCover = subjectCover,
+    episode = episode,
+    lat = lat,
+    lng = lng
+)
 
 /**
  * 圣地选择 Activity
@@ -89,19 +103,13 @@ class SavedPointPickerActivity : ComponentActivity() {
                 ) {
                     SavedPointPickerScreen(
                         onPointSelected = { point ->
-                            ComparisonCameraActivity.start(
+                            ComparisonCameraModule.startCamera(
                                 context = this,
-                                referenceImageUrl = point.pointImage,
-                                pointName = point.pointNameCn.ifBlank { point.pointName },
-                                subjectName = point.subjectName,
-                                subjectCover = point.subjectCover,
-                                episode = point.episode,
-                                lat = point.lat,
-                                lng = point.lng
+                                data = point.toComparisonPhotoData()
                             )
                         },
                         onOpenGallery = {
-                            GalleryActivity.start(this)
+                            GalleryModule.openGallery(this)
                         },
                         onBack = { finish() }
                     )

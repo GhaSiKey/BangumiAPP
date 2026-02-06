@@ -41,7 +41,10 @@ sealed class CaptureState {
     data object Composing : CaptureState()
 
     /** 保存成功 */
-    data object Saved : CaptureState()
+    data class Saved(
+        val composedPhotoPath: String,
+        val originalPhotoPath: String?
+    ) : CaptureState()
 
     /** 发生错误 */
     data class Error(val message: String) : CaptureState()
