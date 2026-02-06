@@ -59,6 +59,7 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 
 ### 📚 我的收藏页面
 支持番剧收藏状态管理，点击状态角标唤起选择弹窗
+
 <img src="assets/collection_img_1.webp" alt="我的收藏" width="45%"> <img src="assets/collection_img_2.webp" alt="我的收藏" width="45%">
 
 ### 🏆 排行榜页面
