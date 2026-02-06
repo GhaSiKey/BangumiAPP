@@ -8,6 +8,7 @@
     <string name="point_save_failed">Operation failed</string>
     <string name="open_in_maps">Open in maps</string>
     <string name="open_maps_failed">Unable to open maps</string>
+    <string name="comparison_camera">Take comparison photo</string>
     <string name="get_location_failed">Failed to get location</string>
     <string name="map_search_restaurant">Find Restaurant</string>
     <string name="map_start_navigation">Start Navigation</string>

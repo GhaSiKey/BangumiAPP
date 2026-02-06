@@ -15,6 +15,8 @@ import com.gaoshiqi.map.MapsDemoActivity
 import com.gaoshiqi.otakumap.collection.v2.CollectionV2Activity
 import com.gaoshiqi.player.PlayerTestActivity
 import com.gaoshiqi.camera.CameraActivity
+import com.gaoshiqi.otakumap.comparison.SavedPointPickerActivity
+import com.gaoshiqi.otakumap.demo.UiDemoActivity
 
 class TestActivity : AppCompatActivity() {
 
@@ -81,6 +83,14 @@ class TestActivity : AppCompatActivity() {
 
         mBinding.buttonCamera.setOnClickListener {
             CameraActivity.start(this)
+        }
+
+        mBinding.buttonComparisonCamera.setOnClickListener {
+            SavedPointPickerActivity.start(this)
+        }
+
+        mBinding.buttonUiDemo.setOnClickListener {
+            UiDemoActivity.start(this)
         }
     }
 }

@@ -54,6 +54,9 @@ dependencies {
     // image module (for ImageLoader)
     implementation(project(":image"))
 
+    // camera module (for ComparisonCameraModule)
+    implementation(project(":camera"))
+
     // glide
     implementation(libs.glide)
 }

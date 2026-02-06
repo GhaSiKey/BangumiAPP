@@ -56,6 +56,12 @@
         <activity
             android:name="com.gaoshiqi.otakumap.TestActivity"
             android:exported="false" />
+        <activity
+            android:name="com.gaoshiqi.otakumap.comparison.SavedPointPickerActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.gaoshiqi.otakumap.demo.UiDemoActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
