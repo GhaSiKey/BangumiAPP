@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import com.gaoshiqi.camera.ComparisonCameraModule
+import com.gaoshiqi.camera.ComparisonPhotoData
 import com.gaoshiqi.map.data.LitePoint
 import com.gaoshiqi.map.databinding.FragmentMapBottomSheetBinding
 import com.gaoshiqi.map.utils.GoogleMapUtils
@@ -73,6 +75,7 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         binding.tvTitle.text = name ?: ""
 
         setupOpenMapsButton()
+        setupCameraButton()
         setupSaveButton()
 
         (dialog as? BottomSheetDialog)?.findViewById<View>(
@@ -94,6 +97,29 @@ class MapBottomSheetFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         binding.btnOpenMaps.setOnClickListener {
             val loc = location ?: return@setOnClickListener
             GoogleMapUtils.openInGoogleMaps(requireContext(), loc.latitude, loc.longitude, name)
+        }
+    }
+
+    private fun setupCameraButton() {
+        val point = litePoint
+        if (point == null || point.image.isBlank()) {
+            // 没有参考图，隐藏拍照按钮
+            binding.btnCamera.visibility = View.GONE
+            return
+        }
+
+        binding.btnCamera.setOnClickListener {
+            val data = ComparisonPhotoData(
+                referenceImageUrl = point.image,
+                pointName = point.displayName(),
+                subjectName = point.subjectName,
+                subjectCover = point.subjectCover,
+                episode = point.ep,
+                lat = point.lat(),
+                lng = point.lng()
+            )
+            ComparisonCameraModule.startCamera(requireContext(), data)
+            dismiss()
         }
     }
 

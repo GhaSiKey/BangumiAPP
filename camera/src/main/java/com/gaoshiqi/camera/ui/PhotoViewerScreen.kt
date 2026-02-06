@@ -6,15 +6,21 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +45,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.gaoshiqi.camera.R
@@ -50,11 +57,13 @@ fun PhotoViewerScreen(
     photos: List<PhotoItem>,
     initialIndex: Int,
     showDeleteDialog: Boolean,
+    isSavingToGallery: Boolean = false,
     onPhotoChanged: (PhotoItem) -> Unit,
     onBack: () -> Unit,
     onDelete: (PhotoItem) -> Unit,
     onConfirmDelete: () -> Unit,
-    onCancelDelete: () -> Unit
+    onCancelDelete: () -> Unit,
+    onSaveToGallery: (PhotoItem) -> Unit = {}
 ) {
     val pagerState = rememberPagerState(
         initialPage = initialIndex,
@@ -100,6 +109,35 @@ fun PhotoViewerScreen(
                     actionIconContentColor = Color.White
                 )
             )
+        },
+        bottomBar = {
+            BottomAppBar(
+                containerColor = Color.Black.copy(alpha = 0.8f),
+                contentColor = Color.White
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    IconButton(
+                        onClick = { onSaveToGallery(currentPhoto) },
+                        enabled = !isSavingToGallery
+                    ) {
+                        if (isSavingToGallery) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                color = Color.White,
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_download),
+                                contentDescription = stringResource(R.string.camera_save_to_gallery)
+                            )
+                        }
+                    }
+                }
+            }
         },
         containerColor = Color.Black
     ) { paddingValues ->
