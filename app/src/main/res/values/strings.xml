@@ -33,6 +33,7 @@
     <string name="my_saved_points">Saved Locations</string>
     <string name="saved_points_empty">No saved locations yet</string>
     <string name="saved_points_empty_action">Discover more</string>
+    <string name="saved_points_gallery">My Photos</string>
     <string name="go_to_detail">View details</string>
     <string name="point_count_format">%d locations</string>
     <string name="points_view_all">View all</string>

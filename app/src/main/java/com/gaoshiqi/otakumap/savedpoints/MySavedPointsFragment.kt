@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gaoshiqi.camera.GalleryModule
 import com.gaoshiqi.map.MapBottomSheetFragment
 import com.gaoshiqi.map.data.LitePoint
 import com.gaoshiqi.otakumap.BangumiApplication
@@ -43,6 +44,7 @@ class MySavedPointsFragment : Fragment() {
 
         setupRepository()
         setupRecyclerView()
+        setupGalleryFab()
         initData()
     }
 
@@ -63,6 +65,12 @@ class MySavedPointsFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.recyclerViewSavedPoints.adapter = mAdapter
         binding.recyclerViewSavedPoints.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun setupGalleryFab() {
+        binding.fabGallery.setOnClickListener {
+            GalleryModule.openGallery(requireContext())
+        }
     }
 
     private fun initData() {
