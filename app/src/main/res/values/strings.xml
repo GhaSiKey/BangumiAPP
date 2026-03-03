@@ -199,4 +199,49 @@
     <string name="ui_demo_title">UI Demo</string>
     <string name="ui_demo_loading">Loading data…</string>
     <string name="test_ui_demo">UI Demo</string>
+
+    <!-- DevTools Categories -->
+    <string name="devtools_category_data_api">Data / API</string>
+    <string name="devtools_category_ui">UI</string>
+    <string name="devtools_category_hardware">Hardware</string>
+    <string name="devtools_category_firebase">Firebase</string>
+
+    <!-- DevTools Items - Titles -->
+    <string name="devtools_today_schedule">Today Schedule</string>
+    <string name="devtools_schedule">Schedule</string>
+    <string name="devtools_collection">Collection</string>
+    <string name="devtools_rankings">Rankings</string>
+    <string name="devtools_search">Search</string>
+    <string name="devtools_new_search">New Search</string>
+    <string name="devtools_old_search">Old Search</string>
+    <string name="devtools_player">Player</string>
+    <string name="devtools_collection_v2">Collection V2</string>
+    <string name="devtools_ui_demo">UI Demo</string>
+    <string name="devtools_google_map">Google Map</string>
+    <string name="devtools_camera">Camera</string>
+    <string name="devtools_comparison_camera">Comparison</string>
+    <string name="devtools_crash_test">Crash Test</string>
+    <string name="devtools_anr_test">ANR Test</string>
+
+    <!-- DevTools Items - Descriptions (shown on long press) -->
+    <string name="devtools_desc_today_schedule">Fetch and display today\'s anime schedule from Bangumi API</string>
+    <string name="devtools_desc_schedule">Browse the full weekly anime schedule</string>
+    <string name="devtools_desc_collection">View your anime collection list</string>
+    <string name="devtools_desc_rankings">Browse anime rankings and trending data</string>
+    <string name="devtools_desc_search">Test the unified search interface</string>
+    <string name="devtools_desc_new_search">Test the new Bangumi search API</string>
+    <string name="devtools_desc_old_search">Test the legacy Bangumi search API</string>
+    <string name="devtools_desc_player">Test ExoPlayer video playback with Compose UI</string>
+    <string name="devtools_desc_collection_v2">Test the redesigned Compose collection page</string>
+    <string name="devtools_desc_ui_demo">Preview UI components and design patterns</string>
+    <string name="devtools_desc_google_map">Test Google Maps integration and markers</string>
+    <string name="devtools_desc_camera">Test camera capture functionality</string>
+    <string name="devtools_desc_comparison_camera">Test side-by-side comparison camera for pilgrimage</string>
+    <string name="devtools_desc_crash_test">Trigger a test crash for Firebase Crashlytics verification</string>
+    <string name="devtools_desc_anr_test">Block the main thread for 10s to trigger an ANR report</string>
+
+    <!-- DevTools Confirmation Dialog -->
+    <string name="devtools_confirm_title">Confirm Action</string>
+    <string name="devtools_confirm_crash_message">This will crash the app to test Firebase Crashlytics. Continue?</string>
+    <string name="devtools_confirm_anr_message">This will block the main thread for 10 seconds, causing an ANR. Continue?</string>
 </resources>

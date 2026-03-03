@@ -18,3 +18,5 @@ local.properties
 /.kiro/
 /.claude/
 /docs/api-trending-subjects.md
+# Firebase
+app/google-services.json
