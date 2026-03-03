@@ -184,4 +184,63 @@
     <string name="sort_by_name">按名称排序</string>
     <string name="collection_empty_tab">该分类下暂无番剧</string>
     <string name="test_collection_v2">新版收藏页测试</string>
+    <string name="test_camera">相机测试</string>
+    <string name="test_comparison_camera">对比相机测试</string>
+    <string name="test_ui_demo">UI 演示</string>
+
+    <!-- Comparison Camera Picker -->
+    <string name="comparison_picker_title">选择地点</string>
+    <string name="comparison_picker_empty">暂无保存的地点</string>
+    <string name="comparison_picker_empty_hint">先收藏一些巡礼地点才能使用对比相机</string>
+    <string name="camera_back">返回</string>
+    <string name="comparison_gallery">相册</string>
+
+    <!-- UI Demo -->
+    <string name="ui_demo_title">UI 演示</string>
+    <string name="ui_demo_loading">正在加载数据…</string>
+
+    <!-- DevTools Categories -->
+    <string name="devtools_category_data_api">数据 / API</string>
+    <string name="devtools_category_ui">界面</string>
+    <string name="devtools_category_hardware">硬件</string>
+    <string name="devtools_category_firebase">Firebase</string>
+
+    <!-- DevTools Items - Titles -->
+    <string name="devtools_today_schedule">今日放送</string>
+    <string name="devtools_schedule">时间表</string>
+    <string name="devtools_collection">我的收藏</string>
+    <string name="devtools_rankings">排行榜</string>
+    <string name="devtools_search">搜索</string>
+    <string name="devtools_new_search">新搜索</string>
+    <string name="devtools_old_search">旧搜索</string>
+    <string name="devtools_player">播放器</string>
+    <string name="devtools_collection_v2">收藏 V2</string>
+    <string name="devtools_ui_demo">UI 演示</string>
+    <string name="devtools_google_map">地图</string>
+    <string name="devtools_camera">相机</string>
+    <string name="devtools_comparison_camera">对比相机</string>
+    <string name="devtools_crash_test">崩溃测试</string>
+    <string name="devtools_anr_test">ANR 测试</string>
+
+    <!-- DevTools Items - Descriptions (shown on long press) -->
+    <string name="devtools_desc_today_schedule">从 Bangumi API 获取并展示今日番剧放送表</string>
+    <string name="devtools_desc_schedule">浏览完整的每周番剧放送时间表</string>
+    <string name="devtools_desc_collection">查看你的番剧收藏列表</string>
+    <string name="devtools_desc_rankings">浏览番剧排行榜和趋势数据</string>
+    <string name="devtools_desc_search">测试统一搜索界面</string>
+    <string name="devtools_desc_new_search">测试新版 Bangumi 搜索 API</string>
+    <string name="devtools_desc_old_search">测试旧版 Bangumi 搜索 API</string>
+    <string name="devtools_desc_player">测试基于 Compose 的 ExoPlayer 视频播放</string>
+    <string name="devtools_desc_collection_v2">测试 Compose 重构的收藏页面</string>
+    <string name="devtools_desc_ui_demo">预览 UI 组件和设计模式</string>
+    <string name="devtools_desc_google_map">测试 Google 地图集成和标记功能</string>
+    <string name="devtools_desc_camera">测试相机拍照功能</string>
+    <string name="devtools_desc_comparison_camera">测试圣地巡礼场景对比相机</string>
+    <string name="devtools_desc_crash_test">触发一次测试崩溃以验证 Firebase Crashlytics</string>
+    <string name="devtools_desc_anr_test">阻塞主线程 10 秒以触发 ANR 上报</string>
+
+    <!-- DevTools Confirmation Dialog -->
+    <string name="devtools_confirm_title">确认操作</string>
+    <string name="devtools_confirm_crash_message">即将触发应用崩溃以测试 Firebase Crashlytics，确定继续吗？</string>
+    <string name="devtools_confirm_anr_message">即将阻塞主线程 10 秒导致 ANR，确定继续吗？</string>
 </resources>
