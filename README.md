@@ -5,7 +5,7 @@
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg)](https://android-arsenal.com/api?level=24)
-[![Version](https://img.shields.io/badge/Version-1.4.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
+[![Version](https://img.shields.io/badge/Version-1.5.0-blue.svg)](https://github.com/GhaSiKey/Bangumi/releases)
 
 ## 📱 应用简介
 
@@ -86,7 +86,15 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 
 ## 🔄 更新日志
 
-### v1.4.0 (当前版本)
+### v1.5.0 (当前版本)
+- 🔍 **搜索筛选功能**: 搜索页新增多维度筛选（类型、排序、评分、标签、日期、NSFW 过滤）
+- 🏷️ **标签搜索联动**: 打通番剧详情页风格标签到搜索的链路，点击标签直接搜索
+- 📝 **浏览记录**: 新增最近浏览记录功能，搜索页可快速回访
+- 🖼️ **兜底图优化**: 优化图片兜底图加载逻辑和清晰度
+- 🔧 **Firebase Crashlytics**: 集成崩溃监控，新增开发者工具类别
+- 🎨 **搜索卡片优化**: 优化搜索结果卡片展示效果，修复日夜间模式适配问题
+
+### v1.4.0
 - 📷 **新增相机模块**: 支持拍照功能，包含快门按钮动画和拍照时画面定格效果
 - 🖼️ **相册多选功能**: 支持选择和删除多张照片，异步加载相册
 - 🌍 **多语言支持**: 新增国际化支持
@@ -130,9 +138,10 @@ OtakuMap 圣地巡礼是一款结合了动漫信息浏览和圣地巡礼地点�
 4. 📝 **文档完善**: 改进README和代码注释
 
 ### 开发计划
-- [ ] **搜索功能增强**: 支持更多搜索条件
+- [x] **搜索功能增强**: 支持多维度筛选条件（类型、排序、评分、标签等）
 - [ ] **离线缓存**: 支持离线查看收藏内容
 - [ ] **深色模式**: 支持系统深色模式
+- [ ] **微信小程序版**: 基于微信云开发的轻量版本
 
 ## 📄 开源协议
 
