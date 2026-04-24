@@ -17,6 +17,9 @@ local.properties
 /.idea/copilot.data.migration.ask2agent.xml
 /.kiro/
 /.claude/
-/docs/api-trending-subjects.md
+# docs 下除 PRIVACY 外均不纳入版本控制
+/docs/*
+!/docs/PRIVACY_POLICY.md
+!/docs/PRIVACY_POLICY_EN.md
 # Firebase
 app/google-services.json
