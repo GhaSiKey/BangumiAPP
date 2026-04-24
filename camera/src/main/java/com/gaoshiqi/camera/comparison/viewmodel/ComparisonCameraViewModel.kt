@@ -2,6 +2,8 @@ package com.gaoshiqi.camera.comparison.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
@@ -92,6 +94,7 @@ class ComparisonCameraViewModel(
             is ComparisonCameraIntent.CameraReady -> onCameraReady()
             is ComparisonCameraIntent.CameraError -> onCameraError(intent.message)
             is ComparisonCameraIntent.RetryLoadReference -> loadReferenceImage()
+            is ComparisonCameraIntent.GalleryImageSelected -> composeWithGalleryImage(intent.uri)
         }
     }
 
@@ -344,6 +347,97 @@ class ComparisonCameraViewModel(
                 }
             }
         }
+    }
+
+    /**
+     * 从相册选择的图片进行合成
+     */
+    private fun composeWithGalleryImage(uri: Uri) {
+        val refBitmap = referenceBitmap ?: return
+
+        _uiState.update { it.copy(captureState = CaptureState.Composing) }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val galleryBitmap = withContext(Dispatchers.IO) {
+                    decodeSampledBitmap(uri)
+                } ?: throw IllegalStateException("Failed to decode gallery image")
+
+                val coverBitmap: Bitmap? = if (subjectCover.isNotBlank()) {
+                    try {
+                        withContext(Dispatchers.IO) {
+                            Glide.with(context)
+                                .asBitmap()
+                                .load(subjectCover)
+                                .submit()
+                                .get()
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to load cover image, will compose without it", e)
+                        null
+                    }
+                } else {
+                    null
+                }
+
+                val metadata = PolaroidMetadata(
+                    pointName = pointName,
+                    subjectName = subjectName,
+                    episode = episode,
+                    lat = lat,
+                    lng = lng
+                )
+                val composedBitmap = BitmapComposer.composePolaroidStyle(
+                    cameraImage = galleryBitmap,
+                    referenceImage = refBitmap,
+                    coverImage = coverBitmap,
+                    metadata = metadata,
+                    mirrorCamera = false
+                )
+
+                currentOriginalBitmap = galleryBitmap
+                currentComposedBitmap = composedBitmap
+
+                withContext(Dispatchers.Main) {
+                    _uiState.update {
+                        it.copy(
+                            captureState = CaptureState.Idle,
+                            screenState = ComparisonScreenState.PhotoPreview(composedBitmap)
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to compose with gallery image", e)
+                withContext(Dispatchers.Main) {
+                    _uiState.update {
+                        it.copy(captureState = CaptureState.Error(e.message ?: "Failed to compose"))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun decodeSampledBitmap(uri: Uri, maxWidth: Int = 1920): Bitmap? {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        context.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, options)
+        }
+
+        options.inSampleSize = calculateInSampleSize(options, maxWidth)
+        options.inJustDecodeBounds = false
+
+        return context.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, options)
+        }
+    }
+
+    private fun calculateInSampleSize(options: BitmapFactory.Options, maxWidth: Int): Int {
+        val width = options.outWidth
+        var inSampleSize = 1
+        while (width / inSampleSize > maxWidth) {
+            inSampleSize *= 2
+        }
+        return inSampleSize
     }
 
     /**

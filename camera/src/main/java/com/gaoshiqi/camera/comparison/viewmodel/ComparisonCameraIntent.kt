@@ -1,5 +1,7 @@
 package com.gaoshiqi.camera.comparison.viewmodel
 
+import android.net.Uri
+
 /**
  * 对比拍照模块用户意图
  */
@@ -27,4 +29,7 @@ sealed class ComparisonCameraIntent {
 
     /** 重试加载参考图 */
     data object RetryLoadReference : ComparisonCameraIntent()
+
+    /** 从相册选择的图片进行合成 */
+    data class GalleryImageSelected(val uri: Uri) : ComparisonCameraIntent()
 }

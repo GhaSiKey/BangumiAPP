@@ -3,6 +3,9 @@ package com.gaoshiqi.camera.comparison.ui
 import android.Manifest
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
@@ -73,6 +76,12 @@ fun ComparisonCameraScreen(
     val uiState by viewModel.uiState.collectAsState()
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let { viewModel.handleIntent(ComparisonCameraIntent.GalleryImageSelected(it)) }
+    }
+
     LaunchedEffect(uiState.shouldClose) {
         if (uiState.shouldClose) {
             onClose()
@@ -96,6 +105,11 @@ fun ComparisonCameraScreen(
                     isSwitchingCamera = uiState.isSwitchingCamera,
                     onTakePhoto = { viewModel.handleIntent(ComparisonCameraIntent.TakePhoto) },
                     onSwitchCamera = { viewModel.handleIntent(ComparisonCameraIntent.SwitchCamera) },
+                    onPickFromGallery = {
+                        galleryLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
                     onRetryLoadReference = { viewModel.handleIntent(ComparisonCameraIntent.RetryLoadReference) },
                     onBack = { viewModel.handleIntent(ComparisonCameraIntent.NavigateBack) }
                 )
@@ -127,6 +141,7 @@ private fun ComparisonCameraContent(
     isSwitchingCamera: Boolean,
     onTakePhoto: () -> Unit,
     onSwitchCamera: () -> Unit,
+    onPickFromGallery: () -> Unit,
     onRetryLoadReference: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -199,7 +214,8 @@ private fun ComparisonCameraContent(
             isCapturing = isCapturing,
             canTakePhoto = referenceState is ReferenceImageState.Success,
             onTakePhoto = onTakePhoto,
-            onSwitchCamera = onSwitchCamera
+            onSwitchCamera = onSwitchCamera,
+            onPickFromGallery = onPickFromGallery
         )
     }
 }
@@ -210,7 +226,8 @@ private fun ComparisonCameraControls(
     isCapturing: Boolean,
     canTakePhoto: Boolean,
     onTakePhoto: () -> Unit,
-    onSwitchCamera: () -> Unit
+    onSwitchCamera: () -> Unit,
+    onPickFromGallery: () -> Unit
 ) {
     // 快门按钮动画
     var isShutterPressed by remember { mutableStateOf(false) }
@@ -240,8 +257,21 @@ private fun ComparisonCameraControls(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 占位（保持布局平衡）
-        Box(modifier = Modifier.size(48.dp))
+        // 相册选图按钮
+        IconButton(
+            onClick = onPickFromGallery,
+            enabled = !isCapturing && canTakePhoto,
+            modifier = Modifier
+                .size(48.dp)
+                .background(Color.DarkGray.copy(alpha = 0.5f), CircleShape)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_gallery),
+                contentDescription = stringResource(R.string.comparison_pick_from_gallery),
+                tint = if (canTakePhoto) Color.White else Color.Gray,
+                modifier = Modifier.size(24.dp)
+            )
+        }
 
         // 拍照按钮
         Box(

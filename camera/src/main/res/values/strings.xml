@@ -30,4 +30,5 @@
     <string name="comparison_load_failed">Failed to load reference image</string>
     <string name="comparison_retry">Retry</string>
     <string name="comparison_photo_saved">Comparison photo saved</string>
+    <string name="comparison_pick_from_gallery">Pick from gallery</string>
 </resources>
