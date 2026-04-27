@@ -42,6 +42,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     private val savedStates = mutableMapOf<Int, Boolean>()
 
+    // 集数到颜色索引的映射
+    private val episodeColorMap = mutableMapOf<String, Int>()
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +64,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mPoints = PointListSingleton.getPointList()
         PointListSingleton.clear()
 
+        // 初始化集数颜色映射
+        initEpisodeColorMap()
+
         mBinding.btnBack.setOnClickListener { finish() }
 
         setupViewPager()
@@ -76,6 +82,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             toggleBookmark(point, position)
         }
 
+        // 传递集数颜色映射给 Adapter
+        adapter.setEpisodeColorMap(episodeColorMap)
+
         mBinding.viewPager.adapter = adapter
         mBinding.viewPager.offscreenPageLimit = 1
         mBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -86,13 +95,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
         mBinding.viewPager.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                outRect.left = 80
-                outRect.right = 80
+                outRect.left = 50
+                outRect.right = 50
             }
         })
         mBinding.viewPager.setPageTransformer { page, position ->
             val pageWidth = page.width
-            page.translationX = -(pageWidth * 0.25f) * position
+            // 减小 translationX 系数，从 0.25 降到 0.15，增加卡片间距
+            page.translationX = -(pageWidth * 0.15f) * position
             page.scaleX = 1 - abs(position) * 0.15f
             page.scaleY = 1 - abs(position) * 0.15f
         }
@@ -112,7 +122,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         .position(LatLng(geo[0], geo[1]))
                         .title(point.displayName())
                         .snippet(point.subjectName)
-                        .icon(BitmapDescriptorFactory.defaultMarker(getMarkerHue(index)))
+                        .icon(BitmapDescriptorFactory.defaultMarker(getMarkerHueByEpisode(point.ep)))
                         .alpha(0.6f)
                 )
                 marker?.let {
@@ -172,6 +182,52 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         return hues[index % hues.size]
     }
+
+    /**
+     * 初始化集数到颜色索引的映射
+     * 收集所有不同的集数，按顺序分配颜色索引
+     */
+    private fun initEpisodeColorMap() {
+        val points = mPoints ?: return
+
+        // 收集所有不同的集数，使用 normalizeEpisode 统一格式
+        val episodes = points.map { normalizeEpisode(it.ep) }.distinct()
+
+        // 按集数排序：数字集数按数值排序，"其他"排最后
+        val sortedEpisodes = episodes.sortedWith(compareBy {
+            when {
+                it == "其他" -> Int.MAX_VALUE
+                it.matches("\\d+".toRegex()) -> it.toIntOrNull() ?: Int.MAX_VALUE
+                else -> 1000 + it.hashCode()
+            }
+        })
+
+        // 为每个集数分配颜色索引
+        sortedEpisodes.forEachIndexed { index, episode ->
+            episodeColorMap[episode] = index
+        }
+    }
+
+    /**
+     * 根据集数获取标记颜色
+     */
+    private fun getMarkerHueByEpisode(ep: String?): Float {
+        val normalizedEp = normalizeEpisode(ep)
+        val colorIndex = episodeColorMap[normalizedEp] ?: 0
+        return getMarkerHue(colorIndex)
+    }
+
+    /**
+     * 统一集数格式
+     */
+    private fun normalizeEpisode(ep: String?): String {
+        return when {
+            ep.isNullOrBlank() || ep == "null" -> "其他"
+            ep.matches("\\d+".toRegex()) -> ep
+            else -> ep
+        }
+    }
+
     private fun loadBookmarkStates() {
         val points = mPoints ?: return
         lifecycleScope.launch {
