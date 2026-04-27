@@ -1,39 +1,37 @@
 package com.gaoshiqi.map.widget
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gaoshiqi.image.loadCover
 import com.gaoshiqi.map.R
 import com.gaoshiqi.map.data.LitePoint
+import com.gaoshiqi.map.databinding.ItemLitePointBinding
 import com.gaoshiqi.map.utils.GoogleMapUtils
 
-/**
- * Created by gaoshiqi
- * on 2025/7/11 17:57
- * email: gaoshiqi@bilibili.com
- */
 class LitePointAdapter(
     private val points: List<LitePoint>
-): RecyclerView.Adapter<LitePointAdapter.LitePointViewHolder>() {
+) : RecyclerView.Adapter<LitePointAdapter.LitePointViewHolder>() {
 
-    inner class LitePointViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val cover: ImageView = itemView.findViewById(R.id.item_cover)
-        private val title: TextView = itemView.findViewById(R.id.item_title)
-        private val description: TextView = itemView.findViewById(R.id.item_description)
-        private val btnOpenMaps: ImageButton = itemView.findViewById(R.id.btn_open_maps)
+    var onBookmarkClick: ((LitePoint, Int) -> Unit)? = null
 
-        fun bind(litePoint: LitePoint) {
-            cover.loadCover(litePoint.image, R.drawable.placeholder_landscape)
+    private val bookmarkStates = mutableMapOf<Int, Boolean>()
 
-            title.text = litePoint.name
-            description.text = "坐标: ${litePoint.geo[0]}, ${litePoint.geo[1]}"
+    inner class LitePointViewHolder(
+        private val binding: ItemLitePointBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-            btnOpenMaps.setOnClickListener {
+        fun bind(litePoint: LitePoint, position: Int) {
+            binding.itemCover.loadCover(litePoint.image, R.drawable.placeholder_landscape)
+            binding.itemTitle.text = litePoint.displayName()
+
+            val subtitle = buildSubtitle(litePoint)
+            binding.itemSubtitle.text = subtitle
+
+            updateBookmarkIcon(binding.btnBookmark, bookmarkStates[position] == true)
+
+            binding.btnOpenMaps.setOnClickListener {
                 if (litePoint.geo.size >= 2) {
                     GoogleMapUtils.openInGoogleMaps(
                         itemView.context,
@@ -43,18 +41,53 @@ class LitePointAdapter(
                     )
                 }
             }
+
+            binding.btnBookmark.setOnClickListener {
+                onBookmarkClick?.invoke(litePoint, position)
+            }
+        }
+
+        private fun buildSubtitle(point: LitePoint): String {
+            val parts = mutableListOf<String>()
+            if (point.subjectName.isNotEmpty()) {
+                parts.add(point.subjectName)
+            }
+            val episodeTime = point.formatEpisodeTime()
+            if (episodeTime.isNotEmpty()) {
+                parts.add(episodeTime)
+            }
+            return parts.joinToString(" · ")
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LitePointViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_lite_point, parent, false)
-        return LitePointViewHolder(view)
+        val binding = ItemLitePointBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return LitePointViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: LitePointViewHolder, position: Int) {
-        holder.bind(points[position])
+        holder.bind(points[position], position)
     }
 
     override fun getItemCount() = points.size
+
+    fun updateBookmarkState(position: Int, isSaved: Boolean) {
+        bookmarkStates[position] = isSaved
+        notifyItemChanged(position)
+    }
+
+    fun setBookmarkStates(states: Map<Int, Boolean>) {
+        bookmarkStates.clear()
+        bookmarkStates.putAll(states)
+        notifyDataSetChanged()
+    }
+
+    private fun updateBookmarkIcon(button: ImageButton, isSaved: Boolean) {
+        button.setImageResource(
+            if (isSaved) R.drawable.ic_bookmark_filled
+            else R.drawable.ic_bookmark_border
+        )
+    }
 }
