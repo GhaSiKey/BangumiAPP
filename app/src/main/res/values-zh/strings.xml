@@ -37,6 +37,7 @@
     <string name="go_to_detail">查看详情</string>
     <string name="point_count_format">%d个地点</string>
     <string name="points_view_all">查看全部</string>
+    <string name="points_view_all_map">在地图上查看全部</string>
 
     <!-- SearchActivity -->
     <string name="search_history_title">搜索历史</string>

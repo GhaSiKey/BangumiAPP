@@ -78,30 +78,34 @@ class PointsFragment: Fragment() {
     private fun initObserver() {
         mViewModel.state.observe(viewLifecycleOwner) {state ->
             when (state) {
-                is BangumiPointsState.LOADING -> showLoading()
+                is BangumiPointsState.LOADING -> {
+                    showLoading()
+                    mBinding.fabMap.hide()
+                }
                 is BangumiPointsState.SUCCESS -> {
                     if (state.data.isEmpty()) {
                         showEmpty()
-                        mBinding.watchAll.visibility = View.GONE
+                        mBinding.fabMap.hide()
                         mBinding.episodeScrollView.visibility = View.GONE
                         return@observe
                     }
                     hideLoading()
                     mAdapter.updateList(state.data)
-                    mBinding.watchAll.visibility = View.VISIBLE
+                    mBinding.fabMap.show()
                     mBinding.episodeScrollView.visibility = View.VISIBLE
                     pointList = mViewModel.getRawPoints()
                     updateEpisodeChips()
                 }
                 is BangumiPointsState.ERROR -> {
                     Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                    mBinding.fabMap.hide()
                     mBinding.episodeScrollView.visibility = View.GONE
                     showEmpty()
                 }
             }
         }
 
-        mBinding.watchAll.setOnClickListener {
+        mBinding.fabMap.setOnClickListener {
             if (pointList.isNullOrEmpty()) return@setOnClickListener
             PointListSingleton.setPointList(pointList!!)
 
@@ -175,5 +179,19 @@ class PointsFragment: Fragment() {
             }
         }
     }
-    
+
+    override fun onResume() {
+        super.onResume()
+        // 如果有数据，显示 FAB
+        if (!pointList.isNullOrEmpty()) {
+            mBinding.fabMap.show()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 切换到其他 Tab 时隐藏 FAB
+        mBinding.fabMap.hide()
+    }
+
 }
